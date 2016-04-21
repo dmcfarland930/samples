@@ -1,4 +1,4 @@
-/*
+/**
  * Else if creates another conditional statement to pass through to check 
  * validity. Else is used when no statements are true.
  * 
