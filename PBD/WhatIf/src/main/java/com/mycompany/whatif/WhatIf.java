@@ -6,7 +6,7 @@
 package com.mycompany.whatif;
 
 /**
- *
+ **
  * @author apprentice
  */
 public class WhatIf {
