@@ -8,7 +8,7 @@ package com.mycompany.dumbcalculator;
 import java.util.Scanner;
 import java.text.*;
 /**
- *
+ **
  * @author apprentice
  */
 public class DumbCalculator {
