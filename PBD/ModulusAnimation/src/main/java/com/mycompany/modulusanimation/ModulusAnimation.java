@@ -13,6 +13,7 @@ public class ModulusAnimation {
 	public static void main( String[] args ) throws Exception{
 		for ( int i=0; i<80; i++ )
 		{
+//get ready for the Wacky Waving Inflatable Arm Flailing Tube
 			if ( i%10 == 0 )
 				System.out.print("|o|-----|o|-----\r");
                                 System.out.print("|o|-----|o|-----\r");
