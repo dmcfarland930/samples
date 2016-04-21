@@ -8,7 +8,7 @@ package com.mycompany.askingquestions;
 import java.util.Scanner;
 
 /**
- *
+ **
  * @author apprentice
  */
 public class AskingQuestions {
