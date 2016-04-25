@@ -21,10 +21,12 @@ public class RockPaperScissors {
         int computerP;
 
         String humanP;
+        
+        boolean valid = false;
 
         //Welcome message and round validity check
         System.out.println("<><><><>Welcome to the Thunderdome!<><><><>");
-
+while(!valid){
         System.out.println("--------------------");//Decorative line
         System.out.println("Pick a weapon.");
         System.out.println("    1) ROCK\n    2) PAPER\n    3) SCISSORS");
@@ -50,31 +52,18 @@ public class RockPaperScissors {
                     case "ROCK":
                     case "1":
                         humanP = "ROCK";
-                        System.out.println("You chose " + humanP + "!");
                         switch (computerP) {
                             case 1:
-                                System.out.println("I chose ROCK!");
-                                System.out.println("");
-                                System.out.println("Our ROCKs fought each\nother until they were\ntoo"
-                                        + " exhausted to\ncontinue...");
-                                System.out.println("");
-                                System.out.println("It was a tie...");
+                                computerPlay(1, humanP, "Our ROCKs fought each\nother until they were\ntoo"
+                                        + " exhausted to\ncontinue...", 3);
                                 break;
                             case 2:
-                                System.out.println("I chose PAPER!");
-                                System.out.println("");
-                                System.out.println("My PAPER smothered\nyour " + humanP + " into"
-                                        + " submission!");
-                                System.out.println("");
-                                System.out.println("You lose!");
+                                computerPlay(2, humanP, "My PAPER smothered\nyour " + humanP + " into"
+                                        + " submission!", 2);
                                 break;
                             default:
-                                System.out.println("I chose SCISSORS!");
-                                System.out.println("");
-                                System.out.println("Your " + humanP + " smashed my \nScissors with it's\n"
-                                        + "unrivaled strength!");
-                                System.out.println("");
-                                System.out.println("You win!");
+                                computerPlay(3, humanP, "Your " + humanP + " smashed my \nSCISSORS with it's\n"
+                                        + "unrivaled strength!", 1);
                                 break;
                         }//end human chose rock
                         break;
@@ -82,70 +71,41 @@ public class RockPaperScissors {
                     case "PAPER":
                     case "2":
                         humanP = "PAPER";
-                        System.out.println("You chose " + humanP + "!");
                         switch (computerP) {
                             case 1:
-                                System.out.println("I chose ROCK!");
-                                System.out.println("");
-                                System.out.println("Your " + humanP
-                                        + " covered my\nRock and made him too\ncozy to fight!");
-                                System.out.println("");
-                                System.out.println("You win!");
+                                computerPlay(1, humanP, "Your " + humanP + " covered my\nROCK and "
+                                        + "made him too\ncozy to fight!", 1);
                                 break;
                             case 2:
-                                System.out.println("I chose PAPER!");
-                                System.out.println("");
-                                System.out.println("Our PAPERS folded themselves\ninto origami cranes "
-                                        + "and\nflew away together!");
-                                System.out.println("");
-                                System.out.println("It's a tie!");
+                                computerPlay(2, humanP, "Our PAPERS folded themselves\ninto origami cranes "
+                                        + "and\nflew away together!", 3);
                                 break;
                             default:
-                                System.out.println("I chose SCISSORS!");
-                                System.out.println("");
-                                System.out.println("My SCISSORS made\nribbons of your " + humanP + "!");
-                                System.out.println("");
-                                System.out.println("You lose!");
+                                computerPlay(3, humanP, "My SCISSORS made\nribbons of your "
+                                        + humanP + "!", 2);
                                 break;
                         }//end human chose paper
                         break;
 
                     default:
                         humanP = "SCISSORS";
-                        System.out.println("You chose " + humanP);
                         switch (computerP) {//human chose scissors
                             case 1:
-                                System.out.println("I chose ROCK!");
-                                System.out.println("");
-                                System.out.println("My ROCK countered\nyour " + humanP + " with\n"
-                                        + "a devastating blow!");
-                                System.out.println("");
-                                System.out.println("You lose!");
+                                computerPlay(1, humanP, "My ROCK countered\nyour " + humanP + " with\n"
+                                        + "a devastating blow!", 2);
                                 break;
                             case 2:
-                                System.out.println("I chose PAPER!");
-                                System.out.println("");
-                                System.out.println("Your  " + humanP + " teleported\nbehind my PAPER and "
-                                        + "cut it\ninto a million pieces!");
-                                System.out.println("");
-                                System.out.println("You win!");
+                                computerPlay(2, humanP, "Your  " + humanP + " teleported\nbehind my PAPER "
+                                        + "and cut it\ninto a million pieces!", 1);
                                 break;
                             default:
-                                System.out.println("");
-                                System.out.println("SCISSOR ME TIMBERS!");
-                                System.out.println("");
-                                System.out.println("It's a tie!");
+                                computerPlay(3, humanP, "SCISSOR ME TIMBERS!", 3);
                                 break;
                         }//end human chose scissors
                         break;
 
                 }//end switch for "weapon choice"
-                break;
-
-            case "QUIT":
-            case "Q":
-            case "4":
-                System.out.println("Too tired to go on huh?");
+                valid = true;
                 break;
 
             default:
@@ -154,6 +114,40 @@ public class RockPaperScissors {
                 System.out.println("");
                 break;
 
-        }
+        }//end gameplay switch
+    }//end validity check
     }//end of main
+
+    public static String computerPlay(int computerChoice, String humanChoice, String message, int result) {
+        String object;
+        switch (computerChoice) {
+            case 1:
+                object = "ROCK";
+                break;
+            case 2:
+                object = "PAPER";
+                break;
+            default:
+                object = "SCISSORS";
+                break;
+        }
+
+        System.out.println("You chose " + humanChoice + "!");
+        System.out.println("I chose " + object + "!");
+        System.out.println("");
+        System.out.println(message);
+        System.out.println("");
+        switch (result) {
+            case 1:
+                System.out.println("You win!");
+                break;
+            case 2:
+                System.out.println("You lose!");
+                break;
+            default:
+                System.out.println("It's a tie!");
+                break;
+        }
+        return object;
+    }//end method
 }//end of class
