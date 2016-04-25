@@ -176,10 +176,11 @@ public class RockPaperScissors4 {
 
             } else if (wins < losses) {
                 if (!humanP.equalsIgnoreCase("q")) {
-                    System.out.println("You lost a lot... Couldn't handle the beating any longer?");
-                } else {
                     System.out.println("You lost! Of course, you were never a match for my powerful"
                             + " computer brain.");
+                    System.out.println("You lost a lot... Couldn't handle the beating any longer?");
+                } else {
+                    System.out.println("You lost a lot... Couldn't handle the beating any longer?");
                 }//end computer player had more wins
 
             } else if (wins == losses) {
@@ -192,7 +193,10 @@ public class RockPaperScissors4 {
             confirm = "";
 
             while (!(confirm.equalsIgnoreCase("yes") || confirm.equalsIgnoreCase("y"))) {
-                rounds = 0;
+                rounds = 0; //reset rounds
+                wins = 0; //reset wins
+                losses = 0; //reset losses
+                ties = 0; //reset ties
                 System.out.println("Would you like to play again? [yes/no] ");
                 System.out.print(">");
                 confirm = keyboard.next();

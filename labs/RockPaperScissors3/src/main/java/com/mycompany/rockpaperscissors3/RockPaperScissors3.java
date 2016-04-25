@@ -169,11 +169,12 @@ public class RockPaperScissors3 {
             }//end human player had more wins
 
         } else if (wins < losses) {
-            if (humanP.equalsIgnoreCase("q")) {
-                System.out.println("You lost a lot... Couldn't handle the beating any longer?");
-            } else {
+            if (!humanP.equalsIgnoreCase("q")) {
                 System.out.println("You lost! Of course, you were never a match for my powerful"
                         + " computer brain.");
+                System.out.println("You lost a lot... Couldn't handle the beating any longer?");
+            } else {
+                System.out.println("You lost a lot... Couldn't handle the beating any longer?");
             }//end computer player had more wins
 
         } else if (wins == losses) {
