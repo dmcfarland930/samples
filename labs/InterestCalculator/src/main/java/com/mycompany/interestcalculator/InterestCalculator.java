@@ -13,45 +13,45 @@ import java.text.*;
  */
 public class InterestCalculator {
 
-    public static void main(String[] args) {
+    Scanner keyboard = new Scanner(System.in);
+    ConsoleIO console = new ConsoleIO(this);
 
-        double investment = 0;
-        double annualInterestRate = 0;
-        double investAge = 0;
+    double investment = 0;
+    double annualInterestRate = 0;
+    double investAge = 0;
+    int choice = 0;
+    int year = 1;
+    final int QUARTERLY_COMPOUND = 4;
+    final int MONTHLY_COMPOUND = 12;
+    final int DAILY_COMPOUND = 365;
+    double yearInterest = 0;
+    double interestEarnings = 0;
+    double startInvest = 0;
+
+    public void run() {
 
         //get investment
-        investment = zeroCheck(investment, "Please enter your investment: $",
-                "Please enter an investment greater than 0.");
+        investment = console.zeroCheckDouble("Please enter your investment: $",
+                "Please enter an investment greater than 0.", "That entry is invalid.");
 
         //get interest rate
-        annualInterestRate = zeroCheck(annualInterestRate, "Please enter your annual interest rate: ",
-                "Please enter an interest rate greater than 0.");
+        annualInterestRate = console.zeroCheckDouble("Please enter your annual interest rate: ",
+                "Please enter an interest rate greater than 0.", "That entry is invalid.");
 
         //determine choice of compound rate
-        int choice = returnChoice(annualInterestRate);
+        confirmChoice();
 
         //get amount of time money stays in fund
-        investAge = zeroCheck(investAge, "How many years would you like keep "
-                + "your investment with us?: ", "Please enter an amount that is greater than 0.");
+        investAge = console.zeroCheckDouble("How many years would you like keep "
+                + "your investment with us?: ", "Please enter an amount that is greater than 0.",
+                "That entry is invalid.");
 
         //display balance
-        showMeTheMoney(investment, investAge, annualInterestRate, choice);
-    }//end main
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+        calculateEarnings();
 
-    public static double interestBoost(double investment, double interestRate, double compounder) {
+    }
+
+    public double interestBoost(double investment, double interestRate, double compounder) {
 
         double newInterestRate = interestRate / compounder;
 
@@ -61,194 +61,131 @@ public class InterestCalculator {
         return investment;
     }
 
-    public static double zeroCheck(double query, String message1, String message2) {
+    public void compoundCheck() {
 
-        Scanner keyboard = new Scanner(System.in);
+        String compound;
 
-        while (query <= 0) {
+        while (this.choice < 1) {
+            compound = console.getString("\nHow often will your interest will compound? \n"
+                    + "     1) Daily\n"
+                    + "     2) Monthly\n"
+                    + "     3) Quarterly\n");
 
-            System.out.print(message1);
-            query = keyboard.nextDouble();
-            if (query <= 0) {
-                System.out.println("");
-                System.out.println("That entry is invalid.");
-                System.out.println(message2);
-                System.out.println("");
+            switch (compound.toLowerCase()) {
 
-            } else {
-                System.out.println("");
-            }//end validity check
-        }//end validity loop
-        return query;
+                case "daily":
+                case "1":
+                    System.out.println("\nYour interest will be compounded daily.\n");
+                    this.choice = 1;
+                    break;
+
+                case "monthly":
+                case "2":
+                    System.out.println("\nYour interest will be compounded monthly.\n");
+                    this.choice = 2;
+                    break;
+
+                case "quarterly":
+                case "3":
+                    System.out.println("\nYour interest will be compounded quarterly.\n");
+                    this.choice = 3;
+                    break;
+
+                default:
+                    System.out.println("\nThat is an invalid choice.\n");
+                    break;
+            }//end compound message
+        }
+
     }
 
-    public static int returnChoice(double annualInterestRate) {
+    public int confirmChoice() {
 
-        String confirm = "";
+        boolean confirm = false;
 
-        int choice = 0;
+        if (this.annualInterestRate >= 0) {//execute when interest rate entry is > 0
 
-        if (annualInterestRate >= 0) {//execute when interest rate entry is > 0
-
-            while (!(confirm.equalsIgnoreCase("yes") || confirm.equalsIgnoreCase("y"))) {
+            while (!confirm) {
                 //loop confirming the rate of compounded interest
-                choice = 0;
+                this.choice = 0;
 
-                choice = compoundCheck(choice);
+                compoundCheck();
 
-                confirm = yesCheck(choice);
+                confirm = console.yesCheck("Is this correct? [yes/no]\n",
+                        "That is not a valid entry!");
 
             }//end compound loop
         }//end validity of interest rate and compound
         return choice;
     }
 
-    public static int compoundCheck(int choice) {
+    public void calculateEarnings() {
 
-        Scanner keyboard = new Scanner(System.in);
+        this.startInvest = this.investment;
 
-        String compound;
-
-        while (choice < 1) {
-            System.out.println("");
-            System.out.println("How often will your interest will compound? \n"
-                    + "     1) Daily\n"
-                    + "     2) Monthly\n"
-                    + "     3) Quarterly");
-            compound = keyboard.next();
-            System.out.println("");
-
-            switch (compound.toLowerCase()) {
-
-                case "daily":
-                case "1":
-                    System.out.println("Your interest will be compounded daily.");
-                    choice = 1;
-                    break;
-
-                case "monthly":
-                case "2":
-                    System.out.println("Your interest will be compounded monthly.");
-                    choice = 2;
-                    break;
-
-                case "quarterly":
-                case "3":
-                    System.out.println("Your interest will be compounded quarterly.");
-                    choice = 3;
-                    break;
-
-                default:
-                    System.out.println("That is an invalid choice.");
-                    break;
-            }//end compound message
-        }
-        return choice;
-
-    }
-
-    public static String yesCheck(int choice) {
-
-        Scanner keyboard = new Scanner(System.in);
-
-        System.out.println("Is this correct? [yes/no]");
-        String confirm = keyboard.next();
-
-        switch (confirm.toLowerCase()) {
-
-            case "yes":
-            case "y":
-                System.out.println("");
-                break;
-
-            case "no":
-            case "n":
-                break;
-
-            default:
-                System.out.println("");
-                System.out.println("Not a valid entry!");
-                System.out.println("");
-                break;
-
-        }//end of Y/N switch
-
-        return confirm;
-    }
-
-    public static void showMeTheMoney(double investment, double investAge, double annualInterestRate, int choice) {
-
-        final int QUARTERLY_COMPOUND = 4;
-        final int MONTHLY_COMPOUND = 12;
-        final int DAILY_COMPOUND = 365;
-        double yearInterest = 0;
-        double interestEarnings = 0;
-
-        double startInvest = investment;
-
-        for (int year = 1; year <= investAge; year++) {
+        for (this.year = 1; this.year <= investAge; this.year++) {
 
             switch (choice) {
 
                 case 1:
-                    investment = interestBoost(investment, annualInterestRate, DAILY_COMPOUND);
+                    this.investment = interestBoost(this.investment, this.annualInterestRate, this.DAILY_COMPOUND);
 
-                    yearInterest = investment - startInvest;
-                    interestEarnings = yearInterest / DAILY_COMPOUND;
+                    this.yearInterest = this.investment - this.startInvest;
+                    this.interestEarnings = this.yearInterest / this.DAILY_COMPOUND;
                     break;
 
                 case 2:
-                    investment = interestBoost(investment, annualInterestRate, MONTHLY_COMPOUND);
+                    this.investment = interestBoost(this.investment, this.annualInterestRate, this.MONTHLY_COMPOUND);
 
-                    yearInterest = investment - startInvest;
-                    interestEarnings = yearInterest / MONTHLY_COMPOUND;
+                    this.yearInterest = this.investment - this.startInvest;
+                    this.interestEarnings = this.yearInterest / this.MONTHLY_COMPOUND;
                     break;
 
                 case 3:
-                    investment = interestBoost(investment, annualInterestRate, QUARTERLY_COMPOUND);
+                    this.investment = interestBoost(this.investment, this.annualInterestRate, this.QUARTERLY_COMPOUND);
 
-                    yearInterest = investment - startInvest;
-                    interestEarnings = yearInterest / QUARTERLY_COMPOUND;
+                    this.yearInterest = this.investment - this.startInvest;
+                    this.interestEarnings = this.yearInterest / this.QUARTERLY_COMPOUND;
                     break;
 
                 default:
                     break;
             }
 
-            startInvest = cubaGooding(year, choice, startInvest, investment, yearInterest, interestEarnings);
+            displayInvestment();
 
         }//end display loop
     }
 
-    public static double cubaGooding(int year, int choice, double startInvest, double investment, double yearInterest, double interestEarnings) {
+    public void displayInvestment() {
 
         DecimalFormat df = new DecimalFormat("0.00");
 
         System.out.println("--------------------------------------");
-        System.out.println("Year " + (year));
+        System.out.println("  Year " + (this.year));
         System.out.println("--------------------------------------");
-        System.out.println(" Beginning of Year Balance: $" + df.format(startInvest));
+        System.out.println(" Beginning of Year Balance: $" + df.format(this.startInvest));
 
         switch (choice) {
 
             case 1:
-                System.out.println("    Interest added per day: $" + df.format(interestEarnings));
+                System.out.println("    Interest added per day: $" + df.format(this.interestEarnings));
                 break;
             case 2://monthly interest
-                System.out.println("  Interest added per month: $" + df.format(interestEarnings));
+                System.out.println("  Interest added per month: $" + df.format(this.interestEarnings));
                 break;
             case 3:
-                System.out.println("Interest added per quarter: $" + df.format(interestEarnings));
+                System.out.println("Interest added per quarter: $" + df.format(this.interestEarnings));
                 break;
 
             default:
                 break;
         }//end compound message
-        System.out.println("  Interest added this year: $" + df.format(yearInterest));
-        System.out.println("       End of Year Balance: $" + df.format(investment));
-        System.out.println("");
-        startInvest = investment;
+        System.out.println("  Interest added this year: $" + df.format(this.yearInterest));
+        System.out.println("       End of Year Balance: $" + df.format(this.investment) + "\n");
 
-        return startInvest;
+        this.startInvest = this.investment;
+
     }
+
 }//end class

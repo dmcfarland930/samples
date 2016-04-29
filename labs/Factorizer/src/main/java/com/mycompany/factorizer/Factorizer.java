@@ -4,7 +4,6 @@
  */
 package com.mycompany.factorizer;
 
-import java.util.Scanner;
 
 /**
  *
@@ -12,61 +11,68 @@ import java.util.Scanner;
  */
 public class Factorizer {
 
-    public static void main(String[] args) {
+    int inputNum = 0;
+    int perfect = 0;
+    int prime = 0;
+    int primeCount = 0;
+    int perfectCount = 0;
 
-        Scanner keyboard = new Scanner(System.in);
+    public void run() {
 
-        int inputNum = -1;
-        int perfect = 0;
-        int prime = 0;
+        ConsoleIO console = new ConsoleIO(this);
 
         //ask user for input
-        System.out.println("Welcome to the Factorizer app! We're gonna have some fun!");
-        System.out.println("");
+        System.out.println("Welcome to the Factorizer app! We're gonna have some fun!\n");
 
         //check for valid input
-        inputNum = zeroCheck(inputNum);
+        inputNum = console.zeroCheckInt("Please enter a number that you want Factorized: ",
+                "Your number must be a positive number!", "That entry is invalid.");
 
-        //do a modulus test
-        for (int i = 1; i < inputNum; i++) {
-            if (inputNum % i == 0) {
-                System.out.println(i);
-                System.out.println("");
-                prime++;
-                perfect = perfect + i;
-            }
-        }//end factorizer loop
-        
-        if (perfect == inputNum) {
-            System.out.println(inputNum + " is a perfect number.");
-            System.out.println("");
-        } else {
-            System.out.println(inputNum + " is not a perfect number.");
-            System.out.println("");
-        }
+        //do a modulus test and check for prime and perfect numbers
+        this.perfect = returnPerfect();
+        this.prime = returnPrime();
 
-        if (prime == 1) {
-            System.out.println(inputNum + " is a prime number.");
-            System.out.println("");
-        } else {
-            System.out.println(inputNum + " is not a prime number.");
-            System.out.println("");
-        }
+        //show factors of user input number and tell the user whether or not
+        //their number was prime or perfect
+        resultsShow();
 
     }//end main
-    public static int zeroCheck(int query){
-        Scanner keyboard = new Scanner(System.in);
-        while (query< 0) {
-            System.out.print("Please enter a number that you want Factorized: ");
-            query = keyboard.nextInt();
-            if (query< 0) {
-                System.out.println("");
-                System.out.println("Your number must be a positive number!");
-                System.out.println("");
-            } else {
-                System.out.println("");
-            }//end validity check
+
+    public int returnPerfect() {
+        for (int i = 1; i < this.inputNum; i++) {
+            if (this.inputNum % i == 0) {
+                System.out.println(i + "\n");
+                perfectCount = perfectCount + i;
+            }
+        }
+
+        return perfectCount;
     }
-        return query;
+
+    public int returnPrime() {
+
+        for (int i = 1; i < this.inputNum; i++) {
+            if (this.inputNum % i == 0) {
+                primeCount++;
+            }
+        }
+
+        return primeCount;
     }
+
+    public void resultsShow() {
+
+        if (this.perfectCount == this.inputNum) {
+            System.out.println(this.inputNum + " is a perfect number.\n");
+        } else {
+            System.out.println(this.inputNum + " is not a perfect number.\n");
+        }
+
+        if (this.primeCount == 1) {
+            System.out.println(this.inputNum + " is a prime number.\n");
+        } else {
+            System.out.println(this.inputNum + " is not a prime number.\n");
+        }
+    }
+
 }//end class

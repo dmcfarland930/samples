@@ -27,9 +27,8 @@ public class RockPaperScissors4 {
         boolean gameOver = false;
 
         String humanP = "";
-        String computerChoice;
+        String computerChoice = "";
         String confirm;
-        
 
         //Welcome message and round validity check
         System.out.println("<><><><>Welcome to the Thunderdome!<><><><>");
@@ -49,7 +48,7 @@ public class RockPaperScissors4 {
 
                 //Start of rounds    
             }//resume game
-            for (int count = 0; count!=rounds; count++) {
+            for (int count = 0; count != rounds; count++) {
 
                 System.out.println("--------------------");//Decorative line
                 System.out.println("Round: " + (count + 1) + "/" + rounds);
@@ -111,7 +110,7 @@ public class RockPaperScissors4 {
                                         ties++;
                                         break;
                                     default:
-                                        computerPlay(3, humanP, "My SCISSORS made\nribbons of your " 
+                                        computerPlay(3, humanP, "My SCISSORS made\nribbons of your "
                                                 + humanP + "!", 2);
                                         losses++;
                                         break;
@@ -178,7 +177,6 @@ public class RockPaperScissors4 {
                 if (!humanP.equalsIgnoreCase("q")) {
                     System.out.println("You lost! Of course, you were never a match for my powerful"
                             + " computer brain.");
-                    System.out.println("You lost a lot... Couldn't handle the beating any longer?");
                 } else {
                     System.out.println("You lost a lot... Couldn't handle the beating any longer?");
                 }//end computer player had more wins
@@ -219,7 +217,8 @@ public class RockPaperScissors4 {
             }//end of play confirmation loop
         }//end of game loop
     }//end of main
-    public static String computerPlay(int computerChoice, String humanChoice, String message, int result){
+
+    public static String computerPlay(int computerChoice, String humanChoice, String message, int result) {
         String object;
         switch (computerChoice) {
             case 1:
@@ -232,14 +231,14 @@ public class RockPaperScissors4 {
                 object = "SCISSORS";
                 break;
         }
-        
+
         System.out.println("You chose " + humanChoice + "!");
-        System.out.println("I chose "+object+"!");
+        System.out.println("I chose " + object + "!");
         System.out.println("");
         System.out.println(message);
         System.out.println("");
-        switch (result){
-            case 1: 
+        switch (result) {
+            case 1:
                 System.out.println("You win!");
                 break;
             case 2:
