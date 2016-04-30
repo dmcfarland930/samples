@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.text.*;
 
 /**
  *
@@ -54,6 +53,7 @@ public class StudentData {
                     createScore();
                     break;
                 case "7":
+                    removeScore();
                     break;
                 case "8":
                     viewClassAverage();
@@ -63,6 +63,7 @@ public class StudentData {
                     break;
                 case "10":
                     viewBottomClass();
+                    break;
                 case "q":
                 case "quit":
                     run = false;
@@ -83,7 +84,7 @@ public class StudentData {
     public void displayMenu() {
 
         System.out.println("What would you like to do?");
-        System.out.println("=====================================");
+        System.out.println("====================================");
         System.out.println("    1) View Student Roster");
         System.out.println("    2) Add Student    ");
         System.out.println("    3) Remove Student");
@@ -116,7 +117,7 @@ public class StudentData {
             System.out.println("------------------------------------");
             for (Integer studentID : studentSet) {
 
-                StudentData objectStudent = this.studentInfo.get(studentID);
+                StudentData objectStudent = studentInfo.get(studentID);
                 String studNames = objectStudent.getStudentName();
                 System.out.println(" " + studentID + "   | " + studNames);
             }
@@ -126,30 +127,44 @@ public class StudentData {
     }
 
     public void addStudent() {
-
         StudentData objectStudent = new StudentData();
-        System.out.println("Enter the name for your student");
-        String studName = console.getString(">");
-        studentID++;
-        objectStudent.setStudentName(studName);
+        System.out.println("Enter the first name for your student. Enter 'q' to cancel.");
+        String firstName = console.getString(">");
+        if (firstName.equals("q")) {
+            //do nothing
+        } else {
+            System.out.println("Enter the last name of your student.");
+            String lastName = console.getString(">");
 
-        studentInfo.put(studentID, objectStudent);
+            String fullName = firstName + " " + lastName;
+            studentID++;
+            objectStudent.setStudentName(fullName);
+            System.out.println(fullName + " added to the roster.");
+            studentInfo.put(studentID, objectStudent);
+        }
 
     }
 
     public void removeStudent() {
 
-        Set <Integer> studentSet = studentInfo.keySet();
+        boolean isEmpty;
+        Set<Integer> studentSet = studentInfo.keySet();
 
-        System.out.println("Enter the ID for student you would like to remove.");
-        String studID = console.getString(">");
+        isEmpty = displayStudentRoster();
 
-        if (studentSet.contains(studID)) {
+        while (!isEmpty) {
+            System.out.println("Enter the ID for student you would like to remove.");
 
-            studentInfo.remove(studID);
+            int studID = console.getInteger(">", "That is an invalid entry.");
 
-        } else {
-            System.out.println("That student ID does not exist.");
+            if (studentSet.contains(studID)) {
+
+                studentInfo.remove(studID);
+                break;
+
+            } else {
+                System.out.println("That student ID does not exist.");
+            }
         }
 
     }
@@ -158,19 +173,44 @@ public class StudentData {
 
         boolean run = true;
         boolean isEmpty;
-
-        Set<String> studentSet = studentInfo.keySet();
+        String userInput;
+        Set<Integer> studentSet = studentInfo.keySet();
+        int studID = 0;
 
         isEmpty = displayStudentRoster();
+        while (run == true && !isEmpty) {
 
-        System.out.println("Enter the name of a student to add their quiz scores. Enter 'q' to quit");
-        while (run == true && isEmpty == false) {
-            String studName = console.getString(">");
-            if (studentSet.contains(studName)) {
+            boolean valid = false;
+
+            while (!valid) {
+                System.out.println("Enter the ID of a student to add their quiz scores. Enter 'q' to quit");
+
+                userInput = console.getString(">");
+
+                if (userInput.equals("q")) {
+
+                    run = false;
+                    valid = true;
+
+                } else {
+
+                    try {
+                        studID = Integer.parseInt(userInput);
+                        valid = true;
+                    } catch (Exception ex) {
+
+                        System.out.println("That entry is invalid.");
+                    }
+
+                }
+            }
+
+            if (studentSet.contains(studID)) {
                 while (run == true) {
-                    StudentData objectStudent = studentInfo.get(studName);
-                    System.out.println("Enter your quiz score. Enter 'q' to quit.");
-                    String userInput = console.getString(">");
+                    StudentData objectStudent = studentInfo.get(studID);
+                    String studNames = objectStudent.getStudentName();
+                    System.out.println("\nEnter your quiz score for " + studNames + ". Enter 'q' to quit.");
+                    userInput = console.getString(">");
                     if (userInput.equals("q")) {
                         run = false;
                     } else {
@@ -187,57 +227,164 @@ public class StudentData {
                     }
 
                 }
-            } else if (studName.equals("q") || isEmpty == true) {
-                run = false;
-            } else {
+            } else if (run == true) {
                 System.out.println("That student does not exist.");
             }
         }
 
     }
 
-    public void viewStudentQuizScores() {
+    public void removeScore() {
+        boolean run = true;
+        boolean isEmpty;
+        String userInput;
+        Set<Integer> studentSet = studentInfo.keySet();
+        StudentData objectStudent = new StudentData();
+        int studID = 0;
 
-        Set<String> studentSet = studentInfo.keySet();
+        isEmpty = displayStudentRoster();
+        while (run == true && !isEmpty) {
 
-        System.out.println("Enter the name of student you to view their scores.");
-        String studName = console.getString(">");
+            boolean valid = false;
 
-        if (studentSet.contains(studName)) {
+            while (!valid) {
+                System.out.println("Enter the ID of a student to remove their quiz scores. Enter 'q' to quit");
 
-            StudentData objectStudent = studentInfo.get(studName);
-            List<Float> scoreList = objectStudent.getStudentQuizScores();
+                userInput = console.getString(">");
 
-            for (Float scores : scoreList) {
-                System.out.println(scores);
+                if (userInput.equals("q")) {
 
+                    run = false;
+                    valid = true;
+
+                } else {
+
+                    try {
+                        studID = Integer.parseInt(userInput);
+                        valid = true;
+                    } catch (Exception ex) {
+
+                        System.out.println("That entry is invalid.");
+                    }
+
+                }
             }
 
-        } else {
-            System.out.println("That student does not exist.");
+            objectStudent = studentInfo.get(studID);
+            String studNames = objectStudent.getStudentName();
+            List<Float> scoreList = objectStudent.getStudentQuizScores();
+
+            if (studentSet.contains(studID) && !scoreList.isEmpty()) {
+
+                while (run == true) {
+
+                    if (scoreList.isEmpty()) {
+                        System.out.println("There are no more scores.");
+                        break;
+                    }
+                    System.out.print(studNames + "'s quiz scores: ");
+                    for (Float scores : scoreList) {
+                        System.out.print(scores + " ");
+                    }
+                    System.out.println("Enter your quiz score to remove. Enter 'q' to quit.");
+                    userInput = console.getString(">");
+
+                    if (userInput.equals("q")) {
+                        run = false;
+                    } else {
+
+                        try {
+
+                            Float quizGrade = Float.parseFloat(userInput);
+
+                            if (!scoreList.contains(quizGrade)) {
+                                System.out.println("That score does not exist!");
+                            } else {
+                                objectStudent.removeScoreFromList(quizGrade, objectStudent);
+                            }
+
+                        } catch (Exception ex) {
+
+                            System.out.println("That entry is invalid");
+
+                        }
+                    }
+
+                }
+            } else if (run == true) {
+                if (scoreList.isEmpty()) {
+                    System.out.println("There are no scores to remove!");
+                } else {
+                    System.out.println("That student does not exist.");
+                }
+            }
+            break;
+        }
+
+    }
+
+    public void viewStudentQuizScores() {
+
+        boolean isEmpty;
+        Set<Integer> studentSet = studentInfo.keySet();
+
+        isEmpty = displayStudentRoster();
+        while (!isEmpty) {
+            System.out.println("Enter the ID of student you to view their scores.");
+            int studID = console.getInteger(">", "That is an invalid entry!");
+
+            if (studentSet.contains(studID)) {
+
+                StudentData objectStudent = studentInfo.get(studID);
+                String studNames = objectStudent.getStudentName();
+                List<Float> scoreList = objectStudent.getStudentQuizScores();
+
+                if (scoreList.isEmpty()) {
+                    System.out.println(studNames + " has no grades to view!");
+                } else {
+                    System.out.print(studNames + "'s quiz scores: ");
+                    for (Float scores : scoreList) {
+                        System.out.print(scores + " ");
+                    }
+                }
+            } else {
+                System.out.println("That student does not exist.");
+            }
+            break;
         }
 
     }
 
     public void viewStudentAverage() {
 
-        Set<String> studentNameSet = studentInfo.keySet();
-        System.out.println("Enter the name of student you to view their scores.");
-        String studName = console.getString(">");
+        boolean isEmpty;
+        Set<Integer> studentNameSet = studentInfo.keySet();
 
-        if (studentNameSet.contains(studName)) {
+        isEmpty = displayStudentRoster();
 
-            StudentData objectStudent = studentInfo.get(studName);
-            List<Float> scoreList = objectStudent.getStudentQuizScores();
+        while (!isEmpty) {
+            System.out.println("Enter the ID of the student to view their average.");
+            int studID = console.getInteger(">", "That is an invalid entry.");
 
-            float average = calculateAverageGrades(scoreList);
+            if (studentNameSet.contains(studID)) {
 
-            System.out.println(studName + "'s average Quiz Score is: " + average);
+                StudentData objectStudent = studentInfo.get(studID);
+                List<Float> scoreList = objectStudent.getStudentQuizScores();
+                String studName = objectStudent.getStudentName();
+                float average = calculateAverageGrades(scoreList);
 
-        } else {
-            System.out.println("That student does not exist.");
+                if (scoreList.isEmpty()) {
+                    System.out.println(studName + " has no grades to view!");
+                } else {
+                    System.out.println(studName + "'s average Quiz Score is: " + average);
+
+                }
+
+            } else {
+                System.out.println("That student does not exist.");
+            }
+            break;
         }
-
     }
 
     public String getStudentName() {
@@ -260,6 +407,21 @@ public class StudentData {
 
     }
 
+    public void removeScoreFromList(float quizScore, StudentData studentObject) {
+
+        //Get the desired Student Object by passing in the studentName as the Key
+        //Get the current score list for the student (based off the key)
+        List<Float> scoreList = new ArrayList();
+        scoreList = studentObject.getStudentQuizScores();
+
+        //Add a new score to the list
+        scoreList.remove(quizScore);
+
+        //Set the score list to the Object's <List> value (update the object list)
+        setQuizScore(scoreList);
+
+    }
+
     public void viewClassAverage() {
 
         float sumOfAverages = 0;
@@ -275,14 +437,17 @@ public class StudentData {
 
         classAverage = sumOfAverages / averageList.size();
 
-        System.out.println("The class average is: " + classAverage);
-
+        if (Float.isNaN(classAverage)) {
+            System.out.println("You have no grades to view!");
+        } else {
+            System.out.println("The class average is: " + classAverage);
+        }
     }
 
     public void viewTopClass() {
 
         float highScore = Float.MIN_VALUE;
-        Set<String> studentSet = studentInfo.keySet();
+        Set<Integer> studentSet = studentInfo.keySet();
         List<Float> averageList = createAveragesList();
         for (Float average : averageList) {
 
@@ -293,27 +458,32 @@ public class StudentData {
 
         }
 
-        System.out.println("The highest quiz average is: " + highScore);
+        if (highScore == Float.MIN_VALUE) {
+            System.out.println("There are no grades to view!");
+        } else {
+            System.out.println("The highest quiz average is: " + highScore);
 
-        System.out.println("***TOP GUN***");
-        for (String studName : studentSet) {
+            System.out.println("***TOP GUN***");
+            for (Integer studID : studentSet) {
 
-            StudentData objectStudent = studentInfo.get(studName);
-            List<Float> scoreList = objectStudent.getStudentQuizScores();
-            float averages = calculateAverageGrades(scoreList);
+                StudentData objectStudent = studentInfo.get(studID);
+                List<Float> scoreList = objectStudent.getStudentQuizScores();
+                String studName = objectStudent.getStudentName();
+                float averages = calculateAverageGrades(scoreList);
 
-            if (averages == highScore) {
-                System.out.println(studName);
+                if (averages == highScore) {
+                    System.out.println(studName);
+                }
             }
         }
-
     }
 
     public void viewBottomClass() {
 
         float lowScore = Float.MAX_VALUE;
-        Set<String> studentSet = studentInfo.keySet();
+        Set<Integer> studentSet = studentInfo.keySet();
         List<Float> averageList = createAveragesList();
+
         for (Float average : averageList) {
 
             if (average <= lowScore) {
@@ -323,29 +493,33 @@ public class StudentData {
 
         }
 
-        System.out.println("The highest quiz average is: " + lowScore);
+        if (lowScore == Float.MAX_VALUE) {
+            System.out.println("There are no grades to view!");
+        } else {
+            System.out.println("The lowest quiz average is: " + lowScore);
 
-        System.out.println("***BOTTOM OF CLASS***");
-        for (String studName : studentSet) {
+            System.out.println("***BOTTOM OF CLASS***");
+            for (Integer studID : studentSet) {
 
-            StudentData objectStudent = studentInfo.get(studName);
-            List<Float> scoreList = objectStudent.getStudentQuizScores();
-            float averages = calculateAverageGrades(scoreList);
+                StudentData objectStudent = studentInfo.get(studID);
+                List<Float> scoreList = objectStudent.getStudentQuizScores();
+                String studName = objectStudent.getStudentName();
+                float averages = calculateAverageGrades(scoreList);
 
-            if (averages == lowScore) {
-                System.out.println(studName);
+                if (averages == lowScore) {
+                    System.out.println(studName);
+                }
             }
         }
-
     }
 
     public List createAveragesList() {
 
         float average;
 
-        Set<String> studentSet = studentInfo.keySet();
+        Set<Integer> studentSet = studentInfo.keySet();
         List<Float> averageList = new ArrayList();
-        for (String studName : studentSet) {
+        for (Integer studName : studentSet) {
 
             float total = 0;
             StudentData objectStudent = studentInfo.get(studName);
