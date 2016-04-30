@@ -11,8 +11,8 @@ package com.mycompany.studentquizscores;
 public class App {
     public static void main(String[] args) {
         
-    StudentQuizScores sqs = new StudentQuizScores();
-    sqs.run();
+    StudentData sd = new StudentData();
+    sd.run();
         
     }
     

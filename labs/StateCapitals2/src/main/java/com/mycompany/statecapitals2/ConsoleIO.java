@@ -1,9 +1,10 @@
-package com.mycompany.studentquizscores;
+package com.mycompany.statecapitals2;
 
 /*
  * This program was written by Daniel McFarland.
  * I hope you enjoy it!
  */
+
 import java.util.Scanner;
 
 /**
@@ -93,14 +94,14 @@ public class ConsoleIO {
 
         }
 
-        return floater;
+        return integer;
 
     }
 
     public float checkMinMaxFloat(String prompt, int min, int max, String errorMessage,
             String errorMessage2) {
 
-        floater = -1;
+        floater = 0;
 
         while (floater < min || floater > max) {
             System.out.print(prompt);

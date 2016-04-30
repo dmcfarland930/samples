@@ -21,7 +21,6 @@ public class StudentQuizScores {
     String firstName;
     String lastName;
     String studentName;
-    double quizScore;
     double average;
     boolean go = true;
     boolean valid = false;
@@ -31,6 +30,19 @@ public class StudentQuizScores {
     Set<String> studentNames = new HashSet();
     List quizScores = new ArrayList();
 
+    public StudentQuizScores studentData(Map students, QuizScoreList qsl, double average){
+        
+       
+        StudentQuizScores sqs = new StudentQuizScores();
+        
+        
+        
+        
+        return sqs;
+       
+    }
+    
+    
     public void run() {
 
         while (0 < 1) {
@@ -38,14 +50,14 @@ public class StudentQuizScores {
             valid = false;
 
             showStudentRoster();
-            userChoice = getMenu1Choice();
+            userChoice = getMenuChoice();
             compareUserChoice();
             studentNames = students.keySet();
 
         }
     }
 
-    public String getMenu1Choice() {
+    public String getMenuChoice() {
         this.userChoice = console.getString("What would you like to do?\n"
                 + "1) Add Student\n2) Remove Student\n3) Add Scores\n"
                 + "4) Remove Scores\n5) View Scores\n"
@@ -60,8 +72,8 @@ public class StudentQuizScores {
         this.firstName = console.getString("Enter the student's first name\n");
         this.lastName = console.getString("Enter the student's last name\n");
         this.studentName = (firstName + " " + lastName);
-        
-        students.put(studentName, qsl.setScores(quizScores));
+
+        students.put(studentName, quizScores);
 
     }
 
@@ -90,12 +102,11 @@ public class StudentQuizScores {
                 this.studentName = console.getString("Enter the name your student.\n");
 
                 if (students.containsKey(this.studentName)) {
-                    
-                    
+
                     quizScores = qsl.addQuizScores(this.studentName, students);
 
                     students.put(this.studentName, quizScores);
-                    
+
                     valid = true;
 
                 } else {
@@ -129,17 +140,29 @@ public class StudentQuizScores {
                             + "         SCORES     \n"
                             + "     --------------     ");
 
-                    System.out.println(this.studentName);
+                    System.out.print(this.studentName);
+                    
                     List<Double> scores = this.students.get(this.studentName);
+                                        
+                    if(scores.isEmpty()){
+                        System.out.println(" has no grades yet!"); 
+                    }else{
+                        System.out.print(":");
+                        
                     for (Double quizScore : scores) {
 
-                        System.out.print(quizScore + ", ");
+                        System.out.print(" "+quizScore);
 
                     }
-                    double avg = qsl.getQuizAverage(scores);
-                    System.out.println("\nAverage Score: " + avg);
-
-                } else if (this.studentName.equals("all")) {
+                    
+                    this.average = qsl.getQuizAverage(scores);
+                    System.out.println("\nAverage Score: " + this.average);
+                    
+                    }
+                    
+                    
+                    
+                }else if (this.studentName.equals("all")) {
                     System.out.println("\n=========================\n"
                             + "         SCORES     \n"
                             + "     --------------     ");
@@ -154,13 +177,14 @@ public class StudentQuizScores {
                             System.out.print(quizScore + ", ");
 
                         }//end value print
-
+                        double avgAll = qsl.getQuizAverage(scores);
+                        System.out.println("Average all: " + avgAll);
                     }//end key print
                 } else {
-
                     System.out.println("\nStudent not found!");
                 }//end if else
-                go = console.yesCheck("\nWould you like to view another student's score?", "Invalid option!");
+                go = console.yesCheck("\nWould you like to view another student's score?\n", "Invalid option!");
+                
             }//end loop
         }
     }
@@ -179,8 +203,13 @@ public class StudentQuizScores {
 
     }
 
-    public void showHighQuizScores() {
+    public void showHighQuizScores(Map students) {
 
+        List <Map> highScores = new ArrayList();
+        
+        
+        
+        
         for (String keys : this.studentNames) {
 
             List<Double> scores = this.students.get(keys);
@@ -188,12 +217,10 @@ public class StudentQuizScores {
             for (Double quizScore : scores) {
 
                 quizScore = qsl.getQuizAverage(scores);
-                System.out.println("Avg: "+quizScore);
+                System.out.println("Avg: " + quizScore);
             }//end value print
 
         }//end key print
     }
 
 }
-
-

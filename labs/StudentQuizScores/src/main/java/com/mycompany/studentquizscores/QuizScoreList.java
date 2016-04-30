@@ -22,33 +22,16 @@ public class QuizScoreList {
     public List addQuizScores(String studentName, Map studentMap) {
 
         List<Double> quizGrades = (List<Double>) studentMap.get(studentName);
-        
+
         go = true;
         while (go == true) {
             this.quizScore = console.getDouble("\nEnter a quiz score.\n", "That is an invalid score.\n");
-            
+
             quizGrades.add(this.quizScore);
-            go = console.yesCheck("Would you like to add another score for" + studentName + "?\n", "Invalid option!");
+            go = console.yesCheck("Would you like to add another score for " + studentName + "?\n", "Invalid option!");
         }
 
         return quizGrades;
-    }
-
-    public List getQuizScores() {
-        return quizScores;
-    }
-
-    public void setQuizScore(List quizScores) {
-        this.quizScores = quizScores;
-    }
-
-    public List setScores(List quizScores){
-        
-        QuizScoreList qsl = new QuizScoreList();
-        
-        qsl.setQuizScore(quizScores);
-        return quizScores;
-        
     }
     
     public List removeQuizScores(String studentName) {
@@ -65,6 +48,7 @@ public class QuizScoreList {
 
     public double getQuizAverage(List<Double> quizScores) {
 
+        
         double total = 0;
         double avg = 0;
 
