@@ -5,9 +5,7 @@
 package com.mycompany.studentquizscores;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,7 +17,6 @@ import java.util.Set;
 public class StudentData {
 
     String studentName;
-    Float quizScore;
     ConsoleIO console = new ConsoleIO();
     List<Float> lstQuizScores = new ArrayList();
     Map<String, StudentData> studentInfo = new HashMap();
@@ -58,6 +55,12 @@ public class StudentData {
                     break;
                 case "8":
                     viewClassAverage();
+                    break;
+                case "9":
+                    viewTopClass();
+                    break;
+                case "10":
+                    viewBottomClass();
                 case "q":
                 case "quit":
                     run = false;
@@ -88,6 +91,8 @@ public class StudentData {
         System.out.println("    7) Remove Scores");
         System.out.println(" ---------------------------------- ");
         System.out.println("    8) View Total Quiz Score Average");
+        System.out.println("    9) View Top of Class            ");
+        System.out.println("    10) View Bottom of Class        ");
         System.out.println("                                    ");
         System.out.println("                            [quit]  ");
         System.out.println("====================================");
@@ -205,25 +210,16 @@ public class StudentData {
 
     public void viewStudentAverage() {
 
-        Set<String> studentSet = studentInfo.keySet();
+        Set<String> studentNameSet = studentInfo.keySet();
         System.out.println("Enter the name of student you to view their scores.");
         String studName = console.getString(">");
 
-        if (studentSet.contains(studName)) {
+        if (studentNameSet.contains(studName)) {
 
             StudentData objectStudent = studentInfo.get(studName);
             List<Float> scoreList = objectStudent.getStudentQuizScores();
 
-            float total = 0;
-            float average = 0;
-
-            for (Float quizScores : scoreList) {
-
-                total += quizScores;
-
-            }
-
-            average = total / scoreList.size();
+            float average = calculateAverageGrades(scoreList);
 
             System.out.println(studName + "'s average Quiz Score is: " + average);
 
@@ -274,12 +270,60 @@ public class StudentData {
 
     public void viewTopClass() {
 
+        float highScore = Float.MIN_VALUE;
+        Set<String> studentSet = studentInfo.keySet();
         List<Float> averageList = createAveragesList();
-        
-        for(Float averages : averageList){
+        for (Float average : averageList) {
+
+            if (average >= highScore) {
+
+                highScore = average;
+            }
+
+        }
+
+        System.out.println("The highest quiz average is: " + highScore);
+
+        System.out.println("***TOP GUN***");
+        for (String studName : studentSet) {
+
+            StudentData objectStudent = studentInfo.get(studName);
+            List<Float> scoreList = objectStudent.getStudentQuizScores();
+            float averages = calculateAverageGrades(scoreList);
             
+            if (averages == highScore) {
+                System.out.println(studName);
+            }
+        }
+
+    }
+    
+        public void viewBottomClass() {
+
+        float lowScore = Float.MAX_VALUE;
+        Set<String> studentSet = studentInfo.keySet();
+        List<Float> averageList = createAveragesList();
+        for (Float average : averageList) {
+
+            if (average <= lowScore) {
+
+                lowScore = average;
+            }
+
+        }
+
+        System.out.println("The highest quiz average is: " + lowScore);
+
+        System.out.println("***BOTTOM OF CLASS***");
+        for (String studName : studentSet) {
+
+            StudentData objectStudent = studentInfo.get(studName);
+            List<Float> scoreList = objectStudent.getStudentQuizScores();
+            float averages = calculateAverageGrades(scoreList);
             
-            
+            if (averages == lowScore) {
+                System.out.println(studName);
+            }
         }
 
     }
@@ -290,12 +334,12 @@ public class StudentData {
 
         Set<String> studentSet = studentInfo.keySet();
         List<Float> averageList = new ArrayList();
-        for (String name : studentSet) {
+        for (String studName : studentSet) {
 
             float total = 0;
-            StudentData info = studentInfo.get(name);
+            StudentData objectStudent = studentInfo.get(studName);
 
-            List<Float> quizScoreList = info.getStudentQuizScores();
+            List<Float> quizScoreList = objectStudent.getStudentQuizScores();
 
             for (Float quizScores : quizScoreList) {
 
@@ -327,5 +371,22 @@ public class StudentData {
     public Map getStudentInfo() {
 
         return this.studentInfo;
+    }
+
+    public float calculateAverageGrades(List<Float> scoreList) {
+
+        float total = 0;
+        float average = 0;
+
+        for (Float quizScores : scoreList) {
+
+            total += quizScores;
+
+        }
+
+        average = total / scoreList.size();
+
+        return average;
+
     }
 }
