@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.text.*;
 
 /**
  *
@@ -17,9 +18,10 @@ import java.util.Set;
 public class StudentData {
 
     String studentName;
+    int studentID = 1000;
     ConsoleIO console = new ConsoleIO();
     List<Float> lstQuizScores = new ArrayList();
-    Map<String, StudentData> studentInfo = new HashMap();
+    Map<Integer, StudentData> studentInfo = new HashMap();
 
     public StudentData() {
 
@@ -102,15 +104,23 @@ public class StudentData {
     public boolean displayStudentRoster() {
 
         boolean isEmpty = false;
-        Set<String> studentSet = studentInfo.keySet();
+        Set<Integer> studentSet = studentInfo.keySet();
 
         if (studentSet.isEmpty()) {
             System.out.println("Your roster is empty!");
             isEmpty = true;
         } else {
-            for (String names : studentSet) {
-                System.out.println(names);
+
+            System.out.println("====================================");
+            System.out.println(" ID #   | Student Name");
+            System.out.println("------------------------------------");
+            for (Integer studentID : studentSet) {
+
+                StudentData objectStudent = this.studentInfo.get(studentID);
+                String studNames = objectStudent.getStudentName();
+                System.out.println(" " + studentID + "   | " + studNames);
             }
+            System.out.println("====================================");
         }
         return isEmpty;
     }
@@ -120,25 +130,26 @@ public class StudentData {
         StudentData objectStudent = new StudentData();
         System.out.println("Enter the name for your student");
         String studName = console.getString(">");
-
+        studentID++;
         objectStudent.setStudentName(studName);
-        studentInfo.put(studName, objectStudent);
+
+        studentInfo.put(studentID, objectStudent);
 
     }
 
     public void removeStudent() {
 
-        Set<String> studentSet = studentInfo.keySet();
+        Set <Integer> studentSet = studentInfo.keySet();
 
-        System.out.println("Enter the name for your student you would like to remove.");
-        String studName = console.getString(">");
+        System.out.println("Enter the ID for student you would like to remove.");
+        String studID = console.getString(">");
 
-        if (studentSet.contains(studName)) {
+        if (studentSet.contains(studID)) {
 
-            studentInfo.remove(studName);
+            studentInfo.remove(studID);
 
         } else {
-            System.out.println("That student does not exist.");
+            System.out.println("That student ID does not exist.");
         }
 
     }
@@ -290,15 +301,15 @@ public class StudentData {
             StudentData objectStudent = studentInfo.get(studName);
             List<Float> scoreList = objectStudent.getStudentQuizScores();
             float averages = calculateAverageGrades(scoreList);
-            
+
             if (averages == highScore) {
                 System.out.println(studName);
             }
         }
 
     }
-    
-        public void viewBottomClass() {
+
+    public void viewBottomClass() {
 
         float lowScore = Float.MAX_VALUE;
         Set<String> studentSet = studentInfo.keySet();
@@ -320,7 +331,7 @@ public class StudentData {
             StudentData objectStudent = studentInfo.get(studName);
             List<Float> scoreList = objectStudent.getStudentQuizScores();
             float averages = calculateAverageGrades(scoreList);
-            
+
             if (averages == lowScore) {
                 System.out.println(studName);
             }
