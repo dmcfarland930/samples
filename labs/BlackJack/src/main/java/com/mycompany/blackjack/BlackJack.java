@@ -138,7 +138,6 @@ public class BlackJack {
 
         showHumanCards();
         blackJack = checkBlackJack();
-        blackJack = true;
         if (blackJack == true) {
             drawNew = false;
             win = true;
