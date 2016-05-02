@@ -1,6 +1,6 @@
 package com.mycompany.statecapitals2;
 
-/*
+/**
  * This program was written by Daniel McFarland.
  * I hope you enjoy it!
  */
