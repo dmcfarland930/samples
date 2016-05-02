@@ -5,7 +5,7 @@
 package com.mycompany.studentquizscores;
 
 /**
- *
+ **
  * @author apprentice
  */
 public class App {

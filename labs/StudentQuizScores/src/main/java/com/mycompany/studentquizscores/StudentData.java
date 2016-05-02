@@ -77,9 +77,6 @@ public class StudentData {
         System.out.println("Good bye!");
     }
 
-    public void createAllStudents() {
-
-    }
 
     public void displayMenu() {
 
