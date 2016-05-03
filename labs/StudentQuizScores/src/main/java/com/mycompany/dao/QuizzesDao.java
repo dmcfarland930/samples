@@ -103,9 +103,6 @@ public class QuizzesDao {
                 out.print(TOKEN);
 
                 out.print(myQuiz.getScore());
-                out.print(TOKEN);
-                
-                out.print(myQuiz.getAverage());
                 out.println();
             }
 
@@ -142,12 +139,10 @@ public class QuizzesDao {
                 int id = Integer.parseInt(stringParts[0]);
                 int studId = Integer.parseInt(stringParts[1]);
                 double score = Double.parseDouble(stringParts[2]);
-                double average = Double.parseDouble(stringParts[3]);
 
                 myQuiz.setQuizId(id);
                 myQuiz.setStudId(studId);
                 myQuiz.setScore(score);
-                myQuiz.setAverage(average);
 
                 quizList.add(myQuiz);
 

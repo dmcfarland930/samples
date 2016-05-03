@@ -8,6 +8,7 @@ import com.mycompany.dao.QuizzesDao;
 import com.mycompany.dao.StudentDao;
 import com.mycompany.dto.Quizzes;
 import com.mycompany.dto.Student;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
  */
 public class QuizController {
 
+    DecimalFormat df = new DecimalFormat("0.00");
     ConsoleIO console = new ConsoleIO();
     List<Quizzes> quizzes = new ArrayList();
     QuizzesDao quizDao = new QuizzesDao();
@@ -207,6 +209,7 @@ public class QuizController {
         boolean empty;
         boolean view = true;
         StudentController sc = new StudentController();
+        Student myStudent = new Student();
         while (view == true) {
             empty = sc.viewRoster();
             if (!empty) {
@@ -225,13 +228,12 @@ public class QuizController {
                         for (Student studentOnFile : studentsFromFile) {
 
                             id = studentOnFile.getId();
-                            List<Quizzes> quizzes = quizDao.decode();
-                            Quizzes myQuiz = new Quizzes();
-                                    myQuiz.setQuizId(id);
+                            calculateAverage(id);
+                            double average = studentOnFile.getAverage();
                             String studFName = studentOnFile.getFirstName();
                             String studLName = studentOnFile.getLastName();
                             System.out.println("====================================");
-                            System.out.println(studFName + " " + studLName + "'s Average: ");
+                            System.out.println(studFName + " " + studLName + "'s Average: " + df.format(average));
                             System.out.println("------------------------------------");
 
                         }
@@ -241,24 +243,39 @@ public class QuizController {
             view = false;
         }
 
-    
+    }
 
-    
+    public void calculateAverage(int idEntry) {
 
-    
-//
-//    public double calculateAverage(int idEntry) {
-//
-//        boolean empty;
-//
-//        for (Quizzes myQuiz : quizzes) {
-//            int quizStudId = myQuiz.getStudId();
-//            int quizId = myQuiz.getQuizId();
-//            if (quizStudId == idEntry) {
-//                double score = myQuiz.getScore();
-//            }
-//
-//        }
-//
-//    }
+        StudentDao studDao = new StudentDao();
+        List<Quizzes> quizzes = quizDao.decode();
+        List<Student> students = studDao.decode();
+        List<Double> scores = new ArrayList();
+
+        double total = 0;
+        double average;
+
+        for (Quizzes aQuiz : quizzes) {
+            double score = aQuiz.getScore();
+            scores.add(score);
+
+        }
+        for (Double gotScore : scores) {
+
+            total += gotScore;
+        }
+
+        for (Student studentOnFile : students) {
+            int idOnFile = studentOnFile.getId();
+            if (idOnFile == idEntry) {
+                average = total / scores.size();
+                studentOnFile.setId(idOnFile);
+                studentOnFile.setAverage(average);
+                studDao.update(studentOnFile);
+            } else {
+                break;
+            }
+
+        }
+    }
 }

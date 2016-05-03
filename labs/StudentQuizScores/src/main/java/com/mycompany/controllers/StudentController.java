@@ -88,7 +88,7 @@ public class StudentController {
     }
 
     public boolean viewRoster() {
-        
+
         boolean empty = false;
 
         System.out.println("====================================");
@@ -133,9 +133,9 @@ public class StudentController {
                 String fName = myStudent.getFirstName();
                 String lName = myStudent.getLastName();
 
-                System.out.println("\n'" + fName + " " + lName + "' added.");
+                System.out.println("\n'" + fName + " " + lName + "' added.\n");
                 studDao.create(myStudent);
-                add = console.yesCheck("\nWould you like to add another student?\n"
+                add = console.yesCheck("Would you like to add another student?\n"
                         + "[yes/no]\n>", "That is an invalid entry!");
             } else {
                 add = false;
@@ -147,46 +147,51 @@ public class StudentController {
     public void removeStudent() {
 
         boolean found;
+        boolean empty;
         boolean remove = true;
         while (remove == true) {
-            viewRoster();
-            System.out.println("====================================");
-            String entry = console.getString("Please enter the student's ID to\n"
-                    + "remove them from your roster.\n"
-                    + "Enter 'q' to cancel.\n>");
-            if (!entry.equalsIgnoreCase("q")) {
-                int id = Integer.parseInt(entry);
-                found = studSearch(id);
-                if (!found) {
-                    System.out.println("\nThat student does not exist!\n");
-                } else {
-                    List<Student> studentsFromFile = studDao.decode();
+            empty = viewRoster();
+            if (!empty) {
+                System.out.println("====================================");
+                String entry = console.getString("Please enter the student's ID to\n"
+                        + "remove them from your roster.\n"
+                        + "Enter 'q' to cancel.\n>");
+                if (!entry.equalsIgnoreCase("q")) {
+                    int id = Integer.parseInt(entry);
+                    found = studSearch(id);
+                    if (!found) {
+                        System.out.println("\nThat student does not exist!\n");
+                    } else {
+                        List<Student> studentsFromFile = studDao.decode();
 
-                    List<Quizzes> quizzes = quizDao.decode();
+                        List<Quizzes> quizzes = quizDao.decode();
 
-                    for (Student myStudent : studentsFromFile) {
+                        for (Student myStudent : studentsFromFile) {
 
-                        myStudent.setId(id);
-                        id = myStudent.getId();
-                        String firstName = myStudent.getFirstName();
-                        String lastName = myStudent.getLastName();
+                            myStudent.setId(id);
+                            id = myStudent.getId();
+                            String firstName = myStudent.getFirstName();
+                            String lastName = myStudent.getLastName();
 
+                            for (Quizzes myQuiz : quizzes) {
+                                int quizOnFileStudId = myQuiz.getStudId();
+                                if (id == quizOnFileStudId) {
+                                    int quizId = myQuiz.getQuizId();
+                                    myQuiz.setQuizId(quizId);
+                                    quizDao.delete(myQuiz);
+                                }
 
-                        for (Quizzes myQuiz : quizzes) {
-                            int quizOnFileStudId = myQuiz.getStudId();
-                            if (id == quizOnFileStudId) {
-                                int quizId = myQuiz.getQuizId();
-                                myQuiz.setQuizId(quizId);
-                                quizDao.delete(myQuiz);
                             }
+
                             studDao.delete(myStudent);
+                            System.out.println("\n'" + firstName + " " + lastName + "' removed.\n");
 
                         }
-                        
-                        System.out.println("\n'" + firstName + " " + lastName + "' removed.\n");
                     }
                 }
-                remove = console.yesCheck("\nWould you like to remove another student?\n>", 
+
+                remove = console.yesCheck("Would you like to remove another\nstudent?"
+                        + " [yes/no]\n>",
                         "That is an invalid entry!");
             } else {
                 remove = false;

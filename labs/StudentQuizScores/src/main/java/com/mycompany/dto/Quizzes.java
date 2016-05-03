@@ -14,7 +14,6 @@ public class Quizzes {
     private int quizId;
     private int studId;
     private double score;
-    private double average;
     private int max;
 
     public String getQuizName() {
@@ -55,17 +54,7 @@ public class Quizzes {
 
     public void setStudId(int studId) {
         this.studId = studId;
-    }
-
-    public double getAverage() {
-        return average;
-    }
-
-    public void setAverage(double average) {
-        this.average = average;
-    }
-
-    
+    } 
  
     
     

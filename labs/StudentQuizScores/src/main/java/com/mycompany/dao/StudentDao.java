@@ -27,17 +27,17 @@ public class StudentDao {
     private List<Student> students = new ArrayList();
     private int nextId = 1000;
 
-    public StudentDao(){
+    public StudentDao() {
         students = decode();
-        
-        for(Student myStudent : students){
-            if(myStudent.getId() == nextId){
+
+        for (Student myStudent : students) {
+            if (myStudent.getId() == nextId) {
                 nextId++;
             }
-            
+
         }
     }
-    
+
     public Student create(Student student) {//create
 
         student.setId(nextId);
@@ -46,7 +46,6 @@ public class StudentDao {
 
         students.add(student);
 
-        
         encode();
         return student;
 
@@ -75,7 +74,7 @@ public class StudentDao {
     }
 
     public void delete(Student student) {//delete
-        
+
         Student found = null;
 
         for (Student myStudent : students) {
@@ -84,13 +83,13 @@ public class StudentDao {
                 break;
             }
         }
-        
+
         students.remove(found);
         encode();
     }
 
     private void encode() {
-        
+
         final String TOKEN = "::";
 
         PrintWriter out = null;
@@ -108,6 +107,9 @@ public class StudentDao {
                 out.print(TOKEN);
 
                 out.print(myStudent.getLastName());
+                out.print(TOKEN);
+
+                out.print(myStudent.getAverage());
                 out.println();
 
             }
@@ -151,6 +153,8 @@ public class StudentDao {
                 myStudent.setId(id);
                 myStudent.setFirstName(stringParts[1]);
                 myStudent.setLastName(stringParts[2]);
+                double average = Double.parseDouble(stringParts[3]);
+                myStudent.setAverage(average);
 
                 studentList.add(myStudent);
             }

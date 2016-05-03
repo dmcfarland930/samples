@@ -14,6 +14,7 @@ public class Student {
     
     Quizzes quiz = new Quizzes();
     private int id;
+    private double average;
     private String firstName;
     private String lastName;
     private List<Quizzes> scores;
@@ -56,6 +57,14 @@ public class Student {
 
     public void setScores(List<Quizzes> scores) {
         this.scores = scores;
+    }
+
+    public double getAverage() {
+        return average;
+    }
+
+    public void setAverage(double average) {
+        this.average = average;
     }
 
     
