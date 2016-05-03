@@ -138,6 +138,8 @@ public class QuizController {
                                 remove2 = false;
                             }
 
+                        }else{
+                            break;
                         }
                     }
                 }
@@ -267,7 +269,7 @@ public class QuizController {
 
     public void viewTopClass() {
 
-        double highScore = Float.MIN_VALUE;
+        double highScore = Double.MIN_VALUE;
 
         StudentDao studDao = new StudentDao();
         List<Student> students = studDao.decode();
@@ -283,7 +285,7 @@ public class QuizController {
             }
         }
         if (highScore == Double.MIN_VALUE) {
-            System.out.println("There are no grades to view!");
+            System.out.println("\nThere are no averages to view!\n");
         } else {
             System.out.println("====================================");
             System.out.println(" The highest quiz average is: " + df.format(highScore));
@@ -307,7 +309,7 @@ public class QuizController {
 
     public void viewBottomClass() {
 
-        double highScore = Float.MAX_VALUE;
+        double highScore = Double.MAX_VALUE;
 
         StudentDao studDao = new StudentDao();
         List<Student> students = studDao.decode();
@@ -322,8 +324,8 @@ public class QuizController {
                 highScore = average;
             }
         }
-        if (highScore == Double.MIN_VALUE) {
-            System.out.println("There are no grades to view!");
+        if (highScore == Double.MAX_VALUE) {
+            System.out.println("\nThere are no averages to view!\n");
         } else {
             System.out.println("====================================");
             System.out.println(" The lowest quiz average is: " + df.format(highScore));

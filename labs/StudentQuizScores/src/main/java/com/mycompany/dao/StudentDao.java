@@ -107,9 +107,6 @@ public class StudentDao {
                 out.print(TOKEN);
 
                 out.print(myStudent.getLastName());
-                out.print(TOKEN);
-
-                out.print(myStudent.getAverage());
                 out.println();
 
             }
@@ -153,8 +150,6 @@ public class StudentDao {
                 myStudent.setId(id);
                 myStudent.setFirstName(stringParts[1]);
                 myStudent.setLastName(stringParts[2]);
-                double average = Double.parseDouble(stringParts[3]);
-                myStudent.setAverage(average);
 
                 studentList.add(myStudent);
             }
