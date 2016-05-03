@@ -1,4 +1,4 @@
-package com.mycompany.studentquizscores;
+package com.mycompany.controllers;
 
 /*
  * This program was written by Daniel McFarland.

@@ -22,9 +22,6 @@ public class StudentData {
     List<Float> lstQuizScores = new ArrayList();
     Map<Integer, StudentData> studentInfo = new HashMap();
 
-    public StudentData() {
-
-    }
 
     public void run() {
 
@@ -80,10 +77,11 @@ public class StudentData {
 
     public void displayMenu() {
 
-        System.out.println("What would you like to do?");
+        System.out.println("====================================");
+        System.out.println("   What would you like to do?");
         System.out.println("====================================");
         System.out.println("    1) View Student Roster");
-        System.out.println("    2) Add Student    ");
+        System.out.println("    2) Add Student");
         System.out.println("    3) Remove Student");
         System.out.println("    4) View Quiz Scores");
         System.out.println("    5) View Quiz Score Avg");

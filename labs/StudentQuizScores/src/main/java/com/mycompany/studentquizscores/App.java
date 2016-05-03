@@ -4,15 +4,17 @@
  */
 package com.mycompany.studentquizscores;
 
+import com.mycompany.controllers.StudentController;
+
 /**
- **
+ *
  * @author apprentice
  */
 public class App {
     public static void main(String[] args) {
         
-    StudentData sd = new StudentData();
-    sd.run();
+    StudentController sc = new StudentController();
+    sc.run();
         
     }
     
