@@ -98,7 +98,7 @@ public class QuizzesDao {
 
                 out.print(myQuiz.getQuizId());
                 out.print(TOKEN);
-                
+
                 out.print(myQuiz.getStudId());
                 out.print(TOKEN);
 
@@ -160,5 +160,26 @@ public class QuizzesDao {
 
         return quizList;
 
+    }
+
+    public double calculateClassAverage() {
+
+        List<Quizzes> quizzes = decode();
+        List<Double> scores = new ArrayList();
+
+        double total = 0;
+        double average;
+
+        for (Quizzes aQuiz : quizzes) {
+            double score = aQuiz.getScore();
+            scores.add(score);
+        }
+        for (Double gotScore : scores) {
+
+            total += gotScore;
+        }
+
+        average = total / scores.size();
+        return average;
     }
 }

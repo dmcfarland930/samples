@@ -39,10 +39,10 @@ public class StudentController {
             System.out.println("    5) View Quiz Score Avg");
             System.out.println("    6) Add Scores");
             System.out.println("    7) Remove Scores");
-//            System.out.println(" ---------------------------------- ");
-//            System.out.println("    8) View Total Quiz Score Average");
-//            System.out.println("    9) View Top of Class");
-//            System.out.println("    10) View Bottom of Class");
+            System.out.println(" ---------------------------------- ");
+            System.out.println("    8) View Total Quiz Score Average");
+            System.out.println("    9) View Top of Class");
+            System.out.println("    10) View Bottom of Class");
             System.out.println("                                    ");
             System.out.println("                            [quit]");
             System.out.println("====================================");
@@ -77,6 +77,18 @@ public class StudentController {
                 case "7":
                     //remove score
                     qc.removeScore();
+                    break;
+                case "8":
+                    //calculate class average
+                    qc.viewClassAverage();
+                    break;
+                case "9":
+                    //see top of class
+                    qc.viewTopClass();
+                    break;
+                case "10":
+                    //see bottom of class
+                    qc.viewBottomClass();
                     break;
                 case "q":
                     //quit
@@ -168,8 +180,9 @@ public class StudentController {
 
                         for (Student myStudent : studentsFromFile) {
 
-                            myStudent.setId(id);
-                            id = myStudent.getId();
+                            int idOnFile = myStudent.getId();
+
+                            myStudent.setId(idOnFile);
                             String firstName = myStudent.getFirstName();
                             String lastName = myStudent.getLastName();
 
@@ -179,13 +192,15 @@ public class StudentController {
                                     int quizId = myQuiz.getQuizId();
                                     myQuiz.setQuizId(quizId);
                                     quizDao.delete(myQuiz);
+                                    break;
                                 }
-
+                                break;
                             }
 
-                            studDao.delete(myStudent);
-                            System.out.println("\n'" + firstName + " " + lastName + "' removed.\n");
-
+                            if (id == idOnFile) {
+                                studDao.delete(myStudent);
+                                System.out.println("\n'" + firstName + " " + lastName + "' removed.\n");
+                            }
                         }
                     }
                 }

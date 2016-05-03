@@ -25,18 +25,22 @@ public class QuizController {
 
     public void viewScores() {
         StudentController sc = new StudentController();
-        sc.viewRoster();
-        System.out.println("====================================");
-        String entry = console.getString("Please enter the student's ID to\n"
-                + "view their score. Enter 'q' to\ncancel\n"
-                + ">");
-        if (!entry.equalsIgnoreCase("q")) {
-            int id = Integer.parseInt(entry);
-            boolean found = sc.studSearch(id);
-            if (!found) {
-                System.out.println("\nThat student does not exist!\n");
-            } else {
-                displayScores(id);
+        boolean empty;
+
+        empty = sc.viewRoster();
+        if (!empty) {
+            System.out.println("====================================");
+            String entry = console.getString("Please enter the student's ID to\n"
+                    + "view their score. Enter 'q' to\ncancel\n"
+                    + ">");
+            if (!entry.equalsIgnoreCase("q")) {
+                int id = Integer.parseInt(entry);
+                boolean found = sc.studSearch(id);
+                if (!found) {
+                    System.out.println("\nThat student does not exist!\n");
+                } else {
+                    displayScores(id);
+                }
             }
         }
     }
@@ -65,7 +69,7 @@ public class QuizController {
                         List<Student> studentsFromFile = studDao.decode();
                         for (Student studentOnFile : studentsFromFile) {
                             int idOnFile = studentOnFile.getId();
-                            while (add2 == true) {
+                            while (add2 == true && idOnFile == id) {
                                 String entry2 = console.getString("Please enter your student's quiz\nscore."
                                         + " Enter 'q' to cancel.\n>");
                                 if (!entry2.equalsIgnoreCase("q")) {
@@ -146,6 +150,7 @@ public class QuizController {
     public boolean displayScores(int studId) {
 
         boolean empty = false;
+        boolean found = false;
         int id = studId;
         StudentDao studDao = new StudentDao();
 
@@ -154,9 +159,7 @@ public class QuizController {
         for (Student studentOnFile : studentsFromFile) {
 
             int idOnFile = studentOnFile.getId();
-            if (id != idOnFile) {
-                System.out.println("\nThat student does not exist!\n");
-            } else {
+            if (id == idOnFile) {
                 List<Quizzes> quizzes = quizDao.decode();
                 String studFName = studentOnFile.getFirstName();
                 String studLName = studentOnFile.getLastName();
@@ -166,7 +169,8 @@ public class QuizController {
                 String studFNameCap = studFName.toUpperCase();
                 String studLNameCap = studLName.toUpperCase();
 
-                if (quizzes.isEmpty()) {
+                found = scoreSearch(idOnFile);
+                if (!found) {
 
                     System.out.println("\n   " + studFNameCap + " " + studLNameCap + " HAS NO SCORES!\n");
                     empty = true;
@@ -209,7 +213,6 @@ public class QuizController {
         boolean empty;
         boolean view = true;
         StudentController sc = new StudentController();
-        Student myStudent = new Student();
         while (view == true) {
             empty = sc.viewRoster();
             if (!empty) {
@@ -227,15 +230,15 @@ public class QuizController {
 
                         for (Student studentOnFile : studentsFromFile) {
 
-                            id = studentOnFile.getId();
-                            calculateAverage(id);
-                            double average = studentOnFile.getAverage();
-                            String studFName = studentOnFile.getFirstName();
-                            String studLName = studentOnFile.getLastName();
-                            System.out.println("====================================");
-                            System.out.println(studFName + " " + studLName + "'s Average: " + df.format(average));
-                            System.out.println("------------------------------------");
+                            int idOnFile = studentOnFile.getId();
+                            if (idOnFile == id) {
+                                double average = calculateAverage(id);
+                                String studFName = studentOnFile.getFirstName();
+                                String studLName = studentOnFile.getLastName();
+                                System.out.println("====================================");
+                                System.out.println("  " + studFName + " " + studLName + "'s Average: " + df.format(average));
 
+                            }
                         }
                     }
                 }
@@ -245,7 +248,104 @@ public class QuizController {
 
     }
 
-    public void calculateAverage(int idEntry) {
+    public void viewClassAverage() {
+
+        StudentDao studDao = new StudentDao();
+        List<Student> students = studDao.decode();
+        if (students.isEmpty()) {
+            System.out.println("====================================");
+            System.out.println(" ID #   | Student Name");
+            System.out.println("\n        YOUR ROSTER IS EMPTY!\n");
+        }
+
+        double average = quizDao.calculateClassAverage();
+        System.out.println("====================================");
+        System.out.println("Class Average: " + df.format(average));
+        System.out.println("------------------------------------");
+
+    }
+
+    public void viewTopClass() {
+
+        double highScore = Float.MIN_VALUE;
+
+        StudentDao studDao = new StudentDao();
+        List<Student> students = studDao.decode();
+
+        for (Student studentOnFile : students) {
+            int idOnFile = studentOnFile.getId();
+
+            double average = calculateAverage(idOnFile);
+
+            if (average >= highScore) {
+
+                highScore = average;
+            }
+        }
+        if (highScore == Double.MIN_VALUE) {
+            System.out.println("There are no grades to view!");
+        } else {
+            System.out.println("====================================");
+            System.out.println(" The highest quiz average is: " + df.format(highScore));
+            System.out.println("====================================");
+            System.out.println("         ***TOP OF CLASS***");
+            System.out.println("------------------------------------");
+            for (Student stud : students) {
+
+                int id = stud.getId();
+                double averages = calculateAverage(id);
+                String studFName = stud.getFirstName();
+                String studLName = stud.getLastName();
+
+                if (averages == highScore) {
+                    System.out.println("        " + studFName + " " + studLName);
+                }
+            }
+        }
+
+    }
+
+    public void viewBottomClass() {
+
+        double highScore = Float.MAX_VALUE;
+
+        StudentDao studDao = new StudentDao();
+        List<Student> students = studDao.decode();
+
+        for (Student studentOnFile : students) {
+            int idOnFile = studentOnFile.getId();
+
+            double average = calculateAverage(idOnFile);
+
+            if (average <= highScore) {
+
+                highScore = average;
+            }
+        }
+        if (highScore == Double.MIN_VALUE) {
+            System.out.println("There are no grades to view!");
+        } else {
+            System.out.println("====================================");
+            System.out.println(" The lowest quiz average is: " + df.format(highScore));
+            System.out.println("====================================");
+            System.out.println("        ***BOTTOM OF CLASS***");
+            System.out.println("------------------------------------");
+            for (Student stud : students) {
+
+                int id = stud.getId();
+                double averages = calculateAverage(id);
+                String studFName = stud.getFirstName();
+                String studLName = stud.getLastName();
+
+                if (averages == highScore) {
+                    System.out.println("        " + studFName + " " + studLName);
+                }
+            }
+        }
+
+    }
+
+    public double calculateAverage(int idEntry) {
 
         StudentDao studDao = new StudentDao();
         List<Quizzes> quizzes = quizDao.decode();
@@ -255,27 +355,25 @@ public class QuizController {
         double total = 0;
         double average;
 
-        for (Quizzes aQuiz : quizzes) {
-            double score = aQuiz.getScore();
-            scores.add(score);
-
-        }
-        for (Double gotScore : scores) {
-
-            total += gotScore;
-        }
-
         for (Student studentOnFile : students) {
             int idOnFile = studentOnFile.getId();
-            if (idOnFile == idEntry) {
-                average = total / scores.size();
-                studentOnFile.setId(idOnFile);
-                studentOnFile.setAverage(average);
-                studDao.update(studentOnFile);
-            } else {
-                break;
-            }
 
+            if (idOnFile == idEntry) {
+
+                for (Quizzes aQuiz : quizzes) {
+                    int quizStudId = aQuiz.getStudId();
+                    if (quizStudId == idOnFile) {
+                        double score = aQuiz.getScore();
+                        scores.add(score);
+                    }
+                }
+                for (Double gotScore : scores) {
+
+                    total += gotScore;
+                }
+            }
         }
+        average = total / scores.size();
+        return average;
     }
 }
