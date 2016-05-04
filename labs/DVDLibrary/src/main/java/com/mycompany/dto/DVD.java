@@ -16,6 +16,7 @@ public class DVD {
     String director;
     String studio;
     String userNote;
+    Date dvdDate;
 
     public int getId() {
         return id;
@@ -63,6 +64,14 @@ public class DVD {
 
     public void setUserNote(String userNote) {
         this.userNote = userNote;
+    }
+
+    public Date getDvdDate() {
+        return dvdDate;
+    }
+
+    public void setDvdDate(Date dvdDate) {
+        this.dvdDate = dvdDate;
     }
     
     

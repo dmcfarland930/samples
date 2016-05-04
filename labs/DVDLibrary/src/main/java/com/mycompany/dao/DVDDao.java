@@ -40,9 +40,10 @@ public class DVDDao {
         }
     }
 
-    public DVD create(DVD dvd) {
+    public DVD create(DVD dvd, Date date) {
 
         dvd.setId(nextId);
+        dvd.setDvdDate(date);
         nextId++;
         dvdList.add(dvd);
 
@@ -116,11 +117,11 @@ public class DVDDao {
                 out.print(TOKEN);
                 out.print(myDVD.getUserNote());
                 out.print(TOKEN);
-                out.print(dvdDate.getMonth());
+                out.print(myDVD.getDvdDate().getMonth());
                 out.print(TOKEN);
-                out.print(dvdDate.getDay());
+                out.print(myDVD.getDvdDate().getDay());
                 out.print(TOKEN);
-                out.print(dvdDate.getYear());
+                out.print(myDVD.getDvdDate().getYear());
                 out.println();
 
             }

@@ -48,6 +48,7 @@ public class DVDController {
                     break;
                 case "3":
                     //find by title
+                    findByTitle();
                     break;
                 case "4":
                     //view all
@@ -104,7 +105,7 @@ public class DVDController {
                 newDate.setYear(year);
 
                 System.out.println(dvdTitle + " added to Library!");
-                dvdDao.create(newDvd);
+                dvdDao.create(newDvd, newDate);
 
                 boolean confirm = console.yesCheck("\nAdd another DVD? [yes/no]\n>", "Enter [yes/no] to proceed.");
                 addAgain = confirm == true;
@@ -158,13 +159,13 @@ public class DVDController {
             }
         }
     }
-    
-    public void findByTitle(){
-        
+
+    public void findByTitle() {
+
         boolean findAgain = true;
-        
-        while(findAgain == true){
-        String dvdTitle = console.getString("To find a DVD, enter their its title:"
+
+        while (findAgain == true) {
+            String dvdTitle = console.getString("To find a DVD, enter their its title:"
                     + "(Enter 0 to cancel)\n>");
             if (dvdTitle.equals("0")) {
                 findAgain = false;
@@ -185,17 +186,23 @@ public class DVDController {
                 if (foundDvds.isEmpty()) {
                     System.out.println("No DVDs were found with that title!");
                 } else {
-                    System.out.println(dvdsFound+" were found with that title.");
-                    for (DVD dvdsInList : foundDvds) {
+                    System.out.println(dvdsFound + " were found with that title.");
+                    for (DVD dvdInList : foundDvds) {
 
-//
-//                        if (fSecAdd.equalsIgnoreCase("none")) {
-//                            fSecAdd = "";
-//                        }
-//                        System.out.println("+----------------------------+");
-//                        System.out.println("\n" + fFName + " " + fLName + "\n"
-//                                + fStAdd + "\n" + fCity + ", " + fState + ", " + fZip + "\n"
-//                                + fCountry + " " + fSecAdd + "\n");
+                        int fId = dvdInList.getId();
+                        String fTitle = dvdInList.getTitle();
+                        String fDirect = dvdInList.getDirector();
+                        String fRate = dvdInList.getRating();
+                        String fStudio = dvdInList.getStudio();
+                        String fNote = dvdInList.getUserNote();
+                        String fMonth = dvdInList.getDvdDate().getMonth();
+                        String fDay = dvdInList.getDvdDate().getDay();
+                        String fYear = dvdInList.getDvdDate().getYear();
+
+                        System.out.println("+----------------------------+");
+                        System.out.println(fId + " " + fTitle + " " + fDirect + "\n"
+                                + fRate + "\n" + fStudio + ", " + fNote + "\n"
+                                + fMonth+" "+fDay+", "+fYear);
                     }
                     boolean confirm = console.yesCheck("Search again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
                     if (confirm == true) {
@@ -207,7 +214,6 @@ public class DVDController {
             }
         }
     }
-    
 
     public void showTitlesAndId() {
 
