@@ -24,9 +24,9 @@ import java.util.logging.Logger;
  */
 public class DVDDao {
 
-    Date dvdDate = new Date();
-    List<DVD> dvdList = new ArrayList();
-    int nextId;
+    private Date dvdDate = new Date();
+    private List<DVD> dvdList = new ArrayList();
+    private int nextId = 1000;
 
     public void DVDDao() {
 
