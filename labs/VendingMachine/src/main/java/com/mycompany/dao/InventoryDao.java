@@ -66,10 +66,11 @@ public class InventoryDao {
 
     public void update(Inventory item) {
 
+        inventoryList = decode();
         for (Inventory myItem : inventoryList) {
 
             if (myItem.getInvId() == item.getInvId()) {
-                inventoryList.remove(item);
+                inventoryList.remove(myItem);
                 inventoryList.add(item);
 
             }

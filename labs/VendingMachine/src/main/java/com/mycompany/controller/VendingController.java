@@ -98,7 +98,7 @@ public class VendingController {
                     break;
                 case "3":
                     //update price
-
+                    updatePrice();
                     break;
                 case "4":
                     //view stock;
@@ -106,6 +106,7 @@ public class VendingController {
                     break;
                 case "5":
                     //update stock
+                    updateStock();
                     break;
                 case "6":
                     //view record
@@ -213,43 +214,109 @@ public class VendingController {
             if (itemId.equals("0")) {
                 updateAgain = false;
             } else {
-                int entryId = Integer.parseInt(itemId);
-                List<Inventory> items = invDao.decode();
+                try {
+                    int entryId = Integer.parseInt(itemId);
 
-                for (Inventory foundItem : items) {
+                    List<Inventory> items = invDao.decode();
 
-                    String fItemName = foundItem.getItemName();
-                    int fId = foundItem.getInvId();
+                    for (Inventory foundItem : items) {
 
-                    if (fId == entryId) {
+                        String fItemName = foundItem.getItemName();
+                        int fId = foundItem.getInvId();
+                        int savedStock = foundItem.getStock();
 
-                        boolean confirm = console.yesCheck("Change price for " + fItemName + "? [yes/no]", "Enter [yes/no] to proceed.");
+                        if (fId == entryId) {
 
-                        if (confirm == true) {
+                            boolean confirm = console.yesCheck("Change price for " + fItemName + "? [yes/no]", "Enter [yes/no] to proceed.");
 
-                            String itemPrice = console.checkEmptyString("Enter the new price for your item.", "You cannot leave this blank!");
-                            float newItemPrice= Float.parseFloat(itemPrice);
-                            int savedStock = foundItem.getStock();
+                            if (confirm == true) {
 
-                            foundItem.setCost(newItemPrice);
-                            foundItem.setItemName(fItemName);
-                            foundItem.setStock(savedStock);
-                            invDao.update(foundItem);
-                            
-                            String upperName = fItemName.toUpperCase();
-                            System.out.println("'" + upperName + "' PRICE CHANGED TO $"+newItemPrice);
-                            confirm = console.yesCheck("Update another price? [yes/no]", "Enter [yes/no] to proceed.");
+                                String itemPrice = console.checkEmptyString("Enter the new price for your item.", "You cannot leave this blank!");
+                                float newItemPrice = Float.parseFloat(itemPrice);
+
+                                foundItem.setCost(newItemPrice);
+                                foundItem.setItemName(fItemName);
+                                foundItem.setInvId(fId);
+                                foundItem.setStock(savedStock);
+                                invDao.update(foundItem);
+
+                                String upperName = fItemName.toUpperCase();
+                                System.out.println("'" + upperName + "' PRICE CHANGED TO $" + newItemPrice);
+                                confirm = console.yesCheck("Update another price? [yes/no]", "Enter [yes/no] to proceed.");
+                                updateAgain = confirm == true;
+                                break;
+                            }
+
+                        } else {
+                            System.out.println("\nItem not found!\n");
+                            boolean confirm = console.yesCheck("Search again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
                             updateAgain = confirm == true;
                             break;
+
                         }
-
-                    } else {
-                        System.out.println("\nItem not found!\n");
-                        boolean confirm = console.yesCheck("Search again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
-                        updateAgain = confirm == true;
-                        break;
-
                     }
+                } catch (Exception ex) {
+                    System.out.println("That is an invalid ID entry.");
+                }
+
+            }
+        }
+    }
+
+    public void updateStock() {
+
+        boolean updateAgain = true;
+
+        showInventory();
+
+        while (updateAgain == true) {
+            String itemId = console.checkEmptyString("\nEnter the ID of your item to update its stock. (Enter 0 to cancel)", "You cannot leave this blank!");
+            if (itemId.equals("0")) {
+                updateAgain = false;
+            } else {
+                try {
+                    int entryId = Integer.parseInt(itemId);
+
+                    List<Inventory> items = invDao.decode();
+
+                    for (Inventory foundItem : items) {
+
+                        String fItemName = foundItem.getItemName();
+                        int fId = foundItem.getInvId();
+                        float fPrice = foundItem.getCost();
+
+                        if (fId == entryId) {
+
+                            boolean confirm = console.yesCheck("Change stock for " + fItemName + "? [yes/no]", "Enter [yes/no] to proceed.");
+
+                            if (confirm == true) {
+
+                                String itemStock = console.checkEmptyString("Enter the new stock for your item.", "You cannot leave this blank!");
+                                int newItemStock = Integer.parseInt(itemStock);
+
+                                foundItem.setCost(fPrice);
+                                foundItem.setStock(newItemStock);
+                                foundItem.setInvId(fId);
+                                foundItem.setItemName(fItemName);
+                                invDao.update(foundItem);
+
+                                String upperName = fItemName.toUpperCase();
+                                System.out.println("'" + upperName + "' STOCK CHANGED TO x " + newItemStock);
+                                confirm = console.yesCheck("Update another item's stock? [yes/no]", "Enter [yes/no] to proceed.");
+                                updateAgain = confirm == true;
+                                break;
+                            }
+
+                        } else {
+                            System.out.println("\nItem not found!\n");
+                            boolean confirm = console.yesCheck("Search again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
+                            updateAgain = confirm == true;
+                            break;
+
+                        }
+                    }
+                } catch (Exception ex) {
+                    System.out.println("That is an invalid ID entry.");
                 }
 
             }
