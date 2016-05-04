@@ -12,7 +12,7 @@ public class Inventory {
     
     private int invId;
     private String itemName;
-    private double cost;
+    private float cost;
     private int stock;
 
     public int getInvId() {
@@ -31,11 +31,11 @@ public class Inventory {
         this.itemName = itemName;
     }
 
-    public double getCost() {
+    public float getCost() {
         return cost;
     }
 
-    public void setCost(double cost) {
+    public void setCost(float cost) {
         this.cost = cost;
     }
 

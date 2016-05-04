@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class InventoryDao {
 
     List<Inventory> inventoryList = new ArrayList();
-    private int nextId = 10;
+    private int nextId = 1001;
 
     public void InventoryDao() {
 
@@ -133,7 +133,7 @@ public class InventoryDao {
         List<Inventory> listOfItems = new ArrayList();
 
         try {
-            sc = new Scanner(new BufferedReader(new FileReader("dvdList.txt")));
+            sc = new Scanner(new BufferedReader(new FileReader("inventoryList.txt")));
 
             while (sc.hasNext()) {
 

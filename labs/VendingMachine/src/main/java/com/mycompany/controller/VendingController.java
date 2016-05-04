@@ -7,6 +7,8 @@ package com.mycompany.controller;
 import com.mycompany.dao.ChangeDao;
 import com.mycompany.dao.InventoryDao;
 import com.mycompany.dto.Inventory;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -35,11 +37,9 @@ public class VendingController {
             System.out.println("Hello, hungry traveler.");
             System.out.println("Enter your money for sustanence.");
 
-            System.out.println("+====================================+");
-            System.out.println("  ID # | PRICE | NAME         | STOCK ");
-            System.out.println("--------------------------------------");
+            showInventory();
 
-            System.out.println("Enter 0 to quit.");
+            System.out.println("\nEnter 0 to quit.");
             inPrice = console.checkEmptyString("Enter amount of change: ", "You have to put something in!");
 
             if (inPrice.equals(adminPass)) {
@@ -81,7 +81,7 @@ public class VendingController {
             System.out.println("  4) View Stock");
             System.out.println("  5) Update Stock");
             System.out.println("  6) View transaction record");
-            System.out.println(" --------------------------------");
+            System.out.println(" ----------------------------------");
             System.out.println("  0) Quit");
 
             String selection = console.getString("\nEnter option: ");
@@ -90,9 +90,11 @@ public class VendingController {
 
                 case "1":
                     //add item
+                    addItem();
                     break;
                 case "2":
                     //remove item
+                    removeItem();
                     break;
                 case "3":
                     //update price
@@ -143,10 +145,88 @@ public class VendingController {
                 System.out.println("\n" + itemName + " added to inventory!");
                 invDao.create(newItem);
 
-                boolean confirm = console.yesCheck("\nAdd another DVD? [yes/no]\n>", "Enter [yes/no] to proceed.");
+                boolean confirm = console.yesCheck("\nAdd another item? [yes/no]\n>", "Enter [yes/no] to proceed.");
                 addAgain = confirm == true;
             }
         }
+
+    }
+
+    public void removeItem() {
+
+        boolean removeAgain = true;
+
+        showInventory();
+
+        while (removeAgain == true) {
+            String itemId = console.checkEmptyString("\nEnter the ID of your item to remove. (Enter 0 to cancel)", "You cannot leave this blank!");
+            if (itemId.equals("0")) {
+                removeAgain = false;
+            } else {
+
+                int entryId = Integer.parseInt(itemId);
+                List<Inventory> items = invDao.decode();
+
+                for (Inventory delItem : items) {
+
+                    String delItemName = delItem.getItemName();
+                    int delId = delItem.getInvId();
+
+                    if (delId == entryId) {
+
+                        boolean confirm = console.yesCheck("Are you sure you want to remove " + delItemName + "? [yes/no]", "Enter [yes/no] to proceed.");
+
+                        if (confirm == true) {
+
+                            invDao.delete(delItem);
+                            String upperName = delItemName.toUpperCase();
+                            System.out.println("'" + upperName + "' DELETED");
+                            confirm = console.yesCheck("Delete another item? [yes/no]", "Enter [yes/no] to proceed.");
+                            removeAgain = confirm == true;
+                            break;
+
+                        } else {
+                            System.out.println("\nItem not found!\n");
+                            confirm = console.yesCheck("Search again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
+                            removeAgain = confirm == true;
+                            break;
+
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    public void showInventory() {
+
+        System.out.println("+============================================+");
+        System.out.println("  ID # | PRICE | NAME               | STOCK ");
+        System.out.println("----------------------------------------------");
+        List<Inventory> itemsOnFile = invDao.decode();
+
+        getItemsList(itemsOnFile);
+        System.out.println("+============================================+");
+    }
+
+    public void getItemsList(List<Inventory> inventoryList) {
+
+        for (Inventory itemsSaved : inventoryList) {
+
+            int savedId = itemsSaved.getInvId();
+            float savedPrice = itemsSaved.getCost();
+            String savedName = itemsSaved.getItemName();
+            int savedStock = itemsSaved.getStock();
+
+            showItemsInList(savedId, savedPrice, savedName, savedStock);
+        }
+
+    }
+
+    public void showItemsInList(int itemId, float itemPrice, String itemName, int itemStock) {
+
+        System.out.println("  "+itemId + " | $" + itemPrice + " | " + itemName+ "            | " + itemStock);
 
     }
 
