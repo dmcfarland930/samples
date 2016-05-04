@@ -6,6 +6,7 @@ package com.mycompany.controller;
 
 import com.mycompany.dao.ChangeDao;
 import com.mycompany.dao.InventoryDao;
+import com.mycompany.dto.Inventory;
 
 /**
  *
@@ -40,20 +41,20 @@ public class VendingController {
 
             System.out.println("Enter 0 to quit.");
             inPrice = console.checkEmptyString("Enter amount of change: ", "You have to put something in!");
-            
+
             if (inPrice.equals(adminPass)) {
                 //open admin menu
                 adminMenuDisplay();
             }
-            
+
             try {
                 inPriceF = Float.parseFloat(inPrice);
             } catch (Exception ex) {
-                if (inPrice.equals(adminPass)){
+                if (inPrice.equals(adminPass)) {
                     inPrice = "0";
                     inPriceF = Float.parseFloat(inPrice);
-                }else{
-                System.out.println("We don't accept that kind of change!");
+                } else {
+                    System.out.println("We don't accept that kind of change!");
                 }
             }
 
@@ -107,7 +108,7 @@ public class VendingController {
                     break;
                 case "0":
                     menuDisplay();
-                    run=false;
+                    run = false;
                     break;
                 default:
                     System.out.println("Invalid choice!");
@@ -117,12 +118,36 @@ public class VendingController {
         }
 
     }
-    
-    public void addItem(){
-        
-        
-        
-        
+
+    public void addItem() {
+
+        boolean addAgain = true;
+
+        while (addAgain == true) {
+            String itemName = console.checkEmptyString("Enter the name of your item. (Enter 0 to cancel)", "You cannot leave this blank!");
+            if (itemName.equals("0")) {
+                addAgain = false;
+            } else {
+                String itemPrice = console.checkEmptyString("Enter the price for your item.", "You cannot leave this blank!");
+                String itemStock = console.checkEmptyString("Enter the stock of this item.", "You cannot leave this blank!");
+
+                Inventory newItem = new Inventory();
+
+                float itemPriceF = Float.parseFloat(itemPrice);
+                int itemStockF = Integer.parseInt(itemStock);
+
+                newItem.setItemName(itemName);
+                newItem.setCost(itemPriceF);
+                newItem.setStock(itemStockF);
+
+                System.out.println("\n" + itemName + " added to inventory!");
+                invDao.create(newItem);
+
+                boolean confirm = console.yesCheck("\nAdd another DVD? [yes/no]\n>", "Enter [yes/no] to proceed.");
+                addAgain = confirm == true;
+            }
+        }
+
     }
 
 }
