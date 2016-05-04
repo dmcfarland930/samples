@@ -98,9 +98,11 @@ public class VendingController {
                     break;
                 case "3":
                     //update price
+
                     break;
                 case "4":
                     //view stock;
+                    showInventory();
                     break;
                 case "5":
                     //update stock
@@ -170,6 +172,7 @@ public class VendingController {
                 for (Inventory delItem : items) {
 
                     String delItemName = delItem.getItemName();
+
                     int delId = delItem.getInvId();
 
                     if (delId == entryId) {
@@ -184,19 +187,73 @@ public class VendingController {
                             confirm = console.yesCheck("Delete another item? [yes/no]", "Enter [yes/no] to proceed.");
                             removeAgain = confirm == true;
                             break;
-
-                        } else {
-                            System.out.println("\nItem not found!\n");
-                            confirm = console.yesCheck("Search again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
-                            removeAgain = confirm == true;
-                            break;
-
                         }
+
+                    } else {
+                        System.out.println("\nItem not found!\n");
+                        boolean confirm = console.yesCheck("Search again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
+                        removeAgain = confirm == true;
+                        break;
+
                     }
                 }
+
             }
         }
+    }
 
+    public void updatePrice() {
+
+        boolean updateAgain = true;
+
+        showInventory();
+
+        while (updateAgain == true) {
+            String itemId = console.checkEmptyString("\nEnter the ID of your item to update its price. (Enter 0 to cancel)", "You cannot leave this blank!");
+            if (itemId.equals("0")) {
+                updateAgain = false;
+            } else {
+                int entryId = Integer.parseInt(itemId);
+                List<Inventory> items = invDao.decode();
+
+                for (Inventory foundItem : items) {
+
+                    String fItemName = foundItem.getItemName();
+                    int fId = foundItem.getInvId();
+
+                    if (fId == entryId) {
+
+                        boolean confirm = console.yesCheck("Change price for " + fItemName + "? [yes/no]", "Enter [yes/no] to proceed.");
+
+                        if (confirm == true) {
+
+                            String itemPrice = console.checkEmptyString("Enter the new price for your item.", "You cannot leave this blank!");
+                            float newItemPrice= Float.parseFloat(itemPrice);
+                            int savedStock = foundItem.getStock();
+
+                            foundItem.setCost(newItemPrice);
+                            foundItem.setItemName(fItemName);
+                            foundItem.setStock(savedStock);
+                            invDao.update(foundItem);
+                            
+                            String upperName = fItemName.toUpperCase();
+                            System.out.println("'" + upperName + "' PRICE CHANGED TO $"+newItemPrice);
+                            confirm = console.yesCheck("Update another price? [yes/no]", "Enter [yes/no] to proceed.");
+                            updateAgain = confirm == true;
+                            break;
+                        }
+
+                    } else {
+                        System.out.println("\nItem not found!\n");
+                        boolean confirm = console.yesCheck("Search again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
+                        updateAgain = confirm == true;
+                        break;
+
+                    }
+                }
+
+            }
+        }
     }
 
     public void showInventory() {
@@ -226,7 +283,7 @@ public class VendingController {
 
     public void showItemsInList(int itemId, float itemPrice, String itemName, int itemStock) {
 
-        System.out.println("  "+itemId + " | $" + itemPrice + " | " + itemName+ "            | " + itemStock);
+        System.out.println("  " + itemId + " | $" + itemPrice + " | " + itemName + "            | " + itemStock);
 
     }
 
