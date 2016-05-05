@@ -100,13 +100,12 @@ public class ConsoleIO {
 
     }
 
-    public float checkMinMaxFloat(String prompt, int min, int max, String errorMessage,
+    public float checkMinMaxFloat(String prompt, float min, float max, String errorMessage,
             String errorMessage2) {
 
         floater = min - 1;
 
         while (floater < min || floater > max) {
-            System.out.print(prompt);
 
             floater = this.getFloat(prompt, errorMessage2);
 

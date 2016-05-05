@@ -72,7 +72,7 @@ public class InventoryDao {
             if (myItem.getInvId() == item.getInvId()) {
                 inventoryList.remove(myItem);
                 inventoryList.add(item);
-
+                break;
             }
         }
         encode();

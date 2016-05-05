@@ -11,12 +11,13 @@ package com.mycompany.dto;
 public class Change {
     
     int transId;
-    public static final float QUARTER = .25f;
-    public static final float DIME = .10f;
-    public static final float NICKEL = .05f;
-    public static final float PENNY = .01f;
-    private float enteredAmount;
+    private float enteredAmount = 0;
+    private float spentAmount;
     private float changeAmount;
+    private float quarterCount;
+    private float dimeCount;
+    private float nickelCount;
+    private float pennyCount;
     Inventory inv;
 
     public int getTransId() {
@@ -50,6 +51,45 @@ public class Change {
     public void setChangeAmount(float changeAmount) {
         this.changeAmount = changeAmount;
     }
-    
+
+    public float getSpentAmount() {
+        return spentAmount;
+    }
+
+    public void setSpentAmount(float spentAmount) {
+        this.spentAmount = spentAmount;
+    }
+
+    public float getQuarterCount() {
+        return quarterCount;
+    }
+
+    public void setQuarterCount(float quarterCount) {
+        this.quarterCount = quarterCount;
+    }
+
+    public float getDimeCount() {
+        return dimeCount;
+    }
+
+    public void setDimeCount(float dimeCount) {
+        this.dimeCount = dimeCount;
+    }
+
+    public float getNickelCount() {
+        return nickelCount;
+    }
+
+    public void setNickelCount(float nickelCount) {
+        this.nickelCount = nickelCount;
+    }
+
+    public float getPennyCount() {
+        return pennyCount;
+    }
+
+    public void setPennyCount(float pennyCount) {
+        this.pennyCount = pennyCount;
+    }
     
 }
