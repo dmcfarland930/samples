@@ -17,22 +17,23 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.ListChangeListener;
 
 /**
  *
  * @author apprentice
  */
 public class PlayerDao {
-   
+
     List<Player> playerList = new ArrayList();
     Player player = new Player();
     Team team = new Team();
-
+    
+    private TeamDao teamDao;
     private int nextId = 2000;
 
-    public PlayerDao() {
+    public PlayerDao(TeamDao teamDao) {
 
+        this.teamDao = teamDao;
         playerList = decode();
         for (Player myPlayer : playerList) {
 
@@ -47,7 +48,7 @@ public class PlayerDao {
     public Player create(Player player, Team team) {
 
         player.setPlayerId(nextId);
-        team.setTeamId(nextId);
+        player.setTeam(team);
         nextId++;
         playerList.add(player);
 
@@ -57,12 +58,12 @@ public class PlayerDao {
 
     }
 
-    public Player get(int id) {
+    public Player get(String lastName) {
 
         for (Player myPlayer : playerList) {
 
-            int getId = myPlayer.getPlayerId();
-            if (getId == id) {
+            String getName = myPlayer.getPlayerLastName();
+            if (getName.equals(lastName)) {
 
                 return myPlayer;
             }
@@ -70,12 +71,27 @@ public class PlayerDao {
         return null;
     }
 
-    public void update(Player player) {
+    public Player get(int idPlayer) {
 
-        playerList = decode();
+        for (Player myPlayer : playerList) {
+
+            int getId = myPlayer.getPlayerId();
+            if (getId == idPlayer) {
+
+                return myPlayer;
+            }
+        }
+        return null;
+    }
+    
+ 
+
+    public void update(Player player, Team team) {
+
         for (Player myPlayer : playerList) {
 
             if (myPlayer.getPlayerId() == player.getPlayerId()) {
+                player.setTeam(team);
                 playerList.remove(myPlayer);
                 playerList.add(player);
                 break;
@@ -102,7 +118,7 @@ public class PlayerDao {
         encode();
 
     }
-    
+
     public void encode() {
 
         final String TOKEN = "::";
@@ -124,6 +140,8 @@ public class PlayerDao {
                 out.print(myPlayer.getPlayerNumber());
                 out.print(TOKEN);
                 out.print(myPlayer.getTeam().getTeamName());
+                out.print(TOKEN);
+                out.print(myPlayer.getTeam().getTeamCity());
                 out.println();
 
             }
@@ -140,7 +158,7 @@ public class PlayerDao {
 
     public List decode() {
 
-        List<ListChangeListener.Change> transList = new ArrayList();
+        List<Player> players = new ArrayList();
         Scanner sc = null;
 
         try {
@@ -153,16 +171,24 @@ public class PlayerDao {
 
                 Player myPlayer = new Player();
 
-                int id = Integer.parseInt(stringParts[0]);
+                
+                int teamId = Integer.parseInt(stringParts[0]);
+                myPlayer.setTeamId(teamId);
+                
+                Team myTeam = teamDao.get(teamId);
+                
+                int id = Integer.parseInt(stringParts[1]);
                 myPlayer.setPlayerId(id);
-                int teamId = Integer.parseInt(stringParts[1]);
-                myPlayer.getTeam().setTeamId(teamId);
+                
                 myPlayer.setPlayerFirstName(stringParts[2]);
                 myPlayer.setPlayerLastName(stringParts[3]);
                 myPlayer.setPlayerNumber(stringParts[4]);
-                myPlayer.getTeam().setTeamName(stringParts[5]);
+                myPlayer.setPlayerTeamName(stringParts[5]);
+                myPlayer.setPlayerTeamCity(stringParts[6]);
+                
+                myPlayer.setTeam(myTeam);
 
-                playerList.add(myPlayer);
+                players.add(myPlayer);
 
             }
 
@@ -173,7 +199,7 @@ public class PlayerDao {
             sc.close();
         }
 
-        return transList;
+        return players;
 
     }
 }

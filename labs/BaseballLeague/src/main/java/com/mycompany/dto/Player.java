@@ -11,9 +11,12 @@ package com.mycompany.dto;
 public class Player {
     
     private int playerId;
+    private int teamId;
     private String playerFirstName;
     private String playerLastName;
     private String playerNumber;
+    private String playerTeamName;
+    private String playerTeamCity;
     Team team;
 
     public int getPlayerId() {
@@ -55,6 +58,30 @@ public class Player {
 
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    public int getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
+    }
+
+    public String getPlayerTeamName() {
+        return playerTeamName;
+    }
+
+    public void setPlayerTeamName(String playerTeamName) {
+        this.playerTeamName = playerTeamName;
+    }
+
+    public String getPlayerTeamCity() {
+        return playerTeamCity;
+    }
+
+    public void setPlayerTeamCity(String playerTeamCity) {
+        this.playerTeamCity = playerTeamCity;
     }
      
     

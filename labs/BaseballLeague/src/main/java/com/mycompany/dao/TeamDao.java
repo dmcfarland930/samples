@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.ListChangeListener.Change;
 
 /**
  *
@@ -135,7 +134,7 @@ public class TeamDao {
 
     public List decode() {
 
-        List<Change> transList = new ArrayList();
+        List<Team> teams = new ArrayList();
         Scanner sc = null;
 
         try {
@@ -150,12 +149,12 @@ public class TeamDao {
 
                 int id = Integer.parseInt(stringParts[0]);
                 myTeam.setTeamId(id);
-                myTeam.setTeamName(stringParts[2]);
-                myTeam.setTeamCity(stringParts[3]);
-                myTeam.setTeamManager(stringParts[4]);
-                myTeam.setTeamOwner(stringParts[5]);
+                myTeam.setTeamName(stringParts[1]);
+                myTeam.setTeamCity(stringParts[2]);
+                myTeam.setTeamManager(stringParts[3]);
+                myTeam.setTeamOwner(stringParts[4]);
 
-                teamList.add(myTeam);
+                teams.add(myTeam);
 
             }
 
@@ -166,7 +165,7 @@ public class TeamDao {
             sc.close();
         }
 
-        return transList;
+        return teams;
 
     }
 }
