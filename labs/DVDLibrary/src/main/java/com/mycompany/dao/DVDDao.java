@@ -24,7 +24,6 @@ import java.util.logging.Logger;
  */
 public class DVDDao {
 
-    private Date dvdDate = new Date();
     private List<DVD> dvdList = new ArrayList();
     private int nextId = 1000;
 
@@ -56,8 +55,28 @@ public class DVDDao {
     public DVD get(String title) {
 
         for (DVD myDvd : dvdList) {
-            if (myDvd.getTitle().equalsIgnoreCase(title)) {
+            
+            String getTitle = myDvd.getTitle();
+            
+            if (getTitle.equalsIgnoreCase(title)) {
+                
                 return myDvd;
+                
+            }
+        }
+        return null;
+    }
+    
+       public DVD get(int id) {
+
+        for (DVD myDvd : dvdList) {
+            
+            int getId = myDvd.getId();
+                    
+            if (getId == id) {
+                
+                return myDvd;
+                
             }
         }
         return null;
@@ -139,7 +158,7 @@ public class DVDDao {
     public List decode() {
 
         Scanner sc = null;
-        List<DVD> addressList = new ArrayList();
+        List<DVD> dvdsList = new ArrayList();
 
         try {
             sc = new Scanner(new BufferedReader(new FileReader("dvdList.txt")));
@@ -163,7 +182,8 @@ public class DVDDao {
                 dvdDating.setDay(stringParts[7]);
                 dvdDating.setYear(stringParts[8]);
 
-                addressList.add(myDVD);
+                myDVD.setDvdDate(dvdDating);
+                dvdsList.add(myDVD);
 
             }
 
@@ -174,6 +194,6 @@ public class DVDDao {
             sc.close();
         }
 
-        return addressList;
+        return dvdsList;
     }
 }
