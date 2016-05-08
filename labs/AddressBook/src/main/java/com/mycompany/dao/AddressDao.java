@@ -59,6 +59,16 @@ public class AddressDao {
         return null;
     }
 
+    public Address get(Integer identifier) {
+
+        for (Address myAddress : addresses) {
+            if (myAddress.getIdentifier() == identifier) {
+                return myAddress;
+            }
+        }
+        return null;
+    }
+
     public void update(Address address) {
 
         for (Address myAddress : addresses) {
