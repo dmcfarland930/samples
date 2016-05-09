@@ -4,6 +4,8 @@ package DVDController;
  * This program was written by Daniel McFarland.
  * I hope you enjoy it!
  */
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -286,6 +288,29 @@ public class ConsoleIO {
 
         }
         return string;
+    }
+
+    public Date getDate(String prompt, String error) {
+
+        Date date = null;
+        String dateInput;
+        while (date == null) {
+            try {
+
+                SimpleDateFormat sFormat = new SimpleDateFormat("MM/dd/yyyy");
+                dateInput = getString(prompt);
+                date = sFormat.parse(dateInput);
+                if(!dateInput.equals(sFormat.format(date))){
+                    date = null;
+                }
+            } catch (Exception ex) {
+                System.out.println(error);
+            }
+            if(date == null){
+                System.out.println("Try again!");
+            }
+        }
+        return date;
     }
 
 }

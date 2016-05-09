@@ -5,14 +5,15 @@
 package com.mycompany.dao;
 
 import com.mycompany.dto.DVD;
-import com.mycompany.dto.Date;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -24,10 +25,10 @@ import java.util.logging.Logger;
  */
 public class DVDDao {
 
-    private List<DVD> dvdList = new ArrayList();
+    List<DVD> dvdList = new ArrayList();
     private int nextId = 1000;
 
-    public void DVDDao() {
+    public DVDDao() {
 
         dvdList = decode();
 
@@ -55,28 +56,28 @@ public class DVDDao {
     public DVD get(String title) {
 
         for (DVD myDvd : dvdList) {
-            
+
             String getTitle = myDvd.getTitle();
-            
+
             if (getTitle.equalsIgnoreCase(title)) {
-                
+
                 return myDvd;
-                
+
             }
         }
         return null;
     }
-    
-       public DVD get(int id) {
+
+    public DVD get(int id) {
 
         for (DVD myDvd : dvdList) {
-            
+
             int getId = myDvd.getId();
-                    
+
             if (getId == id) {
-                
+
                 return myDvd;
-                
+
             }
         }
         return null;
@@ -124,6 +125,10 @@ public class DVDDao {
 
             for (DVD myDVD : dvdList) {
 
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                Date date = myDVD.getDvdDate();
+                String dateString = sdf.format(date);
+
                 out.print(myDVD.getId());
                 out.print(TOKEN);
                 out.print(myDVD.getTitle());
@@ -136,11 +141,7 @@ public class DVDDao {
                 out.print(TOKEN);
                 out.print(myDVD.getUserNote());
                 out.print(TOKEN);
-                out.print(myDVD.getDvdDate().getMonth());
-                out.print(TOKEN);
-                out.print(myDVD.getDvdDate().getDay());
-                out.print(TOKEN);
-                out.print(myDVD.getDvdDate().getYear());
+                out.print(dateString);
                 out.println();
 
             }
@@ -158,7 +159,7 @@ public class DVDDao {
     public List decode() {
 
         Scanner sc = null;
-        List<DVD> dvdsList = new ArrayList();
+        List<DVD> dvds = new ArrayList();
 
         try {
             sc = new Scanner(new BufferedReader(new FileReader("dvdList.txt")));
@@ -169,7 +170,7 @@ public class DVDDao {
                 String[] stringParts = currentLine.split("::");
 
                 DVD myDVD = new DVD();
-                Date dvdDating = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
                 int id = Integer.parseInt(stringParts[0]);
                 myDVD.setId(id);
@@ -178,12 +179,14 @@ public class DVDDao {
                 myDVD.setRating(stringParts[3]);
                 myDVD.setStudio(stringParts[4]);
                 myDVD.setUserNote(stringParts[5]);
-                dvdDating.setMonth(stringParts[6]);
-                dvdDating.setDay(stringParts[7]);
-                dvdDating.setYear(stringParts[8]);
+                try {
+                    Date myDate = sdf.parse(stringParts[6]);
+                    myDVD.setDvdDate(myDate);
+                } catch (Exception ex) {
+                    System.out.println("This format is incorrect.");
+                }
 
-                myDVD.setDvdDate(dvdDating);
-                dvdsList.add(myDVD);
+                dvds.add(myDVD);
 
             }
 
@@ -194,6 +197,6 @@ public class DVDDao {
             sc.close();
         }
 
-        return dvdsList;
+        return dvds;
     }
 }

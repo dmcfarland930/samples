@@ -4,6 +4,8 @@
  */
 package com.mycompany.dto;
 
+import java.util.Date;
+
 /**
  *
  * @author apprentice
@@ -16,7 +18,7 @@ public class DVD {
     String director;
     String studio;
     String userNote;
-    Date dvdDate;
+    Date dvdDate = new Date();
 
     public int getId() {
         return id;
