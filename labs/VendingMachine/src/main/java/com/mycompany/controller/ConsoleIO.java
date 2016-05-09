@@ -287,4 +287,41 @@ public class ConsoleIO {
         return string;
     }
 
+    public void padRight(String message, int maxLength) {
+
+        int length = message.length();
+
+        System.out.print(message);
+        if (length < maxLength) {
+
+            for (int i = 0; i < (maxLength - length); i++) {
+
+                System.out.print(" ");
+
+            }
+
+        }
+
+    }
+
+    public String maxStringLngthChk(String messagePrompt, String error, String customOverMaxMess, int maxLength) {
+
+        boolean valid = false;
+        String entry = "";
+
+        while (!valid) {
+
+            entry = checkEmptyString(messagePrompt, error);
+            
+            int length = entry.length();
+            if (length > maxLength) {
+                System.out.println(customOverMaxMess);
+                System.out.println("Please shorten your entry.");
+            } else if (length <= maxLength) {
+                valid = true;
+            }
+
+        }
+        return entry;
+    }
 }

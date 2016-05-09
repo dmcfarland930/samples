@@ -9,7 +9,6 @@ import com.mycompany.dao.InventoryDao;
 import com.mycompany.dto.Change;
 import com.mycompany.dto.Inventory;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,21 +19,22 @@ public class VendingController {
 
     ConsoleIO console = new ConsoleIO();
     InventoryDao invDao = new InventoryDao();
+    Change changeObject = new Change();
     ChangeDao changeDao = new ChangeDao();
     AdminController ac = new AdminController();
     DecimalFormat df = new DecimalFormat("0.00");
 
     int idEntry;
     float funds = 0;
-    List<Inventory> purchasedGoods = new ArrayList();
 
     public void runApp() {
+
+        System.out.println("\nHello, hungry traveler.");
+        System.out.println("Enter your money for sustanence.\n");
 
         menuDisplay();
 
         System.out.println("Good bye!");
-        invDao.encode();
-        changeDao.encode();
 
     }
 
@@ -46,17 +46,21 @@ public class VendingController {
 
         while (run == true) {
 
-            System.out.println("\nHello, hungry traveler.");
-            System.out.println("Enter your money for sustanence.");
-
             ac.showInventory(funds, false);
 
-            selection = console.checkEmptyString("", "You have to put something in!");
+            selection = console.getString(">>");
 
             switch (selection) {
 
+                case "+":
+                    //add funds
+                    funds += fundsInput();
+                    break;
                 case "-":
                     //return funds
+                    changeDao.calculateChange(funds, 0, null, changeObject);
+                    viewChange();
+                    funds = 0;
                     break;
                 case "q":
                     //quit app
@@ -89,27 +93,30 @@ public class VendingController {
 
             int foundId = foundItem.getInvId();
             int foundStock = foundItem.getStock();
-            
-            if (foundId == itemIdEntry && foundStock > 1 ) {
+
+            if (foundId == itemIdEntry && foundStock >= 1) {
                 float foundPrice = foundItem.getCost();
                 ac.showInventory(cash, false);
                 {
                     while (!sufficientFunds) {
-                        cash = funds + console.checkMinMaxFloat("How much would you like to add to your funds?: $", 0, Float.MAX_VALUE, "You can't add less than zero!", "That's not a valid entry!");
-                        funds += cash;
                         sufficientFunds = changeDao.validateEnoughFunds(cash, foundPrice, foundItem);
+                        found = true;
                         if (!sufficientFunds) {
-                            System.out.println("You need to add more money to buy this item!");
+                            System.out.println("\nYou need to add more money to buy this item!\n");
+                            found = true;
+                            break;
 
                         }
                     }
 
+                    changeDao.calculateChange(cash, foundPrice, foundItem, changeObject);
                     List<Change> change = changeDao.decode();
+
                     for (Change tX : change) {
 
                         int invIdTx = tX.getInv().getInvId();
 
-                        if (foundId == invIdTx) {
+                        if (foundId == invIdTx && sufficientFunds == true) {
 
                             cash = cash - tX.getInv().getCost();
                             int stock = tX.getInv().getStock() - 1;
@@ -117,16 +124,17 @@ public class VendingController {
                             String itemName = tX.getInv().getItemName();
                             foundItem = tX.getInv();
                             invDao.update(foundItem);
-                            System.out.println(itemName + " received!");
-                            found = true;
+                            viewChange();
+                            System.out.println(itemName + " GET!!\n");
+                            funds = 0;
                             break;
                         }
                     }
 
                 }
 
-            }else if (found && foundStock < 1){
-                System.out.println("That item is out of stock! Sorry!");
+            } else if (found && foundStock < 1) {
+                System.out.println("That item is no longer in stock!");
                 found = true; //item id is valid but out of stock.
             }
 
@@ -140,7 +148,7 @@ public class VendingController {
 
     public boolean convertUserEntryToId(String userInput) {
 
-        int conversion = 0;
+        int conversion;
         boolean valid = false;
 
         try {
@@ -148,18 +156,60 @@ public class VendingController {
             this.idEntry = conversion;
             valid = true;
         } catch (Exception ex) {
-            System.out.println("That is an invalid entry!");
+            System.out.println("\nThat is an invalid entry!");
 
         }
 
         return valid;
     }
 
-//            
-//            if(!inPrice.equals("q")){
-//                inPriceF = changeDao.addFunds(inPriceF);
-//                change.setEnteredAmount(inPriceF);
-//                System.out.println("Your funds: $" + df.format(inPriceF));
-//                //select item method
-//            }
+    public void viewChange() {
+
+        int quarter = changeObject.getQuarterCount();
+        int dime = changeObject.getDimeCount();
+        int nickel = changeObject.getNickelCount();
+        int penny = changeObject.getPennyCount();
+        float changeOut = changeObject.getChangeAmount();
+
+        if (quarter > 0) {
+
+            System.out.println("\nYou received " + quarter + " quarter(s)!");
+
+        }
+
+        if (dime > 0) {
+
+            System.out.println("You received " + dime + " dime(s)!");
+
+        }
+
+        if (nickel > 0) {
+
+            System.out.println("You received " + nickel + " nickel(s)!");
+
+        }
+
+        if (penny > 0) {
+
+            if (penny == 1) {
+                System.out.println("You received " + penny + "penny!");
+            } else if (penny > 1) {
+                System.out.println("You received " + penny + "pennies!");
+            }
+        }
+
+        if (changeOut > 0) {
+            System.out.println("You received $" + df.format(changeOut) + " in change!\n");
+        }
+
+    }
+
+    public float fundsInput() {
+
+        float cash;
+        cash = console.checkMinMaxFloat("Enter money into to machine: $", 0, Float.MAX_VALUE, "You can't add less than zero!", "That's not a valid entry!");
+
+        System.out.println("You added $" + df.format(cash));
+        return cash;
+    }
 }

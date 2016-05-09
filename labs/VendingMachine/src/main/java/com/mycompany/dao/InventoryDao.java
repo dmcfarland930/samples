@@ -26,13 +26,13 @@ public class InventoryDao {
     List<Inventory> inventoryList = new ArrayList();
     private int nextId = 1001;
 
-    public void InventoryDao() {
+    public InventoryDao() {
 
         inventoryList = decode();
         for (Inventory item : inventoryList) {
 
-            if (item.getInvId() == nextId) {
-                nextId++;
+            if (item.getInvId() >= nextId) {
+                nextId = item.getInvId() +1;
             }
 
         }

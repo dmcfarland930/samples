@@ -46,7 +46,6 @@ public class Inventory {
     public void setStock(int stock) {
         this.stock = stock;
     }
-    
-    
+
     
 }

@@ -28,16 +28,7 @@ public class AdminController {
         boolean run = true;
         boolean admin = true;
         while (run == true) {
-            System.out.println("\nWelcome to the secret admin level!");
-            System.out.println("What would you like to do?");
-            System.out.println("  1) Add item to inventory");
-            System.out.println("  2) Remove item from inventory");
-            System.out.println("  3) Update price of item");
-            System.out.println("  4) View Stock");
-            System.out.println("  5) Update Stock");
-            System.out.println("  6) View transaction record");
-            System.out.println(" ----------------------------------");
-            System.out.println("  0) Quit");
+            displayAdminMenu();
 
             String selection = console.getString("\nEnter option: ");
 
@@ -65,7 +56,7 @@ public class AdminController {
                     break;
                 case "6":
                     //view record
-                    transRecord();
+                    showTransRecord();
                     break;
                 case "0":
                     run = false;
@@ -81,30 +72,43 @@ public class AdminController {
 
     public void addItem() {
 
+        int stockCap = 0;
         boolean addAgain = true;
 
         while (addAgain == true) {
-            String itemName = console.checkEmptyString("Enter the name of your item. (Enter 0 to cancel)", "You cannot leave this blank!");
+            String itemName = console.maxStringLngthChk("\nEnter the name of your item. (Enter 0 to cancel)", "You cannot leave this blank!", "\nYour max character count for this field is 20.", 20);
             if (itemName.equals("0")) {
                 addAgain = false;
             } else {
-                String itemPrice = console.checkEmptyString("Enter the price for your item.", "You cannot leave this blank!");
+                String itemPrice = console.maxStringLngthChk("Enter the price for your item.", "You cannot leave this blank!", "You cannot enter a price higher than $9999.99", 10);
                 String itemStock = console.checkEmptyString("Enter the stock of this item.", "You cannot leave this blank!");
 
-                Inventory newItem = new Inventory();
+                List<Inventory> stock = invDao.decode();
 
-                float itemPriceF = Float.parseFloat(itemPrice);
-                int itemStockF = Integer.parseInt(itemStock);
+                for (Inventory items : stock) {
 
-                newItem.setItemName(itemName);
-                newItem.setCost(itemPriceF);
-                newItem.setStock(itemStockF);
+                    stockCap++;
 
-                System.out.println("\n" + itemName + " added to inventory!");
-                invDao.create(newItem);
+                }
 
-                boolean confirm = console.yesCheck("\nAdd another item? [yes/no]\n>", "Enter [yes/no] to proceed.");
-                addAgain = confirm == true;
+                if (stockCap <= 12) {
+                    Inventory newItem = new Inventory();
+
+                    float itemPriceF = Float.parseFloat(itemPrice);
+                    int itemStockF = Integer.parseInt(itemStock);
+
+                    newItem.setItemName(itemName);
+                    newItem.setCost(itemPriceF);
+                    newItem.setStock(itemStockF);
+
+                    System.out.println("\n" + itemName + " added to inventory!");
+                    invDao.create(newItem);
+
+                    boolean confirm = console.yesCheck("\nAdd another item? [yes/no]\n>", "Enter [yes/no] to proceed.");
+                    addAgain = confirm == true;
+                } else {
+                    System.out.println("This machine cannot hold more than 12 items!");
+                }
             }
         }
 
@@ -114,48 +118,21 @@ public class AdminController {
 
         boolean removeAgain = true;
         boolean found;
-        showInventory(0, true);
 
         while (removeAgain == true) {
-            found = false;
+
+            showInventory(0, true);
             String itemId = console.checkEmptyString("\nEnter the ID of your item to remove. (Enter 0 to cancel)", "You cannot leave this blank!");
             if (itemId.equals("0")) {
                 removeAgain = false;
             } else {
                 try {
-                    int entryId = Integer.parseInt(itemId);
-                    List<Inventory> items = invDao.decode();
 
-                    for (Inventory delItem : items) {
+                    found = deleteItemConfirm(itemId);
+                    removeAgain = removeAgainReturn(found);
 
-                        String delItemName = delItem.getItemName();
-
-                        int delId = delItem.getInvId();
-
-                        if (delId == entryId) {
-                            found = true;
-                            boolean confirm = console.yesCheck("Are you sure you want to remove " + delItemName + "? [yes/no]", "Enter [yes/no] to proceed.");
-
-                            if (confirm == true) {
-
-                                invDao.delete(delItem);
-                                String upperName = delItemName.toUpperCase();
-                                System.out.println("'" + upperName + "' DELETED");
-                                confirm = console.yesCheck("Delete another item? [yes/no]", "Enter [yes/no] to proceed.");
-                                removeAgain = confirm == true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!found) {
-                        System.out.println("\nItem not found!\n");
-                    }
-                    if (removeAgain == true) {
-                        boolean confirm = console.yesCheck("Search again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
-                        removeAgain = confirm == true;
-                    }
                 } catch (Exception ex) {
-                    System.out.println("That is an invalid ID entry.");
+                    System.out.println("\nThat is an invalid ID entry.");
                 }
 
             }
@@ -170,53 +147,18 @@ public class AdminController {
         showInventory(0, true);
 
         while (updateAgain == true) {
-            found = false;
+
             String itemId = console.checkEmptyString("\nEnter the ID of your item to update its price. (Enter 0 to cancel)", "You cannot leave this blank!");
             if (itemId.equals("0")) {
                 updateAgain = false;
             } else {
+
                 try {
-                    int entryId = Integer.parseInt(itemId);
 
-                    List<Inventory> items = invDao.decode();
+                    found = updateConfirm(itemId, "price", "' PRICE CHANGED TO $");
 
-                    for (Inventory foundItem : items) {
+                    updateAgain = updateAgainConfirm(found, "price");
 
-                        String fItemName = foundItem.getItemName();
-                        int fId = foundItem.getInvId();
-                        int savedStock = foundItem.getStock();
-
-                        if (fId == entryId) {
-
-                            found = true;
-                            boolean confirm = console.yesCheck("Change price for " + fItemName + "? [yes/no]", "Enter [yes/no] to proceed.");
-
-                            if (confirm == true) {
-
-                                String itemPrice = console.checkEmptyString("Enter the new price for your item.", "You cannot leave this blank!");
-                                float newItemPrice = Float.parseFloat(itemPrice);
-
-                                foundItem.setCost(newItemPrice);
-                                foundItem.setItemName(fItemName);
-                                foundItem.setInvId(fId);
-                                foundItem.setStock(savedStock);
-                                invDao.update(foundItem);
-
-                                String upperName = fItemName.toUpperCase();
-                                System.out.println("'" + upperName + "' PRICE CHANGED TO $" + df.format(newItemPrice));
-                                confirm = console.yesCheck("Update another price? [yes/no]", "Enter [yes/no] to proceed.");
-                                updateAgain = confirm == true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!found) {
-                        System.out.println("\nItem not found!\n");
-                    }
-                    if (updateAgain == true) {
-                        boolean confirm = console.yesCheck("Search again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
-                        updateAgain = confirm == true;
-                    }
                 } catch (Exception ex) {
                     System.out.println("That is an invalid ID entry.");
                 }
@@ -229,55 +171,20 @@ public class AdminController {
 
         boolean updateAgain = true;
         boolean found;
+
         showInventory(0, true);
 
         while (updateAgain == true) {
-            found = false;
             String itemId = console.checkEmptyString("\nEnter the ID of your item to update its stock. (Enter 0 to cancel)", "You cannot leave this blank!");
             if (itemId.equals("0")) {
                 updateAgain = false;
             } else {
                 try {
-                    int entryId = Integer.parseInt(itemId);
 
-                    List<Inventory> items = invDao.decode();
+                    found = updateConfirm(itemId, "stock", "' STOCK CHANGED TO x ");
 
-                    for (Inventory foundItem : items) {
+                    updateAgain = updateAgainConfirm(found, "item's stock");
 
-                        String fItemName = foundItem.getItemName();
-                        int fId = foundItem.getInvId();
-                        float fPrice = foundItem.getCost();
-
-                        if (fId == entryId) {
-                            found = true;
-                            boolean confirm = console.yesCheck("Change stock for " + fItemName + "? [yes/no]", "Enter [yes/no] to proceed.");
-
-                            if (confirm == true) {
-
-                                String itemStock = console.checkEmptyString("Enter the new stock for your item.", "You cannot leave this blank!");
-                                int newItemStock = Integer.parseInt(itemStock);
-
-                                foundItem.setCost(fPrice);
-                                foundItem.setStock(newItemStock);
-                                foundItem.setInvId(fId);
-                                foundItem.setItemName(fItemName);
-                                invDao.update(foundItem);
-
-                                String upperName = fItemName.toUpperCase();
-                                System.out.println("'" + upperName + "' STOCK CHANGED TO x " + newItemStock);
-                                confirm = console.yesCheck("Update another item's stock? [yes/no]", "Enter [yes/no] to proceed.");
-                                updateAgain = confirm == true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!found) {
-                        System.out.println("\nItem not found!\n");
-                    }
-                    if (updateAgain == true) {
-                        boolean confirm = console.yesCheck("Search again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
-                        updateAgain = confirm == true;
-                    }
                 } catch (Exception ex) {
                     System.out.println("That is an invalid ID entry.");
                 }
@@ -286,20 +193,139 @@ public class AdminController {
         }
     }
 
+    public boolean deleteItemConfirm(String itemId) {
+
+        boolean found = false;
+        int entryId = Integer.parseInt(itemId);
+        List<Inventory> items = invDao.decode();
+
+        for (Inventory delItem : items) {
+
+            String delItemName = delItem.getItemName();
+
+            int delId = delItem.getInvId();
+
+            if (delId == entryId) {
+                found = true;
+                boolean confirm = console.yesCheck("\nAre you sure you want to remove " + delItemName + "? [yes/no]", "Enter [yes/no] to proceed.");
+
+                if (confirm == true) {
+
+                    invDao.delete(delItem);
+                    String upperName = delItemName.toUpperCase();
+                    System.out.println("'" + upperName + "' DELETED");
+                }
+
+            }
+        }
+        return found;
+
+    }
+
+    public boolean removeAgainReturn(boolean found) {
+
+        boolean confirm;
+        boolean removeAgain = false;
+
+        if (found == true) {
+            confirm = console.yesCheck("\nDelete another item? [yes/no]", "Enter [yes/no] to proceed.");
+            removeAgain = confirm == true;
+        }
+        if (!found) {
+            System.out.println("\nItem not found!");
+            removeAgain = true;
+
+        }
+        if (removeAgain == true) {
+            confirm = console.yesCheck("\nSearch again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
+            removeAgain = confirm == true;
+        }
+
+        return removeAgain;
+
+    }
+
+    public boolean updateConfirm(String itemId, String updatedProperty, String confirmationMessage) {
+
+        boolean found = false;
+        float newItemPrice;
+        int newStock;
+        int entryId = Integer.parseInt(itemId);
+
+        List<Inventory> items = invDao.decode();
+
+        for (Inventory foundItem : items) {
+
+            if (foundItem.getInvId() == entryId) {
+
+                found = true;
+                invDao.get(entryId);
+                boolean confirm = console.yesCheck("Change " + updatedProperty + " for " + foundItem.getItemName() + "? [yes/no]\n>", "Enter [yes/no] to proceed.");
+
+                if (confirm == true) {
+
+                    String update = console.checkEmptyString("Enter the new " + updatedProperty + " for your item.", "You cannot leave this blank!");
+
+                    if (updatedProperty.equalsIgnoreCase("price")) {
+                        newItemPrice = Float.parseFloat(update);
+                        foundItem.setCost(newItemPrice);
+                        String upperName = foundItem.getItemName().toUpperCase();
+
+                        System.out.println("'" + upperName + confirmationMessage + df.format(newItemPrice));
+                    } else {
+                        newStock = Integer.parseInt(update);
+                        foundItem.setStock(newStock);
+                        String upperName = foundItem.getItemName().toUpperCase();
+
+                        System.out.println("'" + upperName + confirmationMessage + df.format(newStock));
+
+                    }
+                    invDao.update(foundItem);
+                }
+
+            }
+        }
+        return found;
+    }
+
+    public boolean updateAgainConfirm(boolean found, String property) {
+
+        boolean confirm;
+        boolean updateAgain = false;
+        if (found == true) {
+            confirm = console.yesCheck("Update another " + property + " [yes/no]", "Enter [yes/no] to proceed.");
+            updateAgain = confirm == true;
+
+        }
+
+        if (!found) {
+            System.out.println("\nItem not found!\n");
+            updateAgain = true;
+        }
+
+        if (updateAgain == true) {
+            confirm = console.yesCheck("Search again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
+            updateAgain = confirm == true;
+        }
+
+        return updateAgain;
+    }
+
     public void showInventory(float funds, boolean ad) {
 
-        System.out.println("+============================================+");
-        System.out.println("  ID # | PRICE | NAME               | STOCK ");
+        System.out.println("\n+============================================+");
+        System.out.println("  ID #  | PRICE   | NAME              | STOCK ");
         System.out.println("----------------------------------------------");
         List<Inventory> itemsOnFile = invDao.decode();
 
         getItemsList(itemsOnFile);
         if (!ad) {
             System.out.println("----------------------------------------------");
-            System.out.println("                        CURRENT FUNDS: $" + df.format(funds));
+            System.out.println("                    FUNDS ENTERED: $" + df.format(funds));
             System.out.println("----------------------------------------------");
             System.out.println("  TO OPERATE:");
             System.out.println("         Enter ID to purchase Item");
+            System.out.println("         Enter '+' to enter funds");
             System.out.println("         Enter '-' to return funds");
             System.out.println("         Enter 'q' to quit");
         }
@@ -307,38 +333,30 @@ public class AdminController {
 
     }
 
-    public void transRecord() {
+    public void showTransRecord() {
 
         List<Change> transactions = changeDao.decode();
 
-        System.out.println("+===========================================================+");
-        System.out.println("  ID # | PRICE | NAME               | STOCK | PAID | GIVEN  |");
-        System.out.println("-------------------------------------------------------------");
+        System.out.println("+=====================================================================================================+");
+        System.out.println("  TRANS. ID #  | PRICE   | NAME              | STOCK | AMOUNT ENTERED | AMOUNT SPENT | AMOUNT RETURNED");
+        System.out.println("------------------------------------------------------------------------------------------------------");
         getTransList(transactions);
-        System.out.println("+===========================================================+");
+        System.out.println("+====================================================================================================+");
 
     }
 
-    public void getTransList(List<Change> trans) {
-
-        for (Change transOnFile : trans) {
-
-            int savedId = transOnFile.getInv().getInvId();
-            String savedName = transOnFile.getInv().getItemName();
-            float savedPrice = transOnFile.getInv().getCost();
-            int savedStock = transOnFile.getInv().getStock();
-            float savedIn = transOnFile.getEnteredAmount();
-            float savedOut = transOnFile.getChangeAmount();
-
-            showTransDisplay(savedId, savedPrice, savedName, savedStock, savedIn, savedOut);
-        }
-
-    }
-
-    public void showTransDisplay(int itemId, float itemPrice, String itemName, int itemStock, float in, float out) {
-
-        System.out.println("  " + itemId + " | $" + df.format(itemPrice) + " | " + itemName + "            | " + itemStock + " | $" + in + " | $" + out);
-
+    public void displayAdminMenu() {
+        System.out.println("\n ----------------------------------");
+        System.out.println(" Welcome to the secret admin level!");
+        System.out.println(" What would you like to do?");
+        System.out.println("  1) Add item to inventory");
+        System.out.println("  2) Remove item from inventory");
+        System.out.println("  3) Update price of item");
+        System.out.println("  4) View Stock");
+        System.out.println("  5) Update Stock");
+        System.out.println("  6) View transaction record");
+        System.out.println(" ----------------------------------");
+        System.out.println("  0) Quit");
     }
 
     public void getItemsList(List<Inventory> inventoryList) {
@@ -355,9 +373,41 @@ public class AdminController {
 
     }
 
+    public void getTransList(List<Change> trans) {
+
+        for (Change transOnFile : trans) {
+
+            int savedId = transOnFile.getTransId();
+            String savedName = transOnFile.getInv().getItemName();
+            float savedPrice = transOnFile.getInv().getCost();
+            int savedStock = transOnFile.getInv().getStock();
+            float savedIn = transOnFile.getEnteredAmount();
+            float savedSpent = transOnFile.getSpentAmount();
+            float savedOut = transOnFile.getChangeAmount();
+
+            showTransList(savedId, savedPrice, savedName, savedStock, savedIn, savedSpent, savedOut);
+        }
+
+    }
+
     public void showItemsInList(int itemId, float itemPrice, String itemName, int itemStock) {
 
-        System.out.println("  " + itemId + " | $" + df.format(itemPrice) + " | " + itemName + "            | " + itemStock);
+        console.padRight("  " + itemId, 8);
+        console.padRight("| $" + df.format(itemPrice), 10);
+        console.padRight("| " + itemName, 20);
+        System.out.print("| " + (itemStock) + "\n");
+
+    }
+
+    public void showTransList(int itemId, float itemPrice, String itemName, int itemStock, float in, float spent, float out) {
+
+        console.padRight("   " + itemId, 15);
+        console.padRight("| $" + df.format(itemPrice), 10);
+        console.padRight("| " + itemName, 20);
+        console.padRight("| " + (itemStock - 1), 8);
+        console.padRight("| $" + df.format(in), 17);
+        console.padRight("| $" + df.format(spent), 15);
+        System.out.println("| $" + df.format(out) + "\n");
 
     }
 

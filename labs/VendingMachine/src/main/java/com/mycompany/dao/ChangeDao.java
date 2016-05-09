@@ -22,19 +22,19 @@ import java.util.logging.Logger;
  *
  * @author apprentice
  */
-public class ChangeDao {
+public final class ChangeDao {
 
     List<Change> transactions = new ArrayList();
     Inventory item = new Inventory();
     Change change = new Change();
     int nextId = 1;
 
-    public void Change() {
+    public ChangeDao() {
 
         transactions = decode();
         for (Change myTran : transactions) {
-            if (myTran.getTransId() == nextId) {
-                nextId++;
+            if (myTran.getTransId() >= nextId) {
+                nextId = myTran.getTransId() + 1;
             }
 
         }
@@ -44,7 +44,7 @@ public class ChangeDao {
 
         change.setTransId(nextId);
         change.setInv(item);
-        nextId++;
+        nextId += 1;
         transactions.add(change);
 
         encode();
@@ -75,7 +75,17 @@ public class ChangeDao {
                 out.print(TOKEN);
                 out.print(myChange.getEnteredAmount());
                 out.print(TOKEN);
+                out.print(myChange.getSpentAmount());
+                out.print(TOKEN);
                 out.print(myChange.getChangeAmount());
+                out.print(TOKEN);
+                out.print(myChange.getQuarterCount());
+                out.print(TOKEN);
+                out.print(myChange.getDimeCount());
+                out.print(TOKEN);
+                out.print(myChange.getNickelCount());
+                out.print(TOKEN);
+                out.print(myChange.getPennyCount());
                 out.println();
 
             }
@@ -94,6 +104,7 @@ public class ChangeDao {
 
         List<Change> transList = new ArrayList();
         Scanner sc = null;
+        
         try {
             sc = new Scanner(new BufferedReader(new FileReader("transactionrecord.txt")));
 
@@ -116,10 +127,22 @@ public class ChangeDao {
                 myItem.setStock(stock);
                 float inChange = Float.parseFloat(stringParts[5]);
                 myChange.setEnteredAmount(inChange);
-                float outChange = Float.parseFloat(stringParts[6]);
-                myChange.setEnteredAmount(outChange);
-
+                float spentChange = Float.parseFloat(stringParts[6]);
+                myChange.setSpentAmount(spentChange);
+                float outChange = Float.parseFloat(stringParts[7]);
+                myChange.setChangeAmount(outChange);
+                
+                int quarterC = Integer.parseInt(stringParts[8]);
+                myChange.setQuarterCount(quarterC);
+                int dimeC = Integer.parseInt(stringParts[9]);
+                myChange.setDimeCount(dimeC);
+                int nickelC = Integer.parseInt(stringParts[10]);
+                myChange.setNickelCount(nickelC);
+                int pennyC = Integer.parseInt(stringParts[11]);
+                myChange.setPennyCount(pennyC);
+                
                 myChange.setInv(myItem);
+                
                 transList.add(myChange);
 
             }
@@ -135,70 +158,63 @@ public class ChangeDao {
 
     }
 
-    public float addFunds(float funds) {
 
-        float userFunds = change.getEnteredAmount();
-
-        userFunds = userFunds + funds;
-
-        return userFunds;
-    }
 
     public boolean validateEnoughFunds(float funds, float itemPrice, Inventory item) {
 
         boolean sufficient = false;
 
         if (funds > itemPrice || funds == itemPrice) {
-            calculateChange(funds, itemPrice, item);
             sufficient = true;
         }
 
         return sufficient;
     }
 
-    public void calculateChange(float funds, float itemPrice, Inventory item) {
+    public void calculateChange(float funds, float itemPrice, Inventory item, Change object) {
 
-        Change newTx = new Change();
-        float fundPennies = funds * 100;
-        float pricePennyConvert = itemPrice;
-        float modulus;
-        float outChange;
-        float quarters;
-        float dimes;
-        float nickels;
-        float pennies;
-        
-        if (itemPrice < 1f) {
-            pricePennyConvert = itemPrice * 100;
+        if (item == null){
+            Inventory changeReturn = new Inventory();
+            changeReturn.setItemName("Change return");
+            item = changeReturn;
         }
+        
+        int modulus;
+        float spent;
+        int pennies;
 
-        pennies = fundPennies - pricePennyConvert;
-        newTx.setQuarterCount(pennies / 25);
+        float pricePennyConvert = itemPrice * 100f;
+
+        float fundPennies = funds * 100f;
+
+        float fltPennies = fundPennies - pricePennyConvert;
+
+        pennies = (int) fltPennies;
+        
+        
+
+        object.setQuarterCount(pennies / 25);
         modulus = pennies % 25;
         if (!(modulus == 0)) {
-            newTx.setDimeCount(modulus / 10);
+            object.setDimeCount(modulus / 10);
             modulus = modulus % 10;
             if (!(modulus == 0)) {
-                newTx.setNickelCount(modulus / 5);
+                object.setNickelCount(modulus / 5);
                 modulus = modulus % 5;
                 if (!(modulus == 0)) {
-                    newTx.setPennyCount(modulus);
+                    object.setPennyCount(modulus);
                 }
             }
         }
-        
-        quarters = (newTx.getQuarterCount() * 25);
-        dimes = (newTx.getDimeCount() * 10);
-        nickels = (newTx.getNickelCount() * 5);
-        pennies = (newTx.getPennyCount());
 
-        outChange = ((quarters + dimes + nickels + pennies)/100);
+        spent = (pricePennyConvert / 100);
 
-        newTx.setEnteredAmount(funds);
-        newTx.setChangeAmount(outChange);
-        newTx.setSpentAmount(funds - outChange);
+        object.setEnteredAmount(funds);
+        object.setChangeAmount(funds - (spent));
+        object.setSpentAmount(spent);
 
-        create(newTx, item);
+
+        create(object, item);
 
     }
 

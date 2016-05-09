@@ -9,15 +9,15 @@ package com.mycompany.dto;
  * @author apprentice
  */
 public class Change {
-    
+
     int transId;
     private float enteredAmount = 0;
     private float spentAmount;
     private float changeAmount;
-    private float quarterCount;
-    private float dimeCount;
-    private float nickelCount;
-    private float pennyCount;
+    private int quarterCount = 0;
+    private int dimeCount = 0;
+    private int nickelCount = 0;
+    private int pennyCount = 0;
     Inventory inv;
 
     public int getTransId() {
@@ -60,36 +60,36 @@ public class Change {
         this.spentAmount = spentAmount;
     }
 
-    public float getQuarterCount() {
+    public int getQuarterCount() {
         return quarterCount;
     }
 
-    public void setQuarterCount(float quarterCount) {
+    public void setQuarterCount(int quarterCount) {
         this.quarterCount = quarterCount;
     }
 
-    public float getDimeCount() {
+    public int getDimeCount() {
         return dimeCount;
     }
 
-    public void setDimeCount(float dimeCount) {
+    public void setDimeCount(int dimeCount) {
         this.dimeCount = dimeCount;
     }
 
-    public float getNickelCount() {
+    public int getNickelCount() {
         return nickelCount;
     }
 
-    public void setNickelCount(float nickelCount) {
+    public void setNickelCount(int nickelCount) {
         this.nickelCount = nickelCount;
     }
 
-    public float getPennyCount() {
+    public int getPennyCount() {
         return pennyCount;
     }
 
-    public void setPennyCount(float pennyCount) {
+    public void setPennyCount(int pennyCount) {
         this.pennyCount = pennyCount;
     }
-    
+
 }
