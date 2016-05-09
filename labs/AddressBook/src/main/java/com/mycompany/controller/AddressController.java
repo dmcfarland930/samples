@@ -25,18 +25,8 @@ public class AddressController {
         boolean runAgain = true;
 
         while (runAgain == true) {
-            System.out.println("+----------------------------+");
-            System.out.println("| Welcome! Choose an option! |");
-            System.out.println("+----------------------------+");
-            System.out.println("|   1)Add Address            |");
-            System.out.println("|   2)Delete Address         |");
-            System.out.println("|   3)Find Address           |");
-            System.out.println("|   4)View Address Count     |");
-            System.out.println("|   5)View All Addresses     |");
-            System.out.println("|   6)Update Addresses       |");
-            System.out.println("|  ------------------------  |");
-            System.out.println("|                    [quit]  |");
-            System.out.println("+----------------------------+");
+
+            showMenu();
 
             String selection = console.getString(">");
 
@@ -89,6 +79,7 @@ public class AddressController {
         System.out.println("| Add Address...             |");
         System.out.println("+----------------------------+");
         while (addAgain == true) {
+            Address newAddress = new Address();
             String firstName = console.checkEmptyString("Enter the first name of your\ncontact:"
                     + "(Enter 1 to cancel)", "You must fill this field.");
             if (firstName.equals("1")) {
@@ -103,7 +94,7 @@ public class AddressController {
                 String country = console.checkEmptyString("Enter the country:", "You must fill this field.");
                 String secondAdd = console.checkEmptyString("Enter your secondary address:"
                         + "\n(P.O. Box, Apt #, Suite #)\nEnter 'none' to leave blank.", "You must fill this field.");
-                Address newAddress = new Address();
+
                 newAddress.setFirstName(firstName);
                 newAddress.setLastName(lastName);
                 newAddress.setStreetAddress(stAddress);
@@ -113,25 +104,24 @@ public class AddressController {
                 newAddress.setCountry(country);
                 newAddress.setSecAdd(secondAdd);
 
-                System.out.println("\nAddress added to address book.");
                 addDao.create(newAddress);
-                boolean confirm = console.yesCheck("\nAdd another address? [yes/no]\n>", "Enter [yes/no] to proceed.");
-                if (confirm == true) {
-                    addAgain = true;
-                } else {
-                    addAgain = false;
-                }
+
+                System.out.println("\nAddress added to address book.");
+                addAgain = confirmAgain("\nAdd another address? [yes/no]\n>");
             }
         }
     }
 
     public void removeAddress() {
+
+        boolean confirm;
         boolean removeAgain = true;
 
         System.out.println("\n");
         System.out.println("+----------------------------+");
         System.out.println("| Remove Address...          |");
         System.out.println("+----------------------------+");
+
         while (removeAgain == true) {
             String firstName = console.getString("To delete a contact, enter\ntheir first name:"
                     + "(Enter 1 to cancel)\n>");
@@ -145,30 +135,23 @@ public class AddressController {
 
                 for (Address delAddress : addresses) {
 
-                    String delSecAdd = delAddress.getSecAdd();
-
-                    if (delSecAdd.equalsIgnoreCase("none")) {
-                        delSecAdd = "";
-                    }
                     if (firstName.equalsIgnoreCase(delAddress.getFirstName()) && lastName.equalsIgnoreCase(delAddress.getLastName()) && stAddress.equalsIgnoreCase(delAddress.getStreetAddress())) {
 
-                        System.out.println("\n" + delAddress.getFirstName() + " " + delAddress.getLastName() + "\n"
-                                + delAddress.getStreetAddress() + "\n" + delAddress.getCity() + ", " + delAddress.getState() + ", " + delAddress.getZip() + "\n"
-                                + delAddress.getCountry() + " " + delSecAdd);
+                        showAddress(delAddress);
 
-                        boolean confirm = console.yesCheck("\nDelete this address? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
+                        confirm = console.yesCheck("\nDelete this address? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
 
                         if (confirm == true) {
                             addDao.delete(delAddress);
                             System.out.println("\nADDRESS DELETED\n");
-                            confirm = console.yesCheck("Delete another address? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
-                            removeAgain = confirm == true;
+
+                            removeAgain = confirmAgain("Delete another address? [yes/no]\n>");
+
                             break;
                         }
                     } else {
                         System.out.println("\nAddress not found!\n");
-                        boolean confirm = console.yesCheck("Search again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
-                        removeAgain = confirm == true;
+                        removeAgain = confirmAgain("Seach again? [yes/no]");
                         break;
                     }
                 }
@@ -219,23 +202,10 @@ public class AddressController {
                     System.out.println("Contacts Found: " + addsFound);
                     for (Address addressSaved : addresses) {
 
-                        String fSecAdd = addressSaved.getSecAdd();
-                        if (fSecAdd.equalsIgnoreCase("none")) {
-                            fSecAdd = " ";
-                        }
-                        System.out.println("\n+----------------------------+");
-                        System.out.println(addressSaved.getFirstName() + " " + addressSaved.getLastName() + "\n"
-                                + addressSaved.getStreetAddress() + "\n" + addressSaved.getCity() + ", " + addressSaved.getState() + ", " + addressSaved.getZip() + "\n"
-                                + addressSaved.getCountry() + " " + fSecAdd);
-                        System.out.println("+----------------------------+\n\n");
+                        showAddress(addressSaved);
 
                     }
-                    boolean confirm = console.yesCheck("Search again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
-                    if (confirm == true) {
-                        findAgain = true;
-                    } else {
-                        findAgain = false;
-                    }
+                    findAgain = confirmAgain("Seach again? [yes/no]");
                 }
             }
         }
@@ -273,15 +243,7 @@ public class AddressController {
 
         for (Address addressSaved : addresses) {
 
-            String fSecAdd = addressSaved.getSecAdd();
-            if (fSecAdd.equalsIgnoreCase("none")) {
-                fSecAdd = " ";
-            }
-            System.out.println("\n+----------------------------+");
-            System.out.println(addressSaved.getFirstName() + " " + addressSaved.getLastName() + "\n"
-                    + addressSaved.getStreetAddress() + "\n" + addressSaved.getCity() + ", " + addressSaved.getState() + ", " + addressSaved.getZip() + "\n"
-                    + addressSaved.getCountry() + " " + fSecAdd);
-            System.out.println("+----------------------------+\n\n");
+            showAddress(addressSaved);
         }
     }
 
@@ -324,17 +286,8 @@ public class AddressController {
                     System.out.println("Contacts Found: " + addsFound);
                     for (Address addressInList : foundAddresses) {
 
-                        String fSecAdd = addressInList.getSecAdd();
-
-                        if (fSecAdd.equalsIgnoreCase("none")) {
-                            fSecAdd = "";
-                        }
-                        System.out.println("+----------------------------+");
-                        System.out.println("Address ID: " + addressInList.getIdentifier());
-                        System.out.println("\n" + addressInList.getFirstName() + " " + addressInList.getLastName() + "\n"
-                                + addressInList.getStreetAddress() + "\n" + addressInList.getCity() + ", " + addressInList.getState() + ", " + addressInList.getZip() + "\n"
-                                + addressInList.getCountry() + " " + fSecAdd + "\n");
-                        System.out.println("+----------------------------+");
+                        //add
+                        showAddress(addressInList);
 
                         addressId = console.getInteger("Enter the Address ID for the address you wish to change:\n>", "That is an invalid entry!");
 
@@ -343,83 +296,11 @@ public class AddressController {
                             if (addWithId.getIdentifier() == addressId) {
 
                                 addWithId = addDao.get(addressId);
-
-                                System.out.println("+----------------------------+");
-                                System.out.println("| Edit your address!         |");
-                                System.out.println("+----------------------------+");
-                                System.out.println("|   1)Name                   |");
-                                System.out.println("|   2)Street Address         |");
-                                System.out.println("|   3)City                   |");
-                                System.out.println("|   4)State                  |");
-                                System.out.println("|   5)Zip                    |");
-                                System.out.println("|   6)Country                |");
-                                System.out.println("|   7)Secondary Address      |");
-                                System.out.println("+----------------------------+");
+                                showEditMenu();
 
                                 while (!valid) {
 
-                                    int selection = console.getInteger("What field would you like to change?\n>", "That is an invalid entry!");
-
-                                    switch (selection) {
-
-                                        case 1:
-                                            //change name
-                                            String newFirstName = console.checkEmptyString("Enter the first name of your\ncontact:", "You must fill this field.");
-                                            String newLastName = console.checkEmptyString("Enter the last name of your\ncontact:", "You must fill this field.");
-                                            addWithId.setFirstName(newFirstName);
-                                            addWithId.setLastName(newLastName);
-                                            addDao.update(addWithId);
-                                            valid = true;
-                                            break;
-                                        case 2:
-                                            //change st address
-                                            String newStAddress = console.checkEmptyString("Enter the street address:", "You must fill this field.");
-                                            addWithId.setStreetAddress(newStAddress);
-                                            addDao.update(addWithId);
-                                            valid = true;
-                                            break;
-                                        case 3:
-                                            //change city
-                                            String newCity = console.checkEmptyString("Enter the city:", "You must fill this field.");
-                                            addWithId.setCity(newCity);
-                                            addDao.update(addWithId);
-                                            valid = true;
-                                            break;
-                                        case 4:
-                                            //change state
-                                            String newState = console.checkEmptyString("Enter the state:", "You must fill this field.");
-                                            addWithId.setState(newState);
-                                            addDao.update(addWithId);
-                                            valid = true;
-                                            break;
-                                        case 5:
-                                            //change zip
-                                            String newZip = console.checkEmptyString("Enter the zip code:", "You must fill this field.");
-                                            addWithId.setZip(newZip);
-                                            addDao.update(addWithId);
-                                            valid = true;
-                                            break;
-                                        case 6:
-                                            //change country
-                                            String newCountry = console.checkEmptyString("Enter the country:", "You must fill this field.");
-                                            addWithId.setCountry(newCountry);
-                                            addDao.update(addWithId);
-                                            valid = true;
-                                            break;
-                                        case 7:
-                                            //change secondary address
-                                            String newSecondAdd = console.checkEmptyString("Enter your secondary address:"
-                                                    + "\n(P.O. Box, Apt #, Suite #)\nEnter 'none' to leave blank.", "You must fill this field.");
-                                            addWithId.setSecAdd(newSecondAdd);
-                                            addDao.update(addWithId);
-                                            valid = true;
-                                            break;
-                                        default:
-                                            //error
-                                            System.out.println("That is not an option!");
-                                            break;
-
-                                    }
+                                    valid = validateEdit(addWithId);
 
                                 }
 
@@ -431,15 +312,145 @@ public class AddressController {
 
                 }
 
-                boolean confirm = console.yesCheck("Edit another address? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
-                if (confirm == true) {
-                    editAgain = true;
-                } else {
-                    editAgain = false;
-
-                }
+                editAgain = confirmAgain("Edit another address? [yes/no]\n>");
 
             }
         }
     }
+
+    public void showMenu() {
+
+        System.out.println("+----------------------------+");
+        System.out.println("| Welcome! Choose an option! |");
+        System.out.println("+----------------------------+");
+        System.out.println("|   1)Add Address            |");
+        System.out.println("|   2)Delete Address         |");
+        System.out.println("|   3)Find Address           |");
+        System.out.println("|   4)View Address Count     |");
+        System.out.println("|   5)View All Addresses     |");
+        System.out.println("|   6)Update Addresses       |");
+        System.out.println("|  ------------------------  |");
+        System.out.println("|                    [quit]  |");
+        System.out.println("+----------------------------+");
+
+    }
+
+    public void showEditMenu() {
+
+        System.out.println("+----------------------------+");
+        System.out.println("| Edit your address!         |");
+        System.out.println("+----------------------------+");
+        System.out.println("|   1)Name                   |");
+        System.out.println("|   2)Street Address         |");
+        System.out.println("|   3)City                   |");
+        System.out.println("|   4)State                  |");
+        System.out.println("|   5)Zip                    |");
+        System.out.println("|   6)Country                |");
+        System.out.println("|   7)Secondary Address      |");
+        System.out.println("+----------------------------+");
+    }
+
+    public void showAddress(Address address) {
+
+        String fSecAdd = address.getSecAdd();
+
+        if (fSecAdd.equalsIgnoreCase("none")) {
+            fSecAdd = "";
+        }
+        System.out.println("+----------------------------+");
+        System.out.println("Address ID: " + address.getIdentifier());
+        System.out.println("\n" + address.getFirstName() + " " + address.getLastName() + "\n"
+                + address.getStreetAddress() + "\n" + address.getCity() + ", " + address.getState() + ", " + address.getZip() + "\n"
+                + address.getCountry() + " " + fSecAdd + "\n");
+        System.out.println("+----------------------------+");
+    }
+
+    public boolean validateEdit(Address address) {
+
+        boolean valid = false;
+        int selection = console.getInteger("What field would you like to change?\n>", "That is an invalid entry!");
+
+        checkEditEntry(selection, address);
+
+        return valid;
+    }
+
+    public boolean confirmAgain(String question) {
+
+        boolean again;
+        boolean confirm = console.yesCheck(question, "Enter [yes/no] to proceed.");
+        again = confirm == true;
+
+        return again;
+    }
+
+    public boolean checkEditEntry(int selection, Address address) {
+
+        boolean valid = false;
+        
+        switch (selection) {
+
+            case 1:
+                //change name
+                String newFirstName = console.checkEmptyString("Enter the first name of your\ncontact:", "You must fill this field.");
+                String newLastName = console.checkEmptyString("Enter the last name of your\ncontact:", "You must fill this field.");
+                address.setFirstName(newFirstName);
+                address.setLastName(newLastName);
+                addDao.update(address);
+                valid = true;
+                break;
+            case 2:
+                //change st address
+                String newStAddress = console.checkEmptyString("Enter the street address:", "You must fill this field.");
+                address.setStreetAddress(newStAddress);
+                addDao.update(address);
+                valid = true;
+                break;
+            case 3:
+                //change city
+                String newCity = console.checkEmptyString("Enter the city:", "You must fill this field.");
+                address.setCity(newCity);
+                addDao.update(address);
+                valid = true;
+                break;
+            case 4:
+                //change state
+                String newState = console.checkEmptyString("Enter the state:", "You must fill this field.");
+                address.setState(newState);
+                addDao.update(address);
+                valid = true;
+                break;
+            case 5:
+                //change zip
+                String newZip = console.checkEmptyString("Enter the zip code:", "You must fill this field.");
+                address.setZip(newZip);
+                addDao.update(address);
+                valid = true;
+                break;
+            case 6:
+                //change country
+                String newCountry = console.checkEmptyString("Enter the country:", "You must fill this field.");
+                address.setCountry(newCountry);
+                addDao.update(address);
+                valid = true;
+                break;
+            case 7:
+                //change secondary address
+                String newSecondAdd = console.checkEmptyString("Enter your secondary address:"
+                        + "\n(P.O. Box, Apt #, Suite #)\nEnter 'none' to leave blank.", "You must fill this field.");
+                address.setSecAdd(newSecondAdd);
+                addDao.update(address);
+                valid = true;
+                break;
+            default:
+                //error
+                System.out.println("That is not an option!");
+                break;
+
+        }
+
+        return valid;
+
+    }
+
 }
