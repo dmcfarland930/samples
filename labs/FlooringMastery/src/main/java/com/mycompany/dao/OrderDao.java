@@ -64,7 +64,7 @@ public class OrderDao {
             if (myOrder.getOrderNumber() == order.getOrderNumber()) {
                 orderList.remove(myOrder);
                 orderList.add(order);
-
+                break;
             }
 
         }
@@ -90,19 +90,18 @@ public class OrderDao {
 
     }
 
-    public List<Order> getList(){
-        
+    public List<Order> getList() {
+
         return new ArrayList(this.orderList);
-        
-        
+
     }
-    
-    public double calculateOrderTotal(double laborTotal, double productTotal, double tax){
-        
+
+    public double calculateOrderTotal(double laborTotal, double productTotal, double tax) {
+
         double total;
-        
+
         total = laborTotal + productTotal + tax;
-        
+
         return total;
     }
 }
