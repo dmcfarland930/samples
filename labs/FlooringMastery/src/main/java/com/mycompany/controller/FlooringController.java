@@ -9,13 +9,14 @@ import com.mycompany.dao.ProductDao;
 import com.mycompany.dao.TaxesDao;
 import com.mycompany.data.FlooringData;
 import com.mycompany.dto.Order;
-import com.mycompany.dto.Product;
-import com.mycompany.dto.Taxes;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -28,6 +29,9 @@ public class FlooringController {
     ProductDao productDao = new ProductDao();
     TaxesDao taxesDao = new TaxesDao();
     ConsoleIO console = new ConsoleIO();
+    Map<String, List> orderMap = new HashMap();
+    List<Order> ordersList = new ArrayList();
+    boolean testMode = false;
 
     public void runApp() {
 
@@ -37,6 +41,11 @@ public class FlooringController {
 
     public void displayMainMenu() {
 
+        testMode = testMode();
+        if (testMode == true) {
+            console.readString("YOU ARE IN TEST MODE");
+            console.readString("-------------------------------");
+        }
         console.readString("Welcome to flooring calculator.");
         console.readString("-------------------------------");
         console.readString(" 1) Display Orders             ");
@@ -57,6 +66,7 @@ public class FlooringController {
             displayMainMenu();
 
             selection = console.getString(">");
+
             switch (selection) {
 
                 case "1":
@@ -94,15 +104,36 @@ public class FlooringController {
     public void displayOrders() {
 
         List<Order> orderList;
-        String date = console.getString("Please enter the date. (MM/DD/YYYY) \n>");
+        String date = getDateEntry();
 
         try {
-            orderList = fd.orderDecode(date);
-            for (Order orderOnFile : orderList) {
-                displayOrderSummary(orderOnFile);
+            //retrieve from memory if test mode
+            testMode = testMode();
+            if (testMode == true) {
+                List<Order> listValue = new ArrayList();
+                Set<String> dates = orderMap.keySet();
+
+                for (String dateKey : dates) {
+                    listValue = orderMap.get(dateKey);
+                }
+
+                for (Order memoryOrder : listValue) {
+                    displayOrderSummary(memoryOrder);
+                }
+                if (listValue.isEmpty()) {
+
+                    console.readString("No records for that date could be found! Please check your entry!\n");
+                }
+                //end retrieve from memory
+            } else {
+
+                orderList = fd.orderDecode(date);
+                for (Order orderOnFile : orderList) {
+                    displayOrderSummary(orderOnFile);
+                }
             }
         } catch (Exception ex) {
-            System.out.println("That date could not be found in our records! Please check your entry!");
+            console.readString("No records for that date could be found! Please check your entry!\n");
         }
 
     }
@@ -139,18 +170,20 @@ public class FlooringController {
             areaString = Double.toString(newOrder.getArea());
         }
 
+        newOrder = setNewOrderProperties(newOrder);
         orderDao.create(newOrder, dateString);
 
         if (newOrder.getCustomerName().equals("0") || newOrder.getState().equals("0") || newOrder.getProductType().equals("0") || areaString.equals("0")) {
             showIncompleteOrder(newOrder);
         } else {
-            newOrder = setNewOrderProperties(newOrder);
             displayOrderSummary(newOrder);
             save = console.yesCheck("Submit this order? [yes/no]\n>", "Enter \"yes\" to save, \"no\" to discard.");
         }
 
         if (save == true) {
             console.readString("Order saved!");
+            testMode = testMode();
+            saveTestMode(testMode, dateString, newOrder);
         } else {
             console.readString("Order cancelled!");
             orderDao.delete(newOrder, dateString);
@@ -159,128 +192,183 @@ public class FlooringController {
 
     public void editOrder() {
 
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("MMddyyyy");
         DecimalFormat areaF = new DecimalFormat("#.##");
-        String dateString = sdf.format(date);
-        int orderNum;
-        double areaEdit = 0;
+        int orderNum = 0;
+        double areaEdit;
         String area;
-        String areaString = "";
-        String customerName;
+        String dateString;
+        String customerName = "";
         boolean found = false;
-        boolean save = true;
+        boolean validDate = true;
+        boolean quitEdit = false;
+        boolean changeDate = false;
         Order editOrder = new Order();
-        List<Order> orders = fd.orderDecode(dateString);
+        List<Order> orders = new ArrayList();
 
-        //displayOrders();
-        orderNum = console.getInteger("Please enter your order number to edit.\n>", "That is an ivalid entry!");
-
-        for (Order orderOnList : orders) {
-
-            if (orderOnList.getOrderNumber() == orderNum) {
-                editOrder = orderOnList;
-                found = true;
-            }
-
+        dateString = getDateEntry();
+        try {
+            orders = fd.orderDecode(dateString);
+        } catch (Exception ex) {
+            console.readString("No records for that date could be found! Please check your entry!\n");
+            validDate = false;
         }
 
-        if (found == true) {
+        if (validDate == true) {
+            orderNum = console.getInteger("Please enter your order number to edit.\n>", "That is an ivalid entry!");
 
-            console.readString("To save order and return to the main menu, enter \"0\" at any time.");
+            //retrieve from memory if test mode
+            testMode = testMode();
+            if (testMode == true) {
+                Set<String> dates = orderMap.keySet();
 
-            customerName = console.getString("Enter your name. (" + editOrder.getCustomerName() + ")\n>");
-            if (customerName.isEmpty()) {
-                customerName = editOrder.getCustomerName();
-                editOrder.setCustomerName(customerName);
+                for (String dateKey : dates) {
+                    ordersList = orderMap.get(dateKey);
+                }
+
+                for (Order memoryOrder : ordersList) {
+                    if (memoryOrder.getOrderNumber() == orderNum) {
+                        editOrder = memoryOrder;
+                        found = true;
+                    }
+                }
+                //end retrieve from memory
+
+            } else {
+                for (Order orderOnList : orders) {
+
+                    if (orderOnList.getOrderNumber() == orderNum) {
+                        editOrder = orderOnList;
+                        found = true;
+                    }
+
+                }
+            }
+
+            if (found == true) {
+
+                console.readString("To return to the main menu and discard changes, enter \"0\" at any time.");
+
+                customerName = console.getString("Enter your name. (" + editOrder.getCustomerName() + ")\n>");
+                if (customerName.isEmpty()) {
+                    customerName = editOrder.getCustomerName();
+                    editOrder.setCustomerName(customerName);
+                } else if (customerName.equals("0")) {
+                    quitEdit = true;
+                }
+
             } else {
                 editOrder.setCustomerName(customerName);
             }
 
-            if (!editOrder.getCustomerName().equals("0")) {
+            if (!quitEdit) {
+
                 editOrder.setState(enterState(true, editOrder));
-            } else {
-                editOrder.setState("0");
-            }
 
-            if (!editOrder.getState().equals("0")) {
+                if (editOrder.getState().isEmpty()) {
+                    editOrder.setState(editOrder.getState());
+                } else if (editOrder.getState().equals("0")) {
+                    quitEdit = true;
+                }
+
+            }
+            if (!quitEdit) {
+
                 editOrder.setProductType(enterProduct(true, editOrder));
-            } else {
-                editOrder.setProductType("0");
+                if (editOrder.getProductType().isEmpty()) {
+                    editOrder.setProductType(editOrder.getProductType());
+                } else if (editOrder.getProductType().equals("0")) {
+                    quitEdit = true;
+                }
             }
-
-            if (!editOrder.getProductType().equals("0")) {
+            if (!quitEdit) {
                 area = console.getString("Enter the area of your flooring in sq/ft.(" + areaF.format(editOrder.getArea()) + ")\n>");
                 if (area.isEmpty()) {
                     area = Double.toString(editOrder.getArea());
                     areaEdit = Double.parseDouble(area);
                     editOrder.setArea(areaEdit);
+                } else if (area.equals("0")) {
+                    editOrder.setArea(editOrder.getArea());
+                    quitEdit = true;
                 }
-            } else {
-                editOrder.setArea(0);
-                areaString = Double.toString(editOrder.getArea());
             }
 
-            orderDao.update(editOrder, dateString);
-
-            if (editOrder.getCustomerName().equals("0") || editOrder.getState().equals("0") || editOrder.getProductType().equals("0") || areaString.equals("0")) {
-                showIncompleteOrder(editOrder);
-            } else {
+            if (!quitEdit) {
                 editOrder = setNewOrderProperties(editOrder);
+                orderDao.update(editOrder, dateString);
+
                 displayOrderSummary(editOrder);
-                save = console.yesCheck("Submit this order? [yes/no]\n>", "Enter \"yes\" to save, \"no\" to discard.");
-            }
 
-            if (save == true) {
-                console.readString("Order saved!");
-            } else {
-                console.readString("Order cancelled!");
-                orderDao.delete(editOrder, dateString);
-            }
+                changeDate = console.yesCheck("Change the order's date?", "To change date, enter \"yes\", to keep, enter \"no\".");
+                if (changeDate == true) {
+                    dateString = getDateEntry();
+                    orderDao.update(editOrder, dateString);
+                }
 
-        } else {
-            console.readString("Order not found! Please check your order number carefully!");
+                console.readString("\nOrder updated!\n");
+            }
+        } else if (validDate == true || !found) {
+            console.readString("Order not found! Please check your order number carefully!\n");
         }
+
     }
 
     public void removeOrder() {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("MMddyyyy");
-        DecimalFormat areaF = new DecimalFormat("#.##");
         String dateString = sdf.format(date);
         int orderNum;
         boolean found = false;
-        boolean delete = true;
+        boolean delete;
         Order delOrder = new Order();
         List<Order> orders = fd.orderDecode(dateString);
 
         //displayOrders();
         orderNum = console.getInteger("Please enter your order number to remove.\n>", "That is an ivalid entry!");
 
-        for (Order orderOnList : orders) {
+        //retrieve from memory if test mode
+        testMode = testMode();
+        if (testMode == true) {
+            List<Order> listValue = new ArrayList();
+            Set<String> dates = orderMap.keySet();
 
-            if (orderOnList.getOrderNumber() == orderNum) {
-                delOrder = orderOnList;
-                found = true;
+            for (String dateKey : dates) {
+                listValue = orderMap.get(dateKey);
             }
 
+            for (Order memoryOrder : listValue) {
+                if (memoryOrder.getOrderNumber() == orderNum) {
+                    delOrder = memoryOrder;
+                    found = true;
+                }
+            }
+            //end retrieve from memory
+        } else {
+            for (Order orderOnList : orders) {
+
+                if (orderOnList.getOrderNumber() == orderNum) {
+                    delOrder = orderOnList;
+                    found = true;
+                }
+
+            }
         }
 
         if (found == true) {
 
             displayOrderSummary(delOrder);
-            
+
             delete = console.yesCheck("Are you sure you want to remove this order? [yes/no]\n>", "Enter \"yes\" to delete, \"no\" to keep.");
 
             if (delete == true) {
                 console.readString("Order removed!");
+                removeTestMode(delOrder, orderNum);
                 orderDao.delete(delOrder, dateString);
             } else {
                 console.readString("Order saved!");
             }
 
         } else {
-            console.readString("Order not found! Please check your order number carefully!");
+            console.readString("Order not found! Please check your order number carefully!\n");
         }
     }
 
@@ -291,16 +379,15 @@ public class FlooringController {
         while (!valid) {
             if (edit == true) {
 
-                state = console.getString("Enter your state. We serve OH, PA, MI, and IN. (" + editOrder.getState() + ")\n>");
-
+                state = console.getString("Enter your state. We serve OH, PA, MI, and IN. (" + editOrder.getState().toUpperCase() + ")\n>");
+                valid = taxesDao.validateState(state, true);
                 if (state.isEmpty()) {
                     state = editOrder.getState();
-                    valid = taxesDao.validateState(state);
                 }
 
             } else {
                 state = console.getString("Enter your state. We serve OH, PA, MI, and IN.\n>");
-                valid = taxesDao.validateState(state);
+                valid = taxesDao.validateState(state, false);
             }
             if (!valid) {
                 console.readString("Sorry, we do not serve that state!");
@@ -315,14 +402,14 @@ public class FlooringController {
         while (!valid) {
 
             if (edit == true) {
-                productType = console.getString("Enter your flooring type. We have Carpet, Laminate, Tile, and Wood. (" + editOrder.getProductType() + ")\n>");
+                productType = console.getString("Enter your flooring type. We have Carpet, Laminate, Tile, and Wood. (" + editOrder.getProductType().toUpperCase() + ")\n>");
+                valid = productDao.validateProductType(productType, true);
                 if (productType.isEmpty()) {
                     productType = editOrder.getProductType();
-                    valid = productDao.validateProductType(productType);
                 }
             } else {
                 productType = console.getString("Enter your flooring type. We have Carpet, Laminate, Tile, and Wood.\n>");
-                valid = productDao.validateProductType(productType);
+                valid = productDao.validateProductType(productType, false);
             }
             if (!valid) {
                 console.readString("We do not have that product!");
@@ -432,4 +519,51 @@ public class FlooringController {
         }
         return areaString;
     }
+
+    public String getDateEntry() {
+
+        String dateEntry = console.getString("Please enter the date. (MM/DD/YYYY) \n>");
+        String date = dateEntry.replace("/", "");
+
+        return date;
+
+    }
+
+    public boolean testMode() {
+
+        boolean testTrue = false;
+        String test = fd.testDecode();
+        if (test.equals("1")) {
+            testTrue = true;
+        }
+
+        return testTrue;
+    }
+
+    public void saveTestMode(boolean testMode, String dateString, Order order) {
+
+        if (testMode == true) {
+            ordersList.add(order);
+            orderMap.put(dateString, ordersList);
+            orderDao.delete(order, dateString);
+        }
+    }
+
+    public void removeTestMode(Order order, int orderNum) {
+        Set<String> dates = orderMap.keySet();
+
+        for (String dateKey : dates) {
+            ordersList = orderMap.get(dateKey);
+        }
+
+        if (!ordersList.isEmpty()) {
+            for (Order memoryOrder : ordersList) {
+                if (memoryOrder.getOrderNumber() == orderNum) {
+                    ordersList.remove(memoryOrder);
+                    break;
+                }
+            }
+        }
+    }
+
 }

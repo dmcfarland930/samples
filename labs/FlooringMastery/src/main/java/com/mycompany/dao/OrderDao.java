@@ -60,6 +60,7 @@ public class OrderDao {
 
     public void update(Order order, String date) {
 
+        orderList = fd.orderDecode(date);
         for (Order myOrder : orderList) {
             if (myOrder.getOrderNumber() == order.getOrderNumber()) {
                 orderList.remove(myOrder);
@@ -103,5 +104,25 @@ public class OrderDao {
         total = laborTotal + productTotal + tax;
 
         return total;
+    }
+
+    public Order cloneOrder(Order order) {
+
+        Order newOrder = new Order();
+
+        newOrder.setOrderNumber(order.getOrderNumber());
+        newOrder.setCustomerName(order.getCustomerName());
+        newOrder.setState(order.getState());
+        newOrder.setTaxRate(order.getTaxRate());
+        newOrder.setProductType(order.getProductType());
+        newOrder.setArea(order.getArea());
+        newOrder.setCostPerSqFt(order.getCostPerSqFt());
+        newOrder.setLaborCostPerSqFt(order.getLaborCostPerSqFt());
+        newOrder.setMaterialCost(order.getMaterialCost());
+        newOrder.setTotalLaborCost(order.getTotalLaborCost());
+        newOrder.setTax(order.getTax());
+        newOrder.setOrderTotal(order.getOrderTotal());
+
+        return newOrder;
     }
 }

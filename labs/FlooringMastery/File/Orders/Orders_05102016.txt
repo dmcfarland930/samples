@@ -1,2 +1,2 @@
 OrderNumber, CustomerName, State, TaxRate, ProductType, Area, CostPerSquareFoot, LaborCostPerSquareFoot, MaterialCost, LaborCost, Tax, Total
-1000,Dan,OH,6.25,Tile,50.00,2.25,2.10,112.50,105.00,13.59,231.09
+1000,Jeff,OH,6.25,Carpet,50.00,2.25,2.10,112.50,105.00,13.59,231.09

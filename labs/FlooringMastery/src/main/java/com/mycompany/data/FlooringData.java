@@ -4,6 +4,7 @@
  */
 package com.mycompany.data;
 
+import com.mycompany.controller.FlooringController;
 import com.mycompany.dao.OrderDao;
 import com.mycompany.dao.TaxesDao;
 import com.mycompany.dto.Order;
@@ -71,6 +72,7 @@ public class FlooringData {
 
         DecimalFormat df = new DecimalFormat("0.00");
         final String TOKEN = ",";
+        String customerName;
         PrintWriter out = null;
 
         try {
@@ -78,11 +80,12 @@ public class FlooringData {
             out = new PrintWriter(new FileWriter("File" + File.separator + "Orders" + File.separator + "Orders_" + dateEntry + ".txt"));
             out.print("OrderNumber, CustomerName, State, TaxRate, ProductType, Area, CostPerSquareFoot, LaborCostPerSquareFoot, MaterialCost, LaborCost, Tax, Total");
             out.println();
-            
+
             for (Order myOrder : orderList) {
                 out.print(myOrder.getOrderNumber());
                 out.print(TOKEN);
-                out.print(myOrder.getCustomerName());
+                customerName = escapeComma(myOrder);
+                out.print(customerName);
                 out.print(TOKEN);
                 out.print(myOrder.getState());
                 out.print(TOKEN);
@@ -119,8 +122,9 @@ public class FlooringData {
     public List orderDecode(String dateEntry) {
 
         Scanner sc = null;
+        String customerName;
+        int i;
         List<Order> orders = new ArrayList();
-
         try {
             sc = new Scanner(new BufferedReader(new FileReader("File" + File.separator + "Orders" + File.separator + "Orders_" + dateEntry + ".txt")));
 
@@ -135,39 +139,54 @@ public class FlooringData {
                     continue;
                 }
 
-                String currentLine = sc.nextLine();
-                String[] stringParts = currentLine.split(",");
-
                 Order myOrder = new Order();
+                String currentLine = sc.nextLine();
 
+                String[] stringParts = currentLine.split(",");
                 int id = Integer.parseInt(stringParts[0]);
                 myOrder.setOrderNumber(id);
-                myOrder.setCustomerName(stringParts[1]);
-                myOrder.setState(stringParts[2]);
-                double taxRate = Double.parseDouble(stringParts[3]);
+                if (stringParts.length == 13) {
+                    customerName = stringParts[1] + stringParts[2];
+                    customerName = customerName.replace("\\", ",");
+                    myOrder.setCustomerName(customerName);
+                    i = 3;
+                } else {
+                    myOrder.setCustomerName(stringParts[1]);
+                    myOrder.setCustomerName(removeQuotes(myOrder));
+                    i = 2;
+                }
+                myOrder.setState(stringParts[i]);
+                i++;
+                double taxRate = Double.parseDouble(stringParts[i]);
                 myOrder.setTaxRate(taxRate);
-                myOrder.setProductType(stringParts[4]);
-                double area = Double.parseDouble(stringParts[5]);
+                i++;
+                myOrder.setProductType(stringParts[i]);
+                i++;
+                double area = Double.parseDouble(stringParts[i]);
                 myOrder.setArea(area);
-                double costPerSqFt = Double.parseDouble(stringParts[6]);
+                i++;
+                double costPerSqFt = Double.parseDouble(stringParts[i]);
                 myOrder.setCostPerSqFt(costPerSqFt);
-                double laborCostPerSqFt = Double.parseDouble(stringParts[7]);
+                i++;
+                double laborCostPerSqFt = Double.parseDouble(stringParts[i]);
                 myOrder.setLaborCostPerSqFt(laborCostPerSqFt);
-                double materialCost = Double.parseDouble(stringParts[8]);
+                i++;
+                double materialCost = Double.parseDouble(stringParts[i]);
                 myOrder.setMaterialCost(materialCost);
-                double totalLaborCost = Double.parseDouble(stringParts[9]);
+                i++;
+                double totalLaborCost = Double.parseDouble(stringParts[i]);
                 myOrder.setTotalLaborCost(totalLaborCost);
-                double tax = Double.parseDouble(stringParts[10]);
+                i++;
+                double tax = Double.parseDouble(stringParts[i]);
                 myOrder.setTax(tax);
-                double orderTotal = Double.parseDouble(stringParts[11]);
+                i++;
+                double orderTotal = Double.parseDouble(stringParts[i]);
                 myOrder.setOrderTotal(orderTotal);
 
                 orders.add(myOrder);
             }
 
         } catch (FileNotFoundException | NumberFormatException ex) {
-            
-            
 
         } finally {
             sc.close();
@@ -316,6 +335,58 @@ public class FlooringData {
         }
 
         return products;
+    }
+
+    public String testDecode() {
+
+        Scanner sc = null;
+        int lineNumber = 0;
+        String testString = "";
+
+        try {
+            sc = new Scanner(new BufferedReader(new FileReader("File" + File.separator + "config.txt")));
+
+            while (sc.hasNext()) {
+                lineNumber++;
+
+                if (lineNumber == 1) {
+                    sc.nextLine();
+                    continue;
+                }
+
+                String currentLine = sc.nextLine();
+                String[] stringParts = currentLine.split(",");
+
+                testString = stringParts[0];
+
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(TaxesDao.class.getName()).log(Level.SEVERE, null, ex);
+
+        } finally {
+            sc.close();
+        }
+
+        return testString;
+    }
+
+    public String removeQuotes(Order order) {
+        String customerName = order.getCustomerName();
+        if (customerName.contains("\"")) {
+            customerName = customerName.replace("\"", "");
+        }
+        return customerName;
+    }
+
+    public String escapeComma(Order order) {
+
+        String customerName = order.getCustomerName();
+        if (customerName.contains(",")) {
+
+            customerName = customerName.replace(",", "\\,");
+        }
+        return customerName;
     }
 
 }

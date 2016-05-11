@@ -14,31 +14,31 @@ import java.util.List;
  * @author apprentice
  */
 public class ProductDao {
-    
+
     boolean isTest;
     FlooringData fd = new FlooringData();
     List<Product> productList = new ArrayList();
     String productType;
-    
+
     public ProductDao() {
-        
+
         productList = fd.productDecode();
-        
+
     }
-    
+
     public Product create(Product product) {
-        
+
         product.setProductType(productType);
         productList.add(product);
-        
+
         fd.productEncode();
-        
+
         return product;
-        
+
     }
-    
+
     public Product get(String productType) {
-        
+
         for (Product myProduct : productList) {
             if (myProduct.getProductType().equals(productType)) {
                 return myProduct;
@@ -46,108 +46,112 @@ public class ProductDao {
         }
         return null;
     }
-    
+
     public void update(Product product) {
-        
+
         for (Product myProduct : productList) {
             if (myProduct.getProductType().equals(product.getProductType())) {
                 productList.remove(myProduct);
                 productList.add(product);
-                
+
             }
-            
+
         }
         fd.productEncode();
-        
+
     }
-    
+
     public void delete(Product product) {
-        
+
         Product found = null;
-        
+
         for (Product myProduct : productList) {
-            
+
             if (myProduct.getProductType().equals(product.getProductType())) {
-                
+
                 found = myProduct;
                 break;
             }
         }
         productList.remove(found);
-        
+
         fd.productEncode();
-        
+
     }
-    
+
     public double getCostPerSqFt(String productType) {
-        
+
         List<Product> productListOnFile = fd.productDecode();
         double productCost = 0;
         for (Product productOnFile : productListOnFile) {
-            
+
             if (productType.equalsIgnoreCase(productOnFile.getProductType())) {
                 productCost = productOnFile.getCostPerSqFt();
             }
-            
+
         }
         return productCost;
     }
-    
+
     public double getLaborCostPerSqFt(String productType) {
-        
+
         List<Product> productListOnFile = fd.productDecode();
         double laborCost = 0;
         for (Product productOnFile : productListOnFile) {
-            
+
             if (productType.equalsIgnoreCase(productOnFile.getProductType())) {
                 laborCost = productOnFile.getLaborCostPerSqFt();
             }
-            
+
         }
         return laborCost;
     }
-    
+
     public double calculateTotalCostPerSqFt(double area, String productType) {
-        
+
         List<Product> productListOnFile = fd.productDecode();
         double costPerSqFt = 0;
         for (Product productOnFile : productListOnFile) {
-            
+
             if (productType.equalsIgnoreCase(productOnFile.getProductType())) {
                 costPerSqFt = area * productOnFile.getCostPerSqFt();
             }
-            
+
         }
-        
+
         return costPerSqFt;
     }
-    
+
     public double calculateTotalLaborCost(double area, String productType) {
-        
+
         List<Product> productListOnFile = fd.productDecode();
         double laborCostPerSqFt = 0;
         for (Product productOnFile : productListOnFile) {
-            
+
             if (productType.equalsIgnoreCase(productOnFile.getProductType())) {
                 laborCostPerSqFt = area * productOnFile.getLaborCostPerSqFt();
             }
-            
+
         }
         return laborCostPerSqFt;
-        
+
     }
-    
-    public boolean validateProductType(String productType) {
+
+    public boolean validateProductType(String productType, boolean edit) {
         boolean valid = false;
         List<Product> productListOnFile = fd.productDecode();
-        
+
         for (Product productOnFile : productListOnFile) {
-            
-            if (productType.equalsIgnoreCase(productOnFile.getProductType()) || productType.equals("0")) {
+
+            if (edit == true) {
+                if (productType.equalsIgnoreCase(productOnFile.getProductType()) || productType.equals("0") || productType.isEmpty()) {
+                    valid = true;
+                }
+            } else if (productType.equalsIgnoreCase(productOnFile.getProductType()) || productType.equals("0")) {
                 valid = true;
             }
+
         }
-        
         return valid;
     }
 }
