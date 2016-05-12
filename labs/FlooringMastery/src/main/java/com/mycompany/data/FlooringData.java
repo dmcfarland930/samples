@@ -82,6 +82,7 @@ public class FlooringData {
             out.println();
 
             for (Order myOrder : orderList) {
+                if(dateEntry.equals(myOrder.getOrderDate())){
                 out.print(myOrder.getOrderNumber());
                 out.print(TOKEN);
                 customerName = escapeComma(myOrder);
@@ -107,7 +108,7 @@ public class FlooringData {
                 out.print(TOKEN);
                 out.print(df.format(myOrder.getOrderTotal()));
                 out.println();
-
+                }
             }
             out.flush();
 
@@ -127,7 +128,7 @@ public class FlooringData {
         List<Order> orders = new ArrayList();
         try {
             sc = new Scanner(new BufferedReader(new FileReader("File" + File.separator + "Orders" + File.separator + "Orders_" + dateEntry + ".txt")));
-
+            
             int lineNumber = 0;
 
             while (sc.hasNext()) {
@@ -141,7 +142,7 @@ public class FlooringData {
 
                 Order myOrder = new Order();
                 String currentLine = sc.nextLine();
-
+                myOrder.setOrderDate(dateEntry);
                 String[] stringParts = currentLine.split(",");
                 int id = Integer.parseInt(stringParts[0]);
                 myOrder.setOrderNumber(id);

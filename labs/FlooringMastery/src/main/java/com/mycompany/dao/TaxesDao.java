@@ -5,7 +5,6 @@
 package com.mycompany.dao;
 
 import com.mycompany.data.FlooringData;
-import com.mycompany.dto.Product;
 import com.mycompany.dto.Taxes;
 import java.util.ArrayList;
 import java.util.List;

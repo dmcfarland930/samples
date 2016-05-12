@@ -24,6 +24,8 @@ public class Order {
     private double totalLaborCost;
     private double tax;
     private double orderTotal;
+    private String orderDate;
+    private String prevOrderDate;
 
     public int getOrderNumber() {
         return orderNumber;
@@ -120,7 +122,22 @@ public class Order {
     public void setOrderTotal(double orderTotal) {
         this.orderTotal = orderTotal;
     }
-   
-            
+
+    public String getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public String getPrevOrderDate() {
+        return prevOrderDate;
+    }
+
+    public void setPrevOrderDate(String prevOrderDate) {
+        this.prevOrderDate = prevOrderDate;
+    }
+               
     
 }

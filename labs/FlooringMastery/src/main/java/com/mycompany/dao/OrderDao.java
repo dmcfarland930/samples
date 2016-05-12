@@ -6,6 +6,7 @@ package com.mycompany.dao;
 
 import com.mycompany.data.FlooringData;
 import com.mycompany.dto.Order;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,17 +18,17 @@ import java.util.List;
  */
 public class OrderDao {
 
-    private boolean isTest;
     private FlooringData fd = new FlooringData();
     private List<Order> orderList = new ArrayList();
     private Date date = new Date();
     private SimpleDateFormat sdf = new SimpleDateFormat("MMddyyyy");
     private String dateString = sdf.format(date);
     int nextId = 1000;
+    boolean testMode;
 
     public OrderDao() {
 
-        orderList = fd.orderDecode(dateString);
+        setDatesToOrders();
 
         for (Order myOrder : orderList) {
             if (myOrder.getOrderNumber() == nextId) {
@@ -40,12 +41,16 @@ public class OrderDao {
     public Order create(Order order, String date) {
 
         order.setOrderNumber(nextId);
+        if(!testMode){
+            orderList = fd.orderDecode(date);
+        }
         nextId++;
         orderList.add(order);
-        fd.orderEncode(date, orderList);
+        if (!testMode) {
+            fd.orderEncode(date, orderList);
+        }
 
         return order;
-
     }
 
     public Order get(Integer orderNumber) {
@@ -58,19 +63,25 @@ public class OrderDao {
         return null;
     }
 
-    public void update(Order order, String date) {
+    public void update(Order order, String date, boolean changeDate) {
 
-        orderList = fd.orderDecode(date);
+        if (!testMode) {
+            orderList = fd.orderDecode(date);
+        }
+        if(testMode == true && changeDate == true){
+            orderList = makeListWithDate(date);
+        }
         for (Order myOrder : orderList) {
-            if (myOrder.getOrderNumber() == order.getOrderNumber()) {
+            if (myOrder.getOrderNumber() == order.getOrderNumber() && myOrder.getOrderDate().equals(order.getOrderDate())) {
                 orderList.remove(myOrder);
                 orderList.add(order);
                 break;
             }
 
         }
-        fd.orderEncode(date, orderList);
-
+        if (!testMode) {
+            fd.orderEncode(date, orderList);
+        }
     }
 
     public void delete(Order order, String date) {
@@ -87,14 +98,26 @@ public class OrderDao {
         }
         orderList.remove(found);
 
-        fd.orderEncode(date, orderList);
-
+        if (!testMode) {
+            fd.orderEncode(date, orderList);
+        }
     }
 
     public List<Order> getList() {
 
         return new ArrayList(this.orderList);
 
+    }
+
+    public List<Order> getOrdersOnDate(String date) {
+        List<Order> myOrderList = new ArrayList<>();
+        for (Order myOrder : orderList) {
+            String date2 = myOrder.getOrderDate();
+            if (date2.equals(date)) {
+                myOrderList.add(myOrder);
+            }
+        }
+        return myOrderList;
     }
 
     public double calculateOrderTotal(double laborTotal, double productTotal, double tax) {
@@ -106,23 +129,50 @@ public class OrderDao {
         return total;
     }
 
-    public Order cloneOrder(Order order) {
+    public void setTestMode(boolean testMode) {
+        this.testMode = testMode;
+    }
 
-        Order newOrder = new Order();
+    public void setDatesToOrders() {
 
-        newOrder.setOrderNumber(order.getOrderNumber());
-        newOrder.setCustomerName(order.getCustomerName());
-        newOrder.setState(order.getState());
-        newOrder.setTaxRate(order.getTaxRate());
-        newOrder.setProductType(order.getProductType());
-        newOrder.setArea(order.getArea());
-        newOrder.setCostPerSqFt(order.getCostPerSqFt());
-        newOrder.setLaborCostPerSqFt(order.getLaborCostPerSqFt());
-        newOrder.setMaterialCost(order.getMaterialCost());
-        newOrder.setTotalLaborCost(order.getTotalLaborCost());
-        newOrder.setTax(order.getTax());
-        newOrder.setOrderTotal(order.getOrderTotal());
+        File dir = new File("File/Orders");
+        File[] directoryListing = dir.listFiles();
+        for (File file : directoryListing) {
+            String[] fileName = file.getName().split("\\.");
+            fileName = fileName[0].split("_");
+            dateString = fileName[1];
+            List<Order> orderList2 = fd.orderDecode(dateString);
+            for (Order orders : orderList2) {
 
-        return newOrder;
+                orderList.add(orders);
+
+            }
+
+        }
+    }
+
+    public int setIdForDate(Order order, String date) {
+        int newId = 1000;
+        for (Order orderWithDate : orderList) {
+            if (orderWithDate.getOrderDate().equals(date)) {
+
+                newId = orderWithDate.getOrderNumber();
+                if (order.getOrderNumber() == newId) {
+                    newId++;
+                }
+
+            }
+        }
+        return newId;
+    }
+
+    public List makeListWithDate(String date) {
+        List<Order> ordersWithDateEntry = new ArrayList();
+        for (Order orderWithDate : orderList) {
+            if (orderWithDate.getOrderDate().equals(date)) {
+                ordersWithDateEntry.add(orderWithDate);
+            }
+        }
+        return ordersWithDateEntry;
     }
 }
