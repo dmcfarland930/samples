@@ -88,6 +88,9 @@ public class OrderDao {
 
         Order found = null;
 
+        if(!testMode){
+            orderList = fd.orderDecode(date);
+        }
         for (Order myOrder : orderList) {
 
             if (myOrder.getOrderNumber() == order.getOrderNumber()) {
