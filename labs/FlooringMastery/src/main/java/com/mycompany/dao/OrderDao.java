@@ -9,6 +9,7 @@ import com.mycompany.dto.Order;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class OrderDao {
 
     private FlooringData fd = new FlooringData();
     private List<Order> orderList = new ArrayList();
+    private List<String> listOfAllDates = new ArrayList();
     private Date date = new Date();
     private SimpleDateFormat sdf = new SimpleDateFormat("MMddyyyy");
     private String dateString = sdf.format(date);
@@ -41,7 +43,9 @@ public class OrderDao {
     public Order create(Order order, String date) {
 
         order.setOrderNumber(nextId);
-        if(!testMode){
+        listOfAllDates.add(date);
+        if (!testMode) {
+            fd.orderEncode(date, orderList);
             orderList = fd.orderDecode(date);
         }
         nextId++;
@@ -68,7 +72,7 @@ public class OrderDao {
         if (!testMode) {
             orderList = fd.orderDecode(date);
         }
-        if(testMode == true && changeDate == true){
+        if (testMode == true && changeDate == true) {
             orderList = makeListWithDate(date);
         }
         for (Order myOrder : orderList) {
@@ -88,7 +92,7 @@ public class OrderDao {
 
         Order found = null;
 
-        if(!testMode){
+        if (!testMode) {
             orderList = fd.orderDecode(date);
         }
         for (Order myOrder : orderList) {
@@ -109,6 +113,13 @@ public class OrderDao {
     public List<Order> getList() {
 
         return new ArrayList(this.orderList);
+
+    }
+
+    public List<String> getListOfDates() {
+
+        Collections.sort(listOfAllDates);
+        return new ArrayList(this.listOfAllDates);
 
     }
 
@@ -144,6 +155,7 @@ public class OrderDao {
             String[] fileName = file.getName().split("\\.");
             fileName = fileName[0].split("_");
             dateString = fileName[1];
+            listOfAllDates.add(dateString);
             List<Order> orderList2 = fd.orderDecode(dateString);
             for (Order orders : orderList2) {
 
@@ -179,3 +191,5 @@ public class OrderDao {
         return ordersWithDateEntry;
     }
 }
+
+//make a method to collect dates

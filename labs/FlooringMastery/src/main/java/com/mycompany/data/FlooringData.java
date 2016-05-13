@@ -4,7 +4,6 @@
  */
 package com.mycompany.data;
 
-import com.mycompany.controller.FlooringController;
 import com.mycompany.dao.OrderDao;
 import com.mycompany.dao.TaxesDao;
 import com.mycompany.dto.Order;
@@ -32,8 +31,6 @@ import java.util.logging.Logger;
  */
 public class FlooringData {
 
-    List<Taxes> taxesList = new ArrayList();
-    List<Product> productList = new ArrayList();
     boolean fileDir = new File("File" + File.separator + "Orders" + File.separator).mkdirs();
     File newFile;
 
@@ -82,32 +79,32 @@ public class FlooringData {
             out.println();
 
             for (Order myOrder : orderList) {
-                if(dateEntry.equals(myOrder.getOrderDate())){
-                out.print(myOrder.getOrderNumber());
-                out.print(TOKEN);
-                customerName = escapeComma(myOrder);
-                out.print(customerName);
-                out.print(TOKEN);
-                out.print(myOrder.getState());
-                out.print(TOKEN);
-                out.print(df.format(myOrder.getTaxRate()));
-                out.print(TOKEN);
-                out.print(myOrder.getProductType());
-                out.print(TOKEN);
-                out.print(df.format(myOrder.getArea()));
-                out.print(TOKEN);
-                out.print(df.format(myOrder.getCostPerSqFt()));
-                out.print(TOKEN);
-                out.print(df.format(myOrder.getLaborCostPerSqFt()));
-                out.print(TOKEN);
-                out.print(df.format(myOrder.getMaterialCost()));
-                out.print(TOKEN);
-                out.print(df.format(myOrder.getTotalLaborCost()));
-                out.print(TOKEN);
-                out.print(df.format(myOrder.getTax()));
-                out.print(TOKEN);
-                out.print(df.format(myOrder.getOrderTotal()));
-                out.println();
+                if (dateEntry.equals(myOrder.getOrderDate())) {
+                    out.print(myOrder.getOrderNumber());
+                    out.print(TOKEN);
+                    customerName = escapeComma(myOrder);
+                    out.print(customerName);
+                    out.print(TOKEN);
+                    out.print(myOrder.getState());
+                    out.print(TOKEN);
+                    out.print(df.format(myOrder.getTaxRate()));
+                    out.print(TOKEN);
+                    out.print(myOrder.getProductType());
+                    out.print(TOKEN);
+                    out.print(df.format(myOrder.getArea()));
+                    out.print(TOKEN);
+                    out.print(df.format(myOrder.getCostPerSqFt()));
+                    out.print(TOKEN);
+                    out.print(df.format(myOrder.getLaborCostPerSqFt()));
+                    out.print(TOKEN);
+                    out.print(df.format(myOrder.getMaterialCost()));
+                    out.print(TOKEN);
+                    out.print(df.format(myOrder.getTotalLaborCost()));
+                    out.print(TOKEN);
+                    out.print(df.format(myOrder.getTax()));
+                    out.print(TOKEN);
+                    out.print(df.format(myOrder.getOrderTotal()));
+                    out.println();
                 }
             }
             out.flush();
@@ -128,7 +125,7 @@ public class FlooringData {
         List<Order> orders = new ArrayList();
         try {
             sc = new Scanner(new BufferedReader(new FileReader("File" + File.separator + "Orders" + File.separator + "Orders_" + dateEntry + ".txt")));
-            
+
             int lineNumber = 0;
 
             while (sc.hasNext()) {
@@ -196,14 +193,15 @@ public class FlooringData {
         return orders;
     }
 
-    public void taxEncode() {
+    public void taxEncode(List<Taxes> taxesList) {
 
-        final String TOKEN = "::";
+        final String TOKEN = ",";
         PrintWriter out = null;
 
         try {
             out = new PrintWriter(new FileWriter("File" + File.separator + "taxesList.txt"));
-
+            out.print("State,TaxRate");
+            out.println();
             for (Taxes myTaxes : taxesList) {
 
                 out.print(myTaxes.getState());
@@ -265,13 +263,15 @@ public class FlooringData {
         return taxes;
     }
 
-    public void productEncode() {
+    public void productEncode(List<Product> productList) {
 
         final String TOKEN = ",";
         PrintWriter out = null;
 
         try {
             out = new PrintWriter(new FileWriter("File" + File.separator + "productList.txt"));
+            out.print("OrdProductType,CostPerSquareFoot,LaborCostPerSquareFoot");
+            out.println();
 
             for (Product myProduct : productList) {
 

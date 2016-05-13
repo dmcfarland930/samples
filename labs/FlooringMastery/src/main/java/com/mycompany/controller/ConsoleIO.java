@@ -4,6 +4,8 @@ package com.mycompany.controller;
  * This program was written by Daniel McFarland.
  * I hope you enjoy it!
  */
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -19,7 +21,7 @@ public class ConsoleIO {
     private String userInput;
     private String string;
 
-        public int getInteger(String prompt, String errorMessage) {
+    public int getInteger(String prompt, String errorMessage) {
 
         boolean isValid = false;
 
@@ -173,6 +175,10 @@ public class ConsoleIO {
 
     }
 
+    public void readStringSameLine(String string) {
+        System.out.print(string);
+    }
+
     public int zeroCheckInt(String message, String errorMessage, String errorMessage2) {
 
         integer = 0;
@@ -287,7 +293,7 @@ public class ConsoleIO {
 
         int length = message.length();
 
-        System.out.println(message);
+        System.out.print(message);
         if (length < maxLength) {
 
             for (int i = 0; i < (maxLength - length); i++) {
@@ -308,7 +314,7 @@ public class ConsoleIO {
         while (!valid) {
 
             entry = checkEmptyString(messagePrompt, error);
-            
+
             int length = entry.length();
             if (length > maxLength) {
                 System.out.println(customOverMaxMess);
@@ -319,5 +325,28 @@ public class ConsoleIO {
 
         }
         return entry;
+    }
+
+    public Date getDate(String prompt, String error) {
+
+        Date date = null;
+        String dateInput;
+        while (date == null) {
+            try {
+
+                SimpleDateFormat sFormat = new SimpleDateFormat("MM/dd/yyyy");
+                dateInput = getString(prompt);
+                date = sFormat.parse(dateInput);
+                if (!dateInput.equals(sFormat.format(date))) {
+                    date = null;
+                }
+            } catch (Exception ex) {
+                System.out.println(error);
+            }
+            if (date == null) {
+                System.out.println("Try again!");
+            }
+        }
+        return date;
     }
 }

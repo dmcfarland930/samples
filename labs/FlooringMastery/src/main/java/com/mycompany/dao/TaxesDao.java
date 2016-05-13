@@ -19,6 +19,7 @@ public class TaxesDao {
     FlooringData fd = new FlooringData();
     List<Taxes> taxesList = new ArrayList();
     String state;
+    boolean testMode;
 
     public TaxesDao() {
 
@@ -28,11 +29,11 @@ public class TaxesDao {
 
     public Taxes create(Taxes taxes) {
 
-        taxes.setState(state);
         taxesList.add(taxes);
 
-        fd.taxEncode();
-
+        if (!testMode) {
+            fd.taxEncode(taxesList);
+        }
         return taxes;
 
     }
@@ -57,8 +58,9 @@ public class TaxesDao {
             }
 
         }
-        fd.taxEncode();
-
+        if (!testMode) {
+            fd.taxEncode(taxesList);
+        }
     }
 
     public void delete(Taxes taxes) {
@@ -75,7 +77,9 @@ public class TaxesDao {
         }
         taxesList.remove(found);
 
-        fd.taxEncode();
+        if (!testMode) {
+            fd.taxEncode(taxesList);
+        }
 
     }
 
@@ -119,7 +123,7 @@ public class TaxesDao {
                 if (state.equalsIgnoreCase(tax.getState()) || state.equals("0") || state.isEmpty()) {
                     valid = true;
                 }
-                
+
             } else if (state.equalsIgnoreCase(tax.getState()) || state.equals("0")) {
                 valid = true;
             }
@@ -127,4 +131,9 @@ public class TaxesDao {
         }
         return valid;
     }
+
+    public void setTestMode(boolean testMode) {
+        this.testMode = testMode;
+    }
+
 }

@@ -1,5 +1,8 @@
-ProductType,CostPerSquareFoot,LaborCostPerSquareFoot
-Carpet,2.25,2.10
-Laminate,1.75,2.10
-Tile,3.50,4.15
+OrdProductType,CostPerSquareFoot,LaborCostPerSquareFoot
+Carpet,2.25,2.1
+Laminate,1.75,2.1
+Tile,3.5,4.15
 Wood,5.15,4.75
+Plastic,2.0,1.0
+Glass,1.0,3.0
+Hamburger,4.0,10.0

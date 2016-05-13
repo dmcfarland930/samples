@@ -19,6 +19,7 @@ public class ProductDao {
     FlooringData fd = new FlooringData();
     List<Product> productList = new ArrayList();
     String productType;
+    boolean testMode;
 
     public ProductDao() {
 
@@ -28,11 +29,11 @@ public class ProductDao {
 
     public Product create(Product product) {
 
-        product.setProductType(productType);
         productList.add(product);
 
-        fd.productEncode();
-
+        if (!testMode) {
+            fd.productEncode(productList);
+        }
         return product;
 
     }
@@ -57,7 +58,9 @@ public class ProductDao {
             }
 
         }
-        fd.productEncode();
+        if (!testMode) {
+            fd.productEncode(productList);
+        }
 
     }
 
@@ -75,8 +78,9 @@ public class ProductDao {
         }
         productList.remove(found);
 
-        fd.productEncode();
-
+        if (!testMode) {
+            fd.productEncode(productList);
+        }
     }
 
     public double getCostPerSqFt(String productType) {
@@ -154,4 +158,9 @@ public class ProductDao {
         }
         return valid;
     }
+
+    public void setTestMode(boolean testMode) {
+        this.testMode = testMode;
+    }
+
 }

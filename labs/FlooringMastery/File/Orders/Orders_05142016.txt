@@ -1,3 +1,2 @@
 OrderNumber, CustomerName, State, TaxRate, ProductType, Area, CostPerSquareFoot, LaborCostPerSquareFoot, MaterialCost, LaborCost, Tax, Total
-1001,Jim,oh,6.25,carpet,40.00,2.25,2.10,90.00,84.00,10.88,184.88
-1003,Brandon,PA,6.75,wood,100.00,5.15,4.75,515.00,475.00,66.83,1056.83
+1002,Mac,PA,6.75,wood,1000.00,5.15,4.75,5150.00,4750.00,668.25,10568.25
