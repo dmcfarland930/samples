@@ -6,7 +6,9 @@ package com.mycompany.controller;
 
 import com.mycompany.dao.OrderDao;
 import com.mycompany.dao.ProductDao;
+import com.mycompany.dao.ProductXmlDao;
 import com.mycompany.dao.TaxesDao;
+import com.mycompany.dao.TaxesXmlDao;
 import com.mycompany.data.FlooringData;
 import com.mycompany.dto.Order;
 import java.text.DecimalFormat;
@@ -28,18 +30,18 @@ public class FlooringController {
     TaxesDao taxesDao = new TaxesDao();
     ConsoleIO console = new ConsoleIO();
     List<Order> ordersList = new ArrayList();
+    ProductXmlDao pXml = new ProductXmlDao();
+    TaxesXmlDao tXml = new TaxesXmlDao();
     boolean testMode = false;
 
     public void runApp() {
 
+        fd.testDecode();
         selectFeature();
 
     }
 
     public void displayMainMenu() {
-
-        testMode = testMode();
-        orderDao.setTestMode(testMode);
 
         if (testMode == true) {
             console.readString("\nYOU ARE IN TEST MODE");
@@ -87,7 +89,7 @@ public class FlooringController {
                 case "HOMEOFTHEWHOPPER":
                     //admin menu
                     fac.displayAdminControls();
-                    break;                    
+                    break;
                 case "quit":
                 case "q":
                     //displayOrder
@@ -107,8 +109,7 @@ public class FlooringController {
     public void displayOrders() {
 
         List<Order> orderList;
-        
-        
+
         showListOfDates();
         String dateString = getDateEntry();
 
@@ -123,6 +124,7 @@ public class FlooringController {
                 displayOrderSummary(orderOnFile);
             }
 
+            console.getString("Enter any key to continue.\n>");
         } catch (Exception ex) {
             console.readString("No records for that date could be found! Please check your entry!\n");
         }
@@ -136,6 +138,7 @@ public class FlooringController {
         String dateString = sdf.format(date);
         String areaString = "";
         boolean save = true;
+        boolean valid = false;
         boolean changeDate;
         Order newOrder = new Order();
         newOrder.setOrderDate(dateString);
@@ -157,7 +160,15 @@ public class FlooringController {
         }
 
         if (!newOrder.getProductType().equals("0")) {
-            newOrder.setArea(console.getDouble("Enter the area of your flooring in sq/ft.\n>", "That is not a valid entry."));
+            while (!valid) {
+                newOrder.setArea(console.getDouble("Enter the area of your flooring in sq/ft.\n>", "That is not a valid entry."));
+                if (newOrder.getArea() < 0) {
+                    console.readString("Your area cannot be a negative number.\n");
+                    valid = false;
+                } else {
+                    valid = true;
+                }
+            }
         } else {
             newOrder.setArea(0);
             areaString = Double.toString(newOrder.getArea());
@@ -176,7 +187,7 @@ public class FlooringController {
                     orderDao.delete(newOrder, dateString);
                 }
                 dateString = getDateEntry();
-                
+
                 newOrder.setOrderDate(dateString);
                 newOrder.setOrderNumber(orderDao.setIdForDate(newOrder, dateString));
 
@@ -209,25 +220,29 @@ public class FlooringController {
         boolean found = false;
         boolean validDate = true;
         boolean quitEdit = false;
+        boolean valid = false;
         boolean changeDate;
         Order editOrder = new Order();
         List<Order> orders = new ArrayList();
 
         showListOfDates();
         dateString = getDateEntry();
-        
+
         try {
             if (testMode == true) {
                 orders = orderDao.getOrdersOnDate(dateString);
             } else {
                 orders = fd.orderDecode(dateString);
             }
-            
+            for (Order orderOnFile : orders) {
+                displayOrderSummary(orderOnFile);
+            }
+
         } catch (Exception ex) {
-            
+
             console.readString("No records for that date could be found! Please check your entry!\n");
             validDate = false;
-        
+
         }
 
         if (validDate == true) {
@@ -268,6 +283,7 @@ public class FlooringController {
                     }
 
                 }
+
                 if (!quitEdit) {
 
                     editOrder.setProductType(enterProduct(true, editOrder));
@@ -277,19 +293,30 @@ public class FlooringController {
                         quitEdit = true;
                     }
                 }
+
                 if (!quitEdit) {
-                    area = console.getString("Enter the area of your flooring in sq/ft.(" + areaF.format(editOrder.getArea()) + ")\n>");
-                    if (area.isEmpty()) {
-                        editOrder.setArea(editOrder.getArea());
-                    } else if (area.equals("0")) {
-                        editOrder.setArea(editOrder.getArea());
-                        quitEdit = true;
-                    } else {
-                        areaEdit = Double.parseDouble(area);
-                        editOrder.setArea(areaEdit);
+
+                    while (!valid) {
+                        area = console.getString("Enter the area of your flooring in sq/ft.(" + areaF.format(editOrder.getArea()) + ")\n>");
+
+                        if (area.isEmpty()) {
+                            editOrder.setArea(editOrder.getArea());
+                            valid = true;
+                        } else if (area.equals("0")) {
+                            editOrder.setArea(editOrder.getArea());
+                            quitEdit = true;
+                        } else {
+                            areaEdit = Double.parseDouble(area);
+                            if (areaEdit < 0) {
+                                console.readString("Your area cannot be a negative number.\n");
+                                valid = false;
+                            } else {
+                                editOrder.setArea(areaEdit);
+                                valid = true;
+                            }
+                        }
                     }
                 }
-
                 if (!quitEdit) {
                     editOrder = setNewOrderProperties(editOrder);
 
@@ -332,8 +359,7 @@ public class FlooringController {
         boolean delete;
         Order delOrder = new Order();
         List<Order> orderList = new ArrayList();
-        
-        
+
         showListOfDates();
         dateString = getDateEntry();
 
@@ -385,9 +411,9 @@ public class FlooringController {
         String state = "";
         boolean valid = false;
         while (!valid) {
-            
+
             fac.viewTaxList();
-            
+
             if (edit == true) {
 
                 state = console.getString("Enter your state.(" + editOrder.getState().toUpperCase() + ")\n>");
@@ -413,7 +439,7 @@ public class FlooringController {
         while (!valid) {
 
             fac.viewProductList();
-            
+
             if (edit == true) {
                 productType = console.getString("Enter your flooring type.(" + editOrder.getProductType().toUpperCase() + ")\n>");
                 valid = productDao.validateProductType(productType, true);
@@ -447,7 +473,7 @@ public class FlooringController {
         console.readString("-------------------------------");
         console.readString(" Product Cost/SqFt: $" + money.format(order.getCostPerSqFt()));
         console.readString(" Labor Cost/SqFt: $" + money.format(order.getLaborCostPerSqFt()));
-        console.readString(" Tax Rate: $" + money.format(order.getTaxRate()));
+        console.readString(" Tax Rate: " + money.format(order.getTaxRate())+"%");
         console.readString("-------------------------------");
         console.readString(" Total Product Cost: $" + money.format(order.getMaterialCost()));
         console.readString(" Total Labor Cost: $" + money.format(order.getTotalLaborCost()));
@@ -538,24 +564,13 @@ public class FlooringController {
     public String getDateEntry() {
 
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-        
+
         Date newDate = console.getDate("Please enter the date for\nyour order. (MM/DD/YYYY)\n>", "That is not a valid date entry!");
         String dateEntry = sdf.format(newDate);
         String dateString = dateEntry.replace("/", "");
 
         return dateString;
 
-    }
-
-    public boolean testMode() {
-
-        boolean testTrue = false;
-        String test = fd.testDecode();
-        if (test.equals("1")) {
-            testTrue = true;
-        }
-
-        return testTrue;
     }
 
     public void setOrderDate(Order order, String date) {
@@ -580,13 +595,17 @@ public class FlooringController {
 
     public void showListOfDates() {
 
+        String previousDate = "";
         List<String> dateList = orderDao.getListOfDates();
 
         console.readString("\nCurrent saved dates:");
-        
+
         for (String date : dateList) {
 
-            insertDateFormat(date);
+            if (!previousDate.equals(date) && !date.equals("051920")) {
+                insertDateFormat(date);
+            }
+            previousDate = date;
 
         }
         console.readString("-------------------------------");

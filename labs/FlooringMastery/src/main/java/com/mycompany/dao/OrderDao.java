@@ -42,10 +42,15 @@ public class OrderDao {
 
     public Order create(Order order, String date) {
 
+        boolean exists;
+        exists = checkFileDateExists(date);
+
         order.setOrderNumber(nextId);
         listOfAllDates.add(date);
         if (!testMode) {
-            fd.orderEncode(date, orderList);
+            if (!exists) {
+                fd.orderEncode(date, orderList);
+            }
             orderList = fd.orderDecode(date);
         }
         nextId++;
@@ -166,17 +171,30 @@ public class OrderDao {
         }
     }
 
+    public boolean checkFileDateExists(String date) {
+
+        boolean exists = false;
+        for (String dates : listOfAllDates) {
+
+            if (date.equals(dates)) {
+                exists = true;
+            }
+
+        }
+        return exists;
+    }
+
     public int setIdForDate(Order order, String date) {
         int newId = 1000;
         for (Order orderWithDate : orderList) {
-            if (orderWithDate.getOrderDate().equals(date)) {
+            //if (orderWithDate.getOrderDate().equals(date)) {
 
                 newId = orderWithDate.getOrderNumber();
                 if (order.getOrderNumber() == newId) {
                     newId++;
                 }
 
-            }
+            //}
         }
         return newId;
     }
@@ -191,5 +209,3 @@ public class OrderDao {
         return ordersWithDateEntry;
     }
 }
-
-//make a method to collect dates

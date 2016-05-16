@@ -4,8 +4,6 @@
  */
 package com.mycompany.dto;
 
-import java.util.List;
-
 /**
  *
  * @author apprentice
@@ -25,7 +23,6 @@ public class Order {
     private double tax;
     private double orderTotal;
     private String orderDate;
-    private String prevOrderDate;
 
     public int getOrderNumber() {
         return orderNumber;
@@ -131,13 +128,5 @@ public class Order {
         this.orderDate = orderDate;
     }
 
-    public String getPrevOrderDate() {
-        return prevOrderDate;
-    }
-
-    public void setPrevOrderDate(String prevOrderDate) {
-        this.prevOrderDate = prevOrderDate;
-    }
-               
     
 }

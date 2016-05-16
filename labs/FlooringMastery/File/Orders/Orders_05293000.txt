@@ -1,2 +1,2 @@
 OrderNumber, CustomerName, State, TaxRate, ProductType, Area, CostPerSquareFoot, LaborCostPerSquareFoot, MaterialCost, LaborCost, Tax, Total
-1000,Dan,IN,6.00,wood,100.00,5.15,4.75,515.00,475.00,59.40,1049.40
+1003,Dan,in,6.00,wood,200.00,5.15,4.75,1030.00,950.00,118.80,2098.80

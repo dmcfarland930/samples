@@ -1,4 +1,0 @@
-OrderNumber, CustomerName, State, TaxRate, ProductType, Area, CostPerSquareFoot, LaborCostPerSquareFoot, MaterialCost, LaborCost, Tax, Total
-1001,Dan,mi,5.75,tile,50.00,3.50,4.15,175.00,207.50,21.99,404.49
-1002,John,oh,6.25,wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
-1003,Acme\, Inc.,oh,6.25,tile,100.00,3.50,4.15,350.00,415.00,47.81,812.81

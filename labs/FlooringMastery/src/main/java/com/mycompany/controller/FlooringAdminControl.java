@@ -370,7 +370,7 @@ public class FlooringAdminControl {
         console.readString("-----------------");
         for (Taxes tax : taxList) {
             console.padRight("  " + tax.getState(), 7);
-            console.readStringSameLine("| " + df.format(tax.getTaxRate()) + "\n");
+            console.readStringSameLine("| " + df.format(tax.getTaxRate()) + "%\n");
         }
         console.readString("-----------------");
     }

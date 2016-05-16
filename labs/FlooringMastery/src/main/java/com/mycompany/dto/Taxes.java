@@ -12,6 +12,7 @@ public class Taxes {
     
     private String state;
     private double taxRate;
+    
 
     public String getState() {
         return state;

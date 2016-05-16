@@ -1,2 +1,2 @@
 OrderNumber, CustomerName, State, TaxRate, ProductType, Area, CostPerSquareFoot, LaborCostPerSquareFoot, MaterialCost, LaborCost, Tax, Total
-1002,Mac,PA,6.75,wood,1000.00,5.15,4.75,5150.00,4750.00,668.25,10568.25
+1003,Acme\, Inc,MI,5.75,hamburger,11.00,4.00,10.00,44.00,110.00,8.86,162.85

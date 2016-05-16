@@ -17,13 +17,19 @@ public class TaxesDao {
 
     boolean isTest;
     FlooringData fd = new FlooringData();
+    TaxesXmlDao tXml = new TaxesXmlDao();
     List<Taxes> taxesList = new ArrayList();
     String state;
     boolean testMode;
+    boolean csv;
 
     public TaxesDao() {
 
-        taxesList = fd.taxDecode();
+        if (csv == true) {
+            taxesList = fd.taxDecode();
+        } else {
+            taxesList = tXml.read();
+        }
 
     }
 
@@ -54,6 +60,7 @@ public class TaxesDao {
             if (myTaxes.getState().equals(taxes.getState())) {
                 taxesList.remove(myTaxes);
                 taxesList.add(taxes);
+                break;
 
             }
 
@@ -86,8 +93,13 @@ public class TaxesDao {
     public double calculateTaxRate(String state) {
 
         double taxRate = 1;
-        List<Taxes> taxList = fd.taxDecode();
-
+        List<Taxes> taxList;
+        if (csv == true) {
+            taxList = fd.taxDecode();
+        } else {
+            taxList = tXml.read();
+        }
+        
         for (Taxes tax : taxList) {
 
             if (state.equalsIgnoreCase(tax.getState())) {
@@ -116,7 +128,13 @@ public class TaxesDao {
     public boolean validateState(String state, boolean edit) {
 
         boolean valid = false;
-        List<Taxes> taxList = fd.taxDecode();
+        
+        List<Taxes> taxList;
+        if (csv == true) {
+            taxList = fd.taxDecode();
+        } else {
+            taxList = tXml.read();
+        }
 
         for (Taxes tax : taxList) {
             if (edit == true) {
@@ -134,6 +152,10 @@ public class TaxesDao {
 
     public void setTestMode(boolean testMode) {
         this.testMode = testMode;
+    }
+
+    public void setCsv(boolean csvXml) {
+        this.csv = csvXml;
     }
 
 }

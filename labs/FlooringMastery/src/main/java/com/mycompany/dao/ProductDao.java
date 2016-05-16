@@ -17,13 +17,20 @@ public class ProductDao {
 
     boolean isTest;
     FlooringData fd = new FlooringData();
+    ProductXmlDao pXml = new ProductXmlDao();
     List<Product> productList = new ArrayList();
     String productType;
     boolean testMode;
+    boolean csv;
 
     public ProductDao() {
 
-        productList = fd.productDecode();
+        if (csv == true) {
+            productList = fd.productDecode();
+
+        } else {
+            productList = pXml.read();
+        }
 
     }
 
@@ -54,6 +61,7 @@ public class ProductDao {
             if (myProduct.getProductType().equals(product.getProductType())) {
                 productList.remove(myProduct);
                 productList.add(product);
+                break;
 
             }
 
@@ -84,8 +92,14 @@ public class ProductDao {
     }
 
     public double getCostPerSqFt(String productType) {
+        List<Product> productListOnFile;
 
-        List<Product> productListOnFile = fd.productDecode();
+        if (csv == true) {
+            productListOnFile = fd.productDecode();
+
+        } else {
+            productListOnFile = pXml.read();
+        }
         double productCost = 0;
         for (Product productOnFile : productListOnFile) {
 
@@ -98,8 +112,14 @@ public class ProductDao {
     }
 
     public double getLaborCostPerSqFt(String productType) {
+        List<Product> productListOnFile;
 
-        List<Product> productListOnFile = fd.productDecode();
+        if (csv == true) {
+            productListOnFile = fd.productDecode();
+
+        } else {
+            productListOnFile = pXml.read();
+        }
         double laborCost = 0;
         for (Product productOnFile : productListOnFile) {
 
@@ -112,8 +132,14 @@ public class ProductDao {
     }
 
     public double calculateTotalCostPerSqFt(double area, String productType) {
+        List<Product> productListOnFile;
 
-        List<Product> productListOnFile = fd.productDecode();
+        if (csv == true) {
+            productListOnFile = fd.productDecode();
+
+        } else {
+            productListOnFile = pXml.read();
+        }
         double costPerSqFt = 0;
         for (Product productOnFile : productListOnFile) {
 
@@ -127,8 +153,14 @@ public class ProductDao {
     }
 
     public double calculateTotalLaborCost(double area, String productType) {
+        List<Product> productListOnFile;
 
-        List<Product> productListOnFile = fd.productDecode();
+        if (csv == true) {
+            productListOnFile = fd.productDecode();
+
+        } else {
+            productListOnFile = pXml.read();
+        }
         double laborCostPerSqFt = 0;
         for (Product productOnFile : productListOnFile) {
 
@@ -142,9 +174,17 @@ public class ProductDao {
     }
 
     public boolean validateProductType(String productType, boolean edit) {
-        boolean valid = false;
-        List<Product> productListOnFile = fd.productDecode();
 
+        boolean valid = false;
+        List<Product> productListOnFile;
+
+        if (csv == true) {
+            productListOnFile = fd.productDecode();
+
+        } else {
+            productListOnFile = pXml.read();
+        }
+        
         for (Product productOnFile : productListOnFile) {
 
             if (edit == true) {
@@ -161,6 +201,10 @@ public class ProductDao {
 
     public void setTestMode(boolean testMode) {
         this.testMode = testMode;
+    }
+
+    public void setCsv(boolean csvXml) {
+        this.csv = csvXml;
     }
 
 }

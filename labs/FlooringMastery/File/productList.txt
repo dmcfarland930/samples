@@ -6,3 +6,5 @@ Wood,5.15,4.75
 Plastic,2.0,1.0
 Glass,1.0,3.0
 Hamburger,4.0,10.0
+Foam,0.75,3.0
+Marble,100.0,29.0

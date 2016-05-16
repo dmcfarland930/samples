@@ -5,7 +5,10 @@
 package com.mycompany.data;
 
 import com.mycompany.dao.OrderDao;
+import com.mycompany.dao.ProductDao;
+import com.mycompany.dao.ProductXmlDao;
 import com.mycompany.dao.TaxesDao;
+import com.mycompany.dao.TaxesXmlDao;
 import com.mycompany.dto.Order;
 import com.mycompany.dto.Taxes;
 import com.mycompany.dto.Product;
@@ -143,7 +146,8 @@ public class FlooringData {
                 String[] stringParts = currentLine.split(",");
                 int id = Integer.parseInt(stringParts[0]);
                 myOrder.setOrderNumber(id);
-                if (stringParts.length == 13) {
+                
+                if (stringParts.length > 12) {
                     customerName = stringParts[1] + stringParts[2];
                     customerName = customerName.replace("\\", ",");
                     myOrder.setCustomerName(customerName);
@@ -195,6 +199,7 @@ public class FlooringData {
 
     public void taxEncode(List<Taxes> taxesList) {
 
+        TaxesXmlDao tXml = new TaxesXmlDao();
         final String TOKEN = ",";
         PrintWriter out = null;
 
@@ -210,6 +215,7 @@ public class FlooringData {
                 out.println();
 
             }
+            tXml.create();
             out.flush();
 
         } catch (IOException ex) {
@@ -265,6 +271,7 @@ public class FlooringData {
 
     public void productEncode(List<Product> productList) {
 
+        ProductXmlDao pXml = new ProductXmlDao();
         final String TOKEN = ",";
         PrintWriter out = null;
 
@@ -283,6 +290,8 @@ public class FlooringData {
                 out.println();
 
             }
+
+            pXml.create();
             out.flush();
 
         } catch (IOException ex) {
@@ -338,11 +347,14 @@ public class FlooringData {
         return products;
     }
 
-    public String testDecode() {
-
+    public void testDecode() {
+        OrderDao orderDao = new OrderDao();
+        ProductDao productDao = new ProductDao();
+        TaxesDao taxesDao = new TaxesDao();
         Scanner sc = null;
         int lineNumber = 0;
         String testString = "";
+        String cvsString = "";
 
         try {
             sc = new Scanner(new BufferedReader(new FileReader("File" + File.separator + "config.txt")));
@@ -359,7 +371,7 @@ public class FlooringData {
                 String[] stringParts = currentLine.split(",");
 
                 testString = stringParts[0];
-
+                cvsString = stringParts[1];
             }
 
         } catch (FileNotFoundException ex) {
@@ -369,7 +381,17 @@ public class FlooringData {
             sc.close();
         }
 
-        return testString;
+        if (testString.equals("1")) {
+            orderDao.setTestMode(true);
+            productDao.setTestMode(true);
+            taxesDao.setTestMode(true);
+        }
+
+        if (cvsString.equals("0")) {
+            productDao.setCsv(true);
+            taxesDao.setCsv(true);
+
+        }
     }
 
     public String removeQuotes(Order order) {
