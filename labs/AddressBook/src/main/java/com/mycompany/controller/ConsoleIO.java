@@ -159,7 +159,7 @@ public class ConsoleIO {
                 System.out.println(errorMessageMin);
             } else if (dub > max) {
 
-                System.out.println(errorMessageMax);
+               System.out.println(errorMessageMax);
             }
 
         }
@@ -169,12 +169,7 @@ public class ConsoleIO {
     }
 
     public void readString(String prompt) {
-        System.out.print(prompt);
-
-        keyboard.nextLine();
-        string = keyboard.nextLine();
-
-        System.out.println(string);
+        System.out.println(prompt);
 
     }
 
@@ -241,7 +236,7 @@ public class ConsoleIO {
         boolean confirm = true;
 
         while (!valid) {
-            //System.out.println("Is this correct? [yes/no]");
+            //console.readString("Is this correct? [yes/no]");
             String confirmChoice = this.getString(message1);
 
             switch (confirmChoice.toLowerCase()) {
@@ -261,7 +256,7 @@ public class ConsoleIO {
 
                 default:
                     System.out.println(message2);
-                    //System.out.println("\nNot a valid entry!\n");
+                    //console.readString("\nNot a valid entry!\n");
                     break;
 
             }//end of Y/N switch

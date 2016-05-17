@@ -5,7 +5,10 @@
 package DVDController;
 
 import com.mycompany.dao.DVDDao;
+import com.mycompany.dao.DVDDaoLambdaImpl;
+import com.mycompany.dao.NoteDao;
 import com.mycompany.dto.DVD;
+import com.mycompany.dto.Notes;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +20,8 @@ import java.util.List;
  */
 public class DVDController {
 
-    private DVDDao dvdDao = new DVDDao();
+    private DVDDao dvdDao = new DVDDaoLambdaImpl();
+    private NoteDao noteDao = new NoteDao();
     ConsoleIO console = new ConsoleIO();
 
     public void runApp() {
@@ -57,18 +61,19 @@ public class DVDController {
                     run = false;
                     break;
                 default:
-                    System.out.println("Invalid entry!");
+                    console.readString("Invalid entry!");
                     break;
             }
 
         }
-        System.out.println("Good bye!");
+        console.readString("Good bye!");
         dvdDao.encode();
 
     }
 
     public void addDvd() {
-
+        String notes = "";
+        boolean addNoteAgain = true;
         boolean addAgain = true;
         while (addAgain == true) {
 
@@ -83,11 +88,22 @@ public class DVDController {
                         "You cannot leave this field blank!");
                 String studio = console.checkEmptyString("Enter the film's studio:",
                         "You cannot leave this field blank!");
-                String notes = console.checkEmptyString("Enter any notes you have for the film:",
-                        "You cannot leave this field blank!");
+                while (addNoteAgain == true) {
+
+                    Notes newNote = new Notes();
+                    newNote.setTitle(dvdTitle);
+                    newNote.setNote(console.checkEmptyString("Enter any notes you have for the film:",
+                            "You cannot leave this field blank!"));
+                    noteDao.create(newNote);
+
+                    boolean confirm = console.yesCheck("Enter another note for " + dvdTitle + "? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
+                    if (!confirm) {
+                        break;
+                    }
+                }
 
                 DVD newDvd = new DVD();
-                Date newDate = console.getDate("Enter the film's release date. [mm/dd/yyyy]\n>", "That date does not meet the format! Please try again!");
+                Date newDate = console.getDate("Enter the film's release date. [mm/dd/yyyy]\n>", "That date does not meet the correct format! Please try again!");
 
                 newDvd.setTitle(dvdTitle);
                 newDvd.setDirector(director);
@@ -96,7 +112,7 @@ public class DVDController {
                 newDvd.setUserNote(notes);
                 newDvd.setDvdDate(newDate);
 
-                System.out.println("\n" + dvdTitle + " added to Library!");
+                console.readString("\n" + dvdTitle + " added to Library!");
                 dvdDao.create(newDvd, newDate);
 
                 boolean confirm = console.yesCheck("\nAdd another DVD? [yes/no]\n>", "Enter [yes/no] to proceed.");
@@ -146,13 +162,13 @@ public class DVDController {
                         if (confirm == true) {
                             dvdDao.delete(delDVD);
                             String upperTitle = delTitle.toUpperCase();
-                            System.out.println("'" + upperTitle + "' DELETED");
+                            console.readString("'" + upperTitle + "' DELETED");
                             break;
                         }
                     }
                 }
                 if (!found) {
-                    System.out.println("\nDVD not found!\n");
+                    console.readString("\nDVD not found!\n");
                 }
                 removeAgain = console.yesCheck("Search again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
 
@@ -169,16 +185,15 @@ public class DVDController {
             String dvdTitle = console.getString("To find a DVD, enter their its title:"
                     + "(Enter 0 to cancel)\n>");
             if (dvdTitle.equals("0")) {
-                findAgain = false;
+                return;
             } else {
 
                 List<DVD> dvds = dvdDao.decode();
                 List<DVD> foundDvds = new ArrayList();
                 for (DVD foundDvd : dvds) {
 
-                    foundDvd = dvdDao.get(dvdTitle);
-
                     try {
+                        foundDvd = dvdDao.get(dvdTitle);
                         fTitle = foundDvd.getTitle();
                         if (fTitle.equalsIgnoreCase(dvdTitle)) {
                             foundDvds.add(foundDvd);
@@ -186,15 +201,15 @@ public class DVDController {
                         }
                     } catch (Exception ex) {
 
-                        System.out.println("No DVDs were found with that title!");
+                        console.readString("No DVDs were found with that title!");
 
                     }
                     if (found == true) {
                         int dvdsFound = foundDvds.size();
-                        System.out.println(dvdsFound + " were found with that title.");
+                        console.readString(dvdsFound + " were found with that title.");
                         getDvdList(foundDvds);
                     }
-                    boolean confirm = console.yesCheck("Search again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
+                    boolean confirm = console.yesCheck("\nSearch again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
                     findAgain = confirm == true;
 
                 }
@@ -207,7 +222,7 @@ public class DVDController {
 
         List<DVD> dvds = dvdDao.decode();
 
-        System.out.println("\nAll Dvds:");
+        console.readString("\nAll Dvds:");
 
         getDvdList(dvds);
 
@@ -225,24 +240,33 @@ public class DVDController {
     public void displayDvdInfo(DVD savedDvd) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        List<Notes> noteList = noteDao.decode();
 
-        System.out.println("\n+----------------------------+");
-        System.out.println("DVD No.: " + savedDvd.getId() + "\n+----------------------------+\nTitle: " + savedDvd.getTitle() + "\nDirector:" + savedDvd.getDirector() + "\nMPAA Rating: "
-                + savedDvd.getRating().toUpperCase() + "\nStudio: " + savedDvd.getStudio() + "\nNotes: " + savedDvd.getUserNote() + "\nRelease Date: "
-                + sdf.format(savedDvd.getDvdDate()));
+        console.readString("\n+----------------------------+");
+        console.readString("DVD No.: " + savedDvd.getId() + "\n+----------------------------+\nTitle: " + savedDvd.getTitle() + "\nDirector: " + savedDvd.getDirector() + "\nMPAA Rating: "
+                + savedDvd.getRating().toUpperCase() + "\nStudio: " + savedDvd.getStudio() + "\nRelease Date: "
+                + sdf.format(savedDvd.getDvdDate()) + "\nUser Notes:");
+        for (Notes note : noteList) {
+
+            if (note.getTitle().equalsIgnoreCase(savedDvd.getTitle())) {
+                console.readString(note.getNote());
+            }
+
+        }
+
     }
 
     public void showTitlesAndId() {
 
         List<DVD> dvdList = dvdDao.decode();
 
-        System.out.println("ID # | Title");
+        console.readString("ID # | Title");
         for (DVD dvdOnFile : dvdList) {
 
             String title = dvdOnFile.getTitle();
             int id = dvdOnFile.getId();
 
-            System.out.println(id + " | " + title);
+            console.readString(id + " | " + title);
 
         }
 
@@ -250,6 +274,7 @@ public class DVDController {
 
     public void editDvd() {
 
+        boolean addNoteAgain = true;
         boolean editAgain = true;
         boolean valid = false;
 
@@ -314,13 +339,23 @@ public class DVDController {
                                     valid = true;
                                     break;
                                 case 5:
-                                    //change notes
-                                    String notes = console.checkEmptyString("Enter any notes you have for the film:",
-                                            "You cannot leave this field blank!");
-                                    dvdWithId.setUserNote(notes);
-                                    dvdDao.update(dvdWithId);
+
+                                    while (addNoteAgain == true) {
+
+                                        Notes newNote = new Notes();
+                                        newNote.setTitle(dvdWithId.getTitle());
+                                        newNote.setNote(console.checkEmptyString("Enter any notes you have for the film:",
+                                                "You cannot leave this field blank!"));
+                                        noteDao.create(newNote);
+
+                                        boolean confirm = console.yesCheck("Enter another note for " + dvdWithId.getTitle() + "? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
+                                        if (!confirm) {
+                                            break;
+                                        }
+                                    }
                                     valid = true;
                                     break;
+
                                 case 6:
                                     //date
                                     Date newDate = console.getDate("Enter the film's release date. [mm/dd/yyyy]\n>", "That date does not meet the format! Please try again!");
@@ -331,16 +366,16 @@ public class DVDController {
                                     break;
                                 default:
                                     //error
-                                    System.out.println("That is not an option!");
+                                    console.readString("That is not an option!");
                                     break;
 
                             }
 
                         }
 
-                        System.out.println("\nDVD updated!");
+                        console.readString("\nDVD updated!");
                     } else {
-                        System.out.println("No DVDs with that ID# were found!");
+                        console.readString("No DVDs with that ID# were found!");
                     }
 
                 }
@@ -354,31 +389,30 @@ public class DVDController {
 
     public void showMainMenu() {
 
-
-        System.out.println("\n+----------------------------+");
-        System.out.println("| Welcome to DVD Library!    |");
-        System.out.println("+----------------------------+");
-        System.out.println("|   1)Add DVD                |");
-        System.out.println("|   2)Remove DVD             |");
-        System.out.println("|   3)Find DVD by Title      |");
-        System.out.println("|   4)View Collection        |");
-        System.out.println("|   5)Edit DVD Info          |");
-        System.out.println("|   6)Date                   |");
-        System.out.println("|----------------------------|");
-        System.out.println("|                      [quit]|");
-        System.out.println("+----------------------------+");
+        console.readString("\n+----------------------------+");
+        console.readString("| Welcome to DVD Library!    |");
+        console.readString("+----------------------------+");
+        console.readString("|   1)Add DVD                |");
+        console.readString("|   2)Remove DVD             |");
+        console.readString("|   3)Find DVD by Title      |");
+        console.readString("|   4)View Collection        |");
+        console.readString("|   5)Edit DVD Info          |");
+        console.readString("|   6)Date                   |");
+        console.readString("|----------------------------|");
+        console.readString("|                      [quit]|");
+        console.readString("+----------------------------+");
     }
 
     public void showEditMenu() {
-        System.out.println("+----------------------------+");
-        System.out.println("| Edit your DVD!             |");
-        System.out.println("+----------------------------+");
-        System.out.println("|   1)Title                  |");
-        System.out.println("|   2)Director               |");
-        System.out.println("|   3)Rating                 |");
-        System.out.println("|   4)Studio                 |");
-        System.out.println("|   5)User Note              |");
-        System.out.println("|   6)Date                   |");
-        System.out.println("+----------------------------+");
+        console.readString("+----------------------------+");
+        console.readString("| Edit your DVD!             |");
+        console.readString("+----------------------------+");
+        console.readString("|   1)Title                  |");
+        console.readString("|   2)Director               |");
+        console.readString("|   3)Rating                 |");
+        console.readString("|   4)Studio                 |");
+        console.readString("|   5)User Note              |");
+        console.readString("|   6)Date                   |");
+        console.readString("+----------------------------+");
     }
 }

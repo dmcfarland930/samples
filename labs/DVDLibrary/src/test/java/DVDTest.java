@@ -3,7 +3,8 @@
  * I hope you enjoy it!
  */
 
-import com.mycompany.dao.DVDDao;
+import DVDController.ConsoleIO;
+import com.mycompany.dao.DVDDaoImpl;
 import com.mycompany.dto.DVD;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,7 +14,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -37,7 +37,9 @@ public class DVDTest {
     //
     // @Test
     // public void hello() {}
-    DVDDao addDao = new DVDDao();
+    DVDDaoImpl addDao = new DVDDaoImpl();
+    ConsoleIO console = new ConsoleIO();
+    
 
     @Test
     public void testCreate() {
@@ -55,7 +57,7 @@ public class DVDTest {
         try{
             date = sFormat.parse("01/15/1974");
         }catch(Exception ex){
-            System.out.println("Error");
+            console.readString("Error");
         }
         
         
@@ -104,7 +106,7 @@ public class DVDTest {
         try {
             delDvd = addDao.get("TEST 3: REVENGE OF THE QUIZ");
         } catch (Exception ex) {
-            System.out.println("EMPTY");
+            console.readString("EMPTY");
         }
         //DVD should no longer be found
         Assert.assertEquals(null, delDvd);

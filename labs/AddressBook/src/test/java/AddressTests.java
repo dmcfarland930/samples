@@ -4,7 +4,9 @@
  * Help was received from Mike Moxley
  */
 
-import com.mycompany.dao.AddressDao;
+import com.mycompany.controller.ConsoleIO;
+import com.mycompany.dao.AddressBookLambdaImpl;
+import com.mycompany.dao.AddressDaoImpl;
 import com.mycompany.dto.Address;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,8 @@ public class AddressTests {
     //
     // @Test
     // public void hello() {}
-    AddressDao addDao = new AddressDao();
+    AddressDaoImpl addDao = new AddressDaoImpl();
+    ConsoleIO console = new ConsoleIO();
 
     @Test
     public void testCreate() {
@@ -65,7 +68,7 @@ public class AddressTests {
 
         //pull address from list
         Address getAddress = addDao.get("McTESTER");
-        
+
         //pulled address should have these matching properties
         Assert.assertEquals("TEST", getAddress.getFirstName());
         Assert.assertEquals("McTESTER", getAddress.getLastName());
@@ -84,14 +87,59 @@ public class AddressTests {
 
         //delete address
         addDao.delete(getAddress);
-        Address delAddress = new Address();
-        try {
-            delAddress = addDao.get("McTESTER");
-        } catch (Exception ex){
-            System.out.println("EMPTY");
-        } 
-        //address should no longer be found
-        Assert.assertEquals(null, delAddress);
-        }
+//        Address delAddress = new Address();
+//        try {
+//            delAddress = addDao.get("McTESTER");
+//        } catch (Exception ex){
+//            console.readString("EMPTY");
+//        } 
+//        //address should no longer be found
+//        Assert.assertEquals(null, delAddress);
+    }
+
+    @Test
+    public void test2() {
+
+        Address newAddress = new Address();
+        AddressBookLambdaImpl lambdaDao = new AddressBookLambdaImpl();
+
+        newAddress.setFirstName("TEST");
+        newAddress.setLastName("SNACKS");
+        newAddress.setStreetAddress("1337 TEST STREET");
+        newAddress.setCity("TESTVILLE");
+        newAddress.setState("TEST VIRGINIA");
+        newAddress.setCountry("TEST BERLIN");
+        newAddress.setZip("29183");
+        newAddress.setSecAdd("Apt. 78A");
+
+        lambdaDao.create(newAddress);
+        newAddress = lambdaDao.get("SNACKS");
+        console.readString(newAddress.getStreetAddress());
+        lambdaDao.delete(newAddress);
 
     }
+
+    @Test
+    public void test3() {
+
+        Address newAddress = new Address();
+        AddressBookLambdaImpl lambdaDao = new AddressBookLambdaImpl();
+        newAddress.setFirstName("TEST");
+        newAddress.setLastName("SNACKS");
+        newAddress.setStreetAddress("1337 TEST STREET");
+        newAddress.setCity("TESTVILLE");
+        newAddress.setState("TEST VIRGINIA");
+        newAddress.setCountry("TEST BERLIN");
+        newAddress.setZip("29183");
+        newAddress.setSecAdd("Apt. 78A");
+        lambdaDao.create(newAddress);
+        List<Address> addList = lambdaDao.getByLastName(newAddress.getLastName());
+
+        newAddress = addList.get(0);
+
+        Assert.assertEquals("1337 TEST STREET", newAddress.getStreetAddress());
+        lambdaDao.delete(newAddress);
+
+    }
+    
+}

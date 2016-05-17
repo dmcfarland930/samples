@@ -102,13 +102,12 @@ public class ConsoleIO {
 
     }
 
-    public float checkMinMaxFloat(String prompt, int min, int max, String errorMessage,
+    public float checkMinMaxFloat(String prompt, float min, float max, String errorMessage,
             String errorMessage2) {
 
         floater = min - 1;
 
         while (floater < min || floater > max) {
-            System.out.print(prompt);
 
             floater = this.getFloat(prompt, errorMessage2);
 
@@ -170,14 +169,14 @@ public class ConsoleIO {
 
     }
 
-    public void readString(String prompt) {
-        System.out.print(prompt);
-
-        keyboard.nextLine();
-        string = keyboard.nextLine();
+    public void readString(String string) {
 
         System.out.println(string);
 
+    }
+
+    public void readStringSameLine(String string) {
+        System.out.print(string);
     }
 
     public int zeroCheckInt(String message, String errorMessage, String errorMessage2) {
@@ -243,7 +242,7 @@ public class ConsoleIO {
         boolean confirm = true;
 
         while (!valid) {
-            //System.out.println("Is this correct? [yes/no]");
+            //console.readString("Is this correct? [yes/no]");
             String confirmChoice = this.getString(message1);
 
             switch (confirmChoice.toLowerCase()) {
@@ -263,7 +262,7 @@ public class ConsoleIO {
 
                 default:
                     System.out.println(message2);
-                    //System.out.println("\nNot a valid entry!\n");
+                    //console.readString("\nNot a valid entry!\n");
                     break;
 
             }//end of Y/N switch
@@ -290,6 +289,44 @@ public class ConsoleIO {
         return string;
     }
 
+    public void padRight(String message, int maxLength) {
+
+        int length = message.length();
+
+        System.out.print(message);
+        if (length < maxLength) {
+
+            for (int i = 0; i < (maxLength - length); i++) {
+
+                System.out.print(" ");
+
+            }
+
+        }
+
+    }
+
+    public String maxStringLngthChk(String messagePrompt, String error, String customOverMaxMess, int maxLength) {
+
+        boolean valid = false;
+        String entry = "";
+
+        while (!valid) {
+
+            entry = checkEmptyString(messagePrompt, error);
+
+            int length = entry.length();
+            if (length > maxLength) {
+                System.out.println(customOverMaxMess);
+                System.out.println("Please shorten your entry.");
+            } else if (length <= maxLength) {
+                valid = true;
+            }
+
+        }
+        return entry;
+    }
+
     public Date getDate(String prompt, String error) {
 
         Date date = null;
@@ -300,17 +337,16 @@ public class ConsoleIO {
                 SimpleDateFormat sFormat = new SimpleDateFormat("MM/dd/yyyy");
                 dateInput = getString(prompt);
                 date = sFormat.parse(dateInput);
-                if(!dateInput.equals(sFormat.format(date))){
+                if (!dateInput.equals(sFormat.format(date))) {
                     date = null;
                 }
             } catch (Exception ex) {
                 System.out.println(error);
             }
-            if(date == null){
+            if (date == null) {
                 System.out.println("Try again!");
             }
         }
         return date;
     }
-
 }
