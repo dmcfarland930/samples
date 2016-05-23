@@ -24,7 +24,7 @@ public class EditorController {
         boolean isEmpty;
 
         while (editAgain) {
-            console.readString("What type of product would you like to edit?");
+            console.readString("\nWhat type of product would you like to edit?\n");
             Product editProduct = pic.validateProduct();
             if (editProduct.getProductType().equals("0")) {
                 return;
@@ -97,8 +97,9 @@ public class EditorController {
     }
 
     public Product editSize(Product editProduct) {
-        editProduct.setSize(console.getString("Enter the size of your product. "
-                + "(Currently: " + editProduct.getSize() + ")\n>"));
+        String size;
+        size = editProduct.setSizeInput();
+        editProduct.setSize(size);
         console.readString("\nSize updated to \"" + editProduct.getSize() + "\"");
         pic.enterKeyToProceed();
         return editProduct;
@@ -137,7 +138,7 @@ public class EditorController {
 
     public void editStockWarningNumber() {
 
-        console.readString("You will be alerted when stock reaches " + invDao.getStockWarningNumber() + ".");
+        console.readString("\nYou will be alerted when stock reaches " + invDao.getStockWarningNumber() + ".");
         boolean confirm = console.yesCheck("Would you like to change when you will be alerted? [yes/no]\n>",
                 "Enter [yes/no] to proceed.");
         if (confirm) {

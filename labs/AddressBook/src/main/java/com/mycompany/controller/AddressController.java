@@ -6,7 +6,6 @@ package com.mycompany.controller;
 
 import com.mycompany.dao.AddressBookLambdaImpl;
 import com.mycompany.dao.AddressDao;
-import com.mycompany.dao.AddressDaoImpl;
 import com.mycompany.dto.Address;
 import java.util.ArrayList;
 import java.util.List;

@@ -24,7 +24,7 @@ public class RemoveProductController {
         ViewerController vc = new ViewerController();
 
         while (removeAgain) {
-            console.readString("What type of product would you like to remove?");
+            console.readString("\nWhat type of product would you like to remove?");
             Product delProduct = pic.validateProduct();
             if (delProduct.getProductType().equals("0")) {
                 return;

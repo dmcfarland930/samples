@@ -19,8 +19,6 @@ public class ProductInventoryController {
     boolean run = true;
 
     public void run() {
-
-        //display Menu
         controllerSwitch();
         console.readString("\nGoodbye!");
     }
@@ -41,31 +39,31 @@ public class ProductInventoryController {
             switch (selection) {
 
                 case "1":
-                    //findProduct
                     vc.findAndViewProduct();
                     break;
                 case "2":
-                    //viewInventory
                     vc.viewInventory();
                     break;
                 case "3":
-                    //addProduct
                     npc.addProduct();
                     break;
                 case "4":
-                    //editProduct
                     ec.editProduct();
                     break;
                 case "5":
                     ec.editStockWarningNumber();
                     break;
                 case "6":
-                    //removeProduct
                     rpc.removeProductFromInventory();
+                    break;
+                case "7":
+                    vc.viewProductValue();
+                    break;
+                case "8":
+                    vc.viewInventoryValue();
                     break;
                 case "quit":
                 case "q":
-                    //quit
                     run = false;
                     break;
                 default:
@@ -103,21 +101,18 @@ public class ProductInventoryController {
 
         return loopAgain;
     }
-    
-    public void checkLowStock(){
-        
+
+    public void checkLowStock() {
         ViewerController vc = new ViewerController();
         List<Product> products = invDao.decodeInventory();
-        
-        for(Product product : products){
-            
-            if(product.getStock() < invDao.getStockWarningNumber()){
-                vc.viewWarning(product);
-            }
-            
-        }
-        
-        
+
+        products
+                .stream()
+                .filter((product) -> (product.getStock() < invDao.getStockWarningNumber()))
+                .forEach((product) -> {
+                    vc.viewWarning(product);
+                });
+
     }
 
     public void enterKeyToProceed() {

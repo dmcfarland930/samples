@@ -44,8 +44,6 @@ public class QueueArrayImpl<T> implements Queue<T> {
                 newQueue[i] = queue[i+1];
             }
          queue = newQueue;
-        } else {
-            System.out.println("Empty stack.");
         }
         return elementInQueue;
     }

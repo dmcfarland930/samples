@@ -25,17 +25,16 @@ public class ViewerController {
     public void findAndViewProduct() {
 
         boolean findAgain = true;
-        boolean isEmpty;
 
         while (findAgain) {
-            console.readString("What type of product would you like to find?");
+            console.readString("\nWhat type of product would you like to find?\n");
             Product productSearch = pic.validateProduct();
             if (productSearch.getProductType().equals("0")) {
                 return;
             } else {
 
-                isEmpty = viewProductByQuery(productSearch);
-                enterIdToViewDetails(isEmpty);
+                viewProductByQuery(productSearch);
+                askToViewProductDetails();
                 findAgain = pic.loopAgainCheck("Find");
 
             }
@@ -60,7 +59,7 @@ public class ViewerController {
 
     public void viewNameAndId(Product product) {
 
-        console.readString("ID: " + product.getProductId() + " | " + product.getProductName());
+        console.readString("ID: " + product.getProductId() + " | Name: " + product.getProductName());
 
     }
 
@@ -71,12 +70,17 @@ public class ViewerController {
         try {
 
             Set<String> productTypes = productMap.keySet();
-            for (String key : productTypes) {
-                console.readString(key + "s: ");
-                List<Product> products = productMap.get(key);
+            console.readStringSameLine("\n");
+            productTypes.stream().map((key) -> {
+                if (!key.equalsIgnoreCase("pants")) {
+                    console.readString(key + "s: ");
+                } else {
+                    console.readString(key + ": ");
+                }
+                return key;
+            }).map((key) -> productMap.get(key)).forEach((products) -> {
                 loopAndViewProducts(products);
-
-            }
+            });
         } catch (Exception ex) {
 
             console.readString("No products were found by that type!");
@@ -91,17 +95,67 @@ public class ViewerController {
         List<Product> listOfProductsByType = invDao.getProductListByType(productSearch);
 
         if (!listOfProductsByType.isEmpty()) {
+
+            if (productSearch.getProductType().equalsIgnoreCase("pants")) {
+                console.readString("\n" + productSearch.getProductType() + ":");
+            } else {
+                console.readString("\n" + productSearch.getProductType() + "s:");
+            }
             loopAndViewProducts(listOfProductsByType);
         } else {
-            console.readString("There are no products of that type in stock!");
+
+            if (productSearch.getProductType().equalsIgnoreCase("pants")) {
+                console.readString("\nThere are no " + productSearch.getProductType().toLowerCase() + " in stock!");
+            } else {
+                console.readString("\nThere are no " + productSearch.getProductType().toLowerCase() + "s in stock!");
+            }
             isEmpty = true;
         }
         return isEmpty;
     }
 
+    public void viewProductValue() {
+
+        boolean findAgain = true;
+
+        while (findAgain) {
+            console.readString("\nEnter a product type to find its value.\n");
+            Product productSearch = pic.validateProduct();
+            if (productSearch.getProductType().equals("0")) {
+                return;
+            } else {
+
+                viewProductByQuery(productSearch);
+                askForIdToViewValue();
+                findAgain = pic.loopAgainCheck("Find");
+
+            }
+        }
+
+    }
+
+    public void askForIdToViewValue() {
+
+        int id = console.getInteger("\nEnter the Product ID to view its value.\n>", "That is an invalid Product ID.");
+
+        Product foundProduct = invDao.get(id);
+        double value = invDao.calculateProductValues(foundProduct);
+        console.readString("\nYou have $"+df.format(value)+" worth of inventory for "+foundProduct.getProductName()+".");
+        pic.enterKeyToProceed();
+
+    }
+    
+    public void viewInventoryValue(){
+        
+        double value = invDao.calculateInventoryValue();
+        console.readString("\nYour inventory is worth $"+df.format(value)+".");
+        pic.enterKeyToProceed();
+        
+    }
+
     public void viewMainMenu() {
 
-        console.readString("--------------------");
+        console.readString("\n--------------------");
         console.readString(" Product Inventory ");
         console.readString("--------------------");
         console.readString(" 1) Find Product");
@@ -110,6 +164,8 @@ public class ViewerController {
         console.readString(" 4) Edit Product");
         console.readString(" 5) Edit Stock Alert");
         console.readString(" 6) Remove Product");
+        console.readString(" 7) View Product Worth");
+        console.readString(" 8) View Inventory Worth");
         console.readString(" ------------------ ");
         console.readString("           [quit]");
         console.readString("--------------------");
@@ -154,7 +210,7 @@ public class ViewerController {
         }
 
     }
-    
+
     public void viewProductDetails(Product product) {
 
         console.readString("\n+----------------------------+");
@@ -170,7 +226,7 @@ public class ViewerController {
     }
 
     void viewWarning(Product product) {
-        console.readString("<!>Current stock for "+product.getProductName()+" is "+product.getStock()+"! Update stock soon<!>");
+        console.readString("<!>Current stock for " + product.getProductName() + " is " + product.getStock() + "! Update stock soon<!>");
     }
 
 }

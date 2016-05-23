@@ -42,18 +42,19 @@ public class NewProductController {
                 = console.yesCheck("\nAdd this product to inventory? [yes/no]\n>",
                         "Enter [yes/no] to proceed.");
         if (addProduct) {
-            console.readString("Addition confirmed!");
+            console.readString("\nAddition confirmed!");
         } else {
-            console.readString("Addition cancelled!");
+            console.readString("\nAddition cancelled!");
             invDao.delete(newProduct);
         }
     }
 
     public Product setNewProductProperties(Product newProduct) {
-        newProduct.setProductName(console.checkEmptyString("Enter the name of your product:",
+        String size;
+        newProduct.setProductName(console.checkEmptyString("\nEnter the name of your product:",
                 "You cannot leave this field blank!"));
-        newProduct.setSize(console.checkEmptyString("Enter the size of your product:",
-                "You cannot leave this field blank!"));
+        size = newProduct.setSizeInput();
+        newProduct.setSize(size);
         String priceString = console.checkEmptyString("Enter the price of your product:",
                 "You cannot leave this field blank!");
         newProduct.setPrice(Double.parseDouble(priceString));

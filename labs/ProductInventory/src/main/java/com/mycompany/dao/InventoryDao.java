@@ -40,6 +40,15 @@ public class InventoryDao {
 
     }
 
+    public void setStockWarningNumber(int stockWarningNumber) {
+        this.stockWarningNumber = stockWarningNumber;
+        encodeStockWarning();
+    }
+
+    public int getStockWarningNumber() {
+        return stockWarningNumber = decodeStockWarning();
+    }
+
     public Product create(Product product) {
 
         product.setProductId(nextId);
@@ -126,94 +135,6 @@ public class InventoryDao {
         return inventoryValue;
     }
 
-    public void setStockWarningNumber(int stockWarningNumber) {
-        this.stockWarningNumber = stockWarningNumber;
-        encodeStockWarning();
-    }
-    
-    public int getStockWarningNumber() {
-        return stockWarningNumber = decodeStockWarning();
-    }
-
-
-    public void encodeInventory() {
-
-        final String TOKEN = "::";
-
-        try {
-            PrintWriter out = new PrintWriter(new FileWriter("productList.txt"));
-
-            productList
-                    .stream()
-                    .forEach((Product myProduct) -> {
-
-                        out.print(myProduct.getProductType());
-                        out.print(TOKEN);
-                        out.print(myProduct.getProductId());
-                        out.print(TOKEN);
-                        out.print(myProduct.getProductName());
-                        out.print(TOKEN);
-                        out.print(myProduct.getPrice());
-                        out.print(TOKEN);
-                        out.print(myProduct.getSize());
-                        out.print(TOKEN);
-                        out.print(myProduct.getStock());
-                        out.println();
-
-                    });
-            out.flush();
-            out.close();
-
-        } catch (IOException ex) {
-
-            Logger.getLogger(InventoryDao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
-    public List decodeInventory() {
-
-        Scanner sc = null;
-        List<Product> products = new ArrayList();
-
-        try {
-            sc = new Scanner(new BufferedReader(new FileReader("productList.txt")));
-
-            while (sc.hasNext()) {
-
-                String currentLine = sc.nextLine();
-
-                String[] stringParts = currentLine.split("::");
-                Product myProduct = getProductByType(stringParts[0]);
-                myProduct.setProductType(myProduct.getProductType());
-
-                int id = Integer.parseInt(stringParts[1]);
-                if (id == nextId) {
-                    nextId++;
-                }
-
-                myProduct.setProductId(id);
-                myProduct.setProductName(stringParts[2]);
-                double price = Double.parseDouble(stringParts[3]);
-                myProduct.setPrice(price);
-                myProduct.setSize(stringParts[4]);
-                int stock = Integer.parseInt(stringParts[5]);
-                myProduct.setStock(stock);
-
-                products.add(myProduct);
-
-            }
-
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(InventoryDao.class.getName()).log(Level.SEVERE, null, ex);
-
-        } finally {
-            sc.close();
-        }
-
-        return products;
-    }
-
     public List<Product> getProductListByType(Product productQuery) {
 
         productList = decodeInventory();
@@ -257,6 +178,93 @@ public class InventoryDao {
         return null;
     }
 
+    public void encodeInventory() {
+
+        final String TOKEN = "::";
+
+        try {
+            PrintWriter out = new PrintWriter(new FileWriter("productList.txt"));
+            out.print("ProductType::ProductID::ProductName::Price::Size::Stock");
+            out.println();
+            productList
+                    .stream()
+                    .forEach((Product myProduct) -> {
+
+                        out.print(myProduct.getProductType());
+                        out.print(TOKEN);
+                        out.print(myProduct.getProductId());
+                        out.print(TOKEN);
+                        out.print(myProduct.getProductName());
+                        out.print(TOKEN);
+                        out.print(myProduct.getPrice());
+                        out.print(TOKEN);
+                        out.print(myProduct.getSize());
+                        out.print(TOKEN);
+                        out.print(myProduct.getStock());
+                        out.println();
+
+                    });
+            out.flush();
+            out.close();
+
+        } catch (IOException ex) {
+
+            Logger.getLogger(InventoryDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public List decodeInventory() {
+
+        Scanner sc = null;
+        List<Product> products = new ArrayList();
+        int lineNumber = 0;
+
+        try {
+            sc = new Scanner(new BufferedReader(new FileReader("productList.txt")));
+
+            while (sc.hasNext()) {
+
+                lineNumber++;
+
+                if (lineNumber == 1) {
+                    sc.nextLine();
+                    continue;
+                }
+
+                String currentLine = sc.nextLine();
+
+                String[] stringParts = currentLine.split("::");
+                Product myProduct = getProductByType(stringParts[0]);
+                myProduct.setProductType(myProduct.getProductType());
+
+                int id = Integer.parseInt(stringParts[1]);
+                if (id == nextId) {
+                    nextId++;
+                }
+
+                myProduct.setProductId(id);
+                myProduct.setProductName(stringParts[2]);
+                double price = Double.parseDouble(stringParts[3]);
+                myProduct.setPrice(price);
+                myProduct.setSize(stringParts[4]);
+                int stock = Integer.parseInt(stringParts[5]);
+                myProduct.setStock(stock);
+
+                products.add(myProduct);
+
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(InventoryDao.class.getName()).log(Level.SEVERE, null, ex);
+
+        } finally {
+            sc.close();
+        }
+
+        return products;
+    }
+
     public void encodeStockWarning() {
 
         try {
@@ -287,7 +295,6 @@ public class InventoryDao {
 
                 String[] stringParts = currentLine.split("::");
                 stock = Integer.parseInt(stringParts[0]);
-                
 
             }
 

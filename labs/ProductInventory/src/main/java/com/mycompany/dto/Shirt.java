@@ -4,20 +4,26 @@
  */
 package com.mycompany.dto;
 
+import com.mycompany.controller.ConsoleIO;
+
 /**
  *
  * @author apprentice
  */
 public class Shirt extends Product {
+    ConsoleIO console = new ConsoleIO();
     
     @Override
     public String getSize() {
         return size;
     }
-
+    
+    
     @Override
-    public void setSize(String size) {
-        this.size = size;
+    public String setSizeInput() {
+        String productSize = console.checkEmptyString("Enter the size of your product:",
+                "You cannot leave this field blank!");
+        return productSize;
     }
 
 }

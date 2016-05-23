@@ -47,8 +47,6 @@ public class StackArrayImpl<T> implements Stack<T> {
                 newStack[i] = stack[i];
             }
            stack = newStack;
-        } else {
-            System.out.println("Empty stack.");
         }
         return elementInStack;
     }

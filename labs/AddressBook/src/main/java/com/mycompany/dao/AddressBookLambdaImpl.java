@@ -201,9 +201,7 @@ public class AddressBookLambdaImpl implements AddressDao {
     @Override
     public Map getByState(String state) {
 
-        Map<String, List<Address>> stateMap = new HashMap();
-        return stateMap
-                = addresses
+        return addresses
                 .stream()
                 .filter(a -> a.getState().equalsIgnoreCase(state))
                 .collect(Collectors.groupingBy(a -> a.getCity()));
@@ -217,6 +215,5 @@ public class AddressBookLambdaImpl implements AddressDao {
                 .filter(a -> a.getZip().equalsIgnoreCase(zip))
                 .collect(Collectors.toList());
     }
-    
-    
+
 }

@@ -56,9 +56,14 @@ public abstract class Product {
     public void setPrice(double price) {
         this.price = price;
     }
-        
+
+    public void setSize(String size) {
+        this.size = size;
+
+    }
+
     public abstract String getSize();
 
-    public abstract void setSize(String size);
+    public abstract String setSizeInput();
 
 }

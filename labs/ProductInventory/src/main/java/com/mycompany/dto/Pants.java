@@ -4,14 +4,15 @@
  */
 package com.mycompany.dto;
 
+import com.mycompany.controller.ConsoleIO;
+
 /**
  *
  * @author apprentice
  */
-public class Pants extends Product{
-    
-    private String inseamSize;
-    private String waistSize;
+public class Pants extends Product {
+
+    ConsoleIO console = new ConsoleIO();
 
     @Override
     public String getSize() {
@@ -19,30 +20,17 @@ public class Pants extends Product{
     }
 
     @Override
-    public void setSize(String size) {
+    public String setSizeInput() {
+            
+        String waist = console.checkEmptyString("Enter the waist size:",
+                "You cannot leave this field blank!");
         
-        String pantsSize = (waistSize+" x "+inseamSize);
-        this.size = pantsSize;
-                
+        String inseam = console.checkEmptyString("Enter the inseam size:",
+                "You cannot leave this field blank");
+                       
+        return waist+"x"+inseam;
+
     }
 
-    public String getInseamSize() {
-        return inseamSize;
-    }
-
-    public void setInseamSize(String inseamSize) {
-        this.inseamSize = inseamSize;
-    }
-
-    public String getWaistSize() {
-        return waistSize;
-    }
-
-    public void setWaistSize(String waistSize) {
-        this.waistSize = waistSize;
-    }
-
-    
-   
-    
 }
+
