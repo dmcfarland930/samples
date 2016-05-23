@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -45,7 +47,7 @@ public class DVDController {
                     break;
                 case "3":
                     //find by title
-                    findByTitle();
+                    findDvdSwitch();
                     break;
                 case "4":
                     //view all
@@ -55,8 +57,15 @@ public class DVDController {
                     //edit Dvd
                     editDvd();
                     break;
-                case "q":
-                case "quit":
+                case "6":
+                    //find average age
+                    showAverageDvdAge();
+                    break;
+                case "7":
+                    //find average note amount
+                    showAverageNotesPerMovie();
+                    break;
+                case "0":
                     //end app
                     run = false;
                     break;
@@ -72,7 +81,6 @@ public class DVDController {
     }
 
     public void addDvd() {
-        String notes = "";
         boolean addNoteAgain = true;
         boolean addAgain = true;
         while (addAgain == true) {
@@ -80,7 +88,7 @@ public class DVDController {
             String dvdTitle = console.checkEmptyString("Enter the title of your "
                     + "DVD (Enter 0 to cancel):", "You cannot leave this field blank!");
             if (dvdTitle.equals("0")) {
-                addAgain = false;
+                return;
             } else {
                 String director = console.checkEmptyString("Enter the film's director:",
                         "You cannot leave this field blank!");
@@ -109,7 +117,6 @@ public class DVDController {
                 newDvd.setDirector(director);
                 newDvd.setRating(rating);
                 newDvd.setStudio(studio);
-                newDvd.setUserNote(notes);
                 newDvd.setDvdDate(newDate);
 
                 console.readString("\n" + dvdTitle + " added to Library!");
@@ -134,10 +141,10 @@ public class DVDController {
 
         showTitlesAndId();
         while (removeAgain == true) {
-            String dvdId = console.getString("To remove a DVD, enter it's ID:"
-                    + "(Enter 0 to cancel)\n>");
+            String dvdId = console.getString("To remove a DVD, enter it's ID "
+                    + "(Enter 0 to cancel):\n>");
             if (dvdId.equals("0")) {
-                removeAgain = false;
+                return;
             } else {
 
                 try {
@@ -161,6 +168,7 @@ public class DVDController {
 
                         if (confirm == true) {
                             dvdDao.delete(delDVD);
+                            noteDao.delete(delDVD);
                             String upperTitle = delTitle.toUpperCase();
                             console.readString("'" + upperTitle + "' DELETED");
                             break;
@@ -180,9 +188,8 @@ public class DVDController {
 
         boolean findAgain = true;
         boolean found = false;
-        String fTitle;
         while (findAgain == true) {
-            String dvdTitle = console.getString("To find a DVD, enter their its title:"
+            String dvdTitle = console.getString("To find a DVD, enter its title:"
                     + "(Enter 0 to cancel)\n>");
             if (dvdTitle.equals("0")) {
                 return;
@@ -193,9 +200,7 @@ public class DVDController {
                 for (DVD foundDvd : dvds) {
 
                     try {
-                        foundDvd = dvdDao.get(dvdTitle);
-                        fTitle = foundDvd.getTitle();
-                        if (fTitle.equalsIgnoreCase(dvdTitle)) {
+                        if (foundDvd.getTitle().equalsIgnoreCase(dvdTitle)) {
                             foundDvds.add(foundDvd);
                             found = true;
                         }
@@ -204,15 +209,162 @@ public class DVDController {
                         console.readString("No DVDs were found with that title!");
 
                     }
-                    if (found == true) {
-                        int dvdsFound = foundDvds.size();
-                        console.readString(dvdsFound + " were found with that title.");
-                        getDvdList(foundDvds);
+                }
+                if (found == true) {
+                    int dvdsFound = foundDvds.size();
+                    console.readString("\nDvds found with that title: " + dvdsFound);
+                    getDvdList(foundDvds);
+                }
+
+            }
+            boolean confirm = console.yesCheck("\nSearch again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
+            findAgain = confirm == true;
+        }
+
+    }
+
+    public void findByDirector() {
+
+        boolean findAgain = true;
+        while (findAgain == true) {
+            String director = console.getString("To find a DVD, enter its director (Enter 0 to quit):\n>");
+            if (director.equals("0")) {
+                return;
+            } else {
+
+                Map<String, List> directorMap = dvdDao.getByDirector(director);
+
+                try {
+                    console.readString("Director: " + director);
+
+                    Set<String> directors = directorMap.keySet();
+                    for (String keys : directors) {
+                        List<DVD> ratings = directorMap.get(keys);
+                        console.readString("\nMPAA RATING: " + keys.toUpperCase());
+                        for (DVD dvd : ratings) {
+                            getDvdList(ratings);
+                        }
+
                     }
-                    boolean confirm = console.yesCheck("\nSearch again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
-                    findAgain = confirm == true;
+                } catch (Exception ex) {
+
+                    console.readString("No DVDs were found by that director!");
 
                 }
+                boolean confirm = console.yesCheck("\nSearch again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
+                findAgain = confirm == true;
+
+            }
+        }
+
+    }
+
+    public void findByRating() {
+
+        boolean findAgain = true;
+        while (findAgain == true) {
+            String rating = console.getString("To find a DVD, enter its MPAA rating (Enter 0 to quit):\n>");
+            if (rating.equals("0")) {
+                return;
+            } else {
+
+                List ratingList = dvdDao.getByMPAA(rating);
+
+                try {
+
+                    console.readString("DVDs found: " + ratingList.size());
+                    console.readString("\nRating: " + rating.toUpperCase());
+
+                    getDvdList(ratingList);
+
+                } catch (Exception ex) {
+
+                    console.readString("No DVDs were found by that rating!");
+
+                }
+                boolean confirm = console.yesCheck("\nSearch again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
+                findAgain = confirm == true;
+
+            }
+        }
+
+    }
+
+    public void findByStudio() {
+
+        boolean findAgain = true;
+        while (findAgain == true) {
+            String studio = console.getString("To find a DVD, enter its studio (Enter 0 to quit):\n>");
+            if (studio.equals("0")) {
+                return;
+            } else {
+
+                List studioList = dvdDao.getByStudio(studio);
+
+                try {
+
+                    console.readString("DVDs found: " + studioList.size());
+                    console.readString("\nStudio: " + studio);
+
+                    getDvdList(studioList);
+
+                } catch (Exception ex) {
+
+                    console.readString("No DVDs were found by that studio!");
+
+                }
+                boolean confirm = console.yesCheck("\nSearch again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
+                findAgain = confirm == true;
+
+            }
+        }
+
+    }
+
+    public void findYoungestDvd() {
+
+        DVD youngestDvd = dvdDao.findNewestMovie();
+
+        console.readString("The youngest title in your collection is " + youngestDvd.getTitle());
+        displayDvdInfo(youngestDvd);
+
+    }
+
+    public void findOldestDvd() {
+
+        DVD oldestDvd = dvdDao.findOldestMovie();
+
+        console.readString("The oldest title in your collection is " + oldestDvd.getTitle());
+        displayDvdInfo(oldestDvd);
+
+    }
+
+    public void findByTimeFrame() {
+
+        boolean findAgain = true;
+        while (findAgain == true) {
+            int years = console.getInteger("We will find all of your DVDs released in the 'X' past years (Enter 0 to quit):\nX=", "That is an invalid entry!");
+            if (years == 0) {
+                return;
+            } else {
+
+                List movieList = dvdDao.getMoviesAfterDate(years);
+
+                try {
+
+                    console.readString("DVDs found: " + movieList.size());
+                    console.readString("\nStudio: " + years);
+
+                    getDvdList(movieList);
+
+                } catch (Exception ex) {
+
+                    console.readString("No DVDs were found in that time frame!");
+
+                }
+                boolean confirm = console.yesCheck("\nSearch again? [yes/no]\n>", "Enter [yes/no] to proceed.\n>");
+                findAgain = confirm == true;
+
             }
         }
 
@@ -243,7 +395,7 @@ public class DVDController {
         List<Notes> noteList = noteDao.decode();
 
         console.readString("\n+----------------------------+");
-        console.readString("DVD No.: " + savedDvd.getId() + "\n+----------------------------+\nTitle: " + savedDvd.getTitle() + "\nDirector: " + savedDvd.getDirector() + "\nMPAA Rating: "
+        console.readString("   DVD No.: " + savedDvd.getId() + "\n+----------------------------+\nTitle: " + savedDvd.getTitle() + "\nDirector: " + savedDvd.getDirector() + "\nMPAA Rating: "
                 + savedDvd.getRating().toUpperCase() + "\nStudio: " + savedDvd.getStudio() + "\nRelease Date: "
                 + sdf.format(savedDvd.getDvdDate()) + "\nUser Notes:");
         for (Notes note : noteList) {
@@ -277,6 +429,7 @@ public class DVDController {
         boolean addNoteAgain = true;
         boolean editAgain = true;
         boolean valid = false;
+        int selection = 0;
 
         while (editAgain == true) {
 
@@ -287,7 +440,7 @@ public class DVDController {
 
             if (idNum == 0) {
 
-                editAgain = false;
+                return;
 
             } else {
 
@@ -302,7 +455,7 @@ public class DVDController {
                         while (!valid) {
 
                             showEditMenu();
-                            int selection = console.getInteger("What field would you like to change?\n>", "That is an invalid entry!");
+                            selection = console.getInteger("What field would you like to change?\n>", "That is an invalid entry!");
 
                             switch (selection) {
 
@@ -364,6 +517,11 @@ public class DVDController {
                                     dvdDao.update(dvdWithId);
                                     valid = true;
                                     break;
+
+                                case 0:
+                                    valid = true;
+                                    break;
+
                                 default:
                                     //error
                                     console.readString("That is not an option!");
@@ -373,7 +531,9 @@ public class DVDController {
 
                         }
 
-                        console.readString("\nDVD updated!");
+                        if (selection != 0) {
+                            console.readString("\nDVD updated!");
+                        }
                     } else {
                         console.readString("No DVDs with that ID# were found!");
                     }
@@ -387,25 +547,108 @@ public class DVDController {
         }
     }
 
+    public void findDvdSwitch() {
+
+        boolean findAgain = true;
+        int selection;
+
+        while (findAgain) {
+
+            showFindMenu();
+            selection = console.getInteger(">", "That is not a valid entry!");
+            switch (selection) {
+
+                case 1:
+                    //findByTitle
+                    findByTitle();
+                    break;
+                case 2:
+                    //findByDirector
+                    findByDirector();
+                    break;
+                case 3:
+                    //findByRating   
+                    findByRating();
+                    break;
+                case 4:
+                    //findByStudio
+                    findByStudio();
+                    break;
+                case 5:
+                    //findNewest
+                    findYoungestDvd();
+                    break;
+
+                case 6:
+                    //findOldest
+                    findOldestDvd();
+                    break;
+                case 7:
+                    //findByTimeFrame
+                    findByTimeFrame();
+                    break;
+                case 0:
+                    findAgain = false;
+                    break;
+
+                default:
+                    //error
+                    console.readString("That is not an option!");
+                    break;
+
+            }
+
+        }
+    }
+
+    public void showAverageDvdAge() {
+
+        int dvdAge = dvdDao.findAverageAgeOfMovies();
+        console.readString("\nThe average age of your DVDs is " + dvdAge + " years old.");
+    }
+
+    public void showAverageNotesPerMovie() {
+        int noteAverage = dvdDao.findAverageAmountOfNotes();
+        console.readString("\nThe average amount of notes per movie is " + noteAverage + ".");
+    }
+
     public void showMainMenu() {
 
-        console.readString("\n+----------------------------+");
-        console.readString("| Welcome to DVD Library!    |");
+        console.readString("\n+--------------------------------------------+");
+        console.readString("|           Welcome to DVD Library!           |");
+        console.readString("+---------------------------------------------+");
+        console.readString("|   1)Add DVD                                 |");
+        console.readString("|   2)Remove DVD                              |");
+        console.readString("|   3)Find DVD                                |");
+        console.readString("|   4)View Collection                         |");
+        console.readString("|   5)Edit DVD Info                           |");
+        console.readString("|  -----------------------------------------  |");
+        console.readString("|   6)View Average Age of DVDs                |");
+        console.readString("|   7)View Average Amount of Notes per DVD    |");
+        console.readString("|  -----------------------------------------  |");
+        console.readString("|                                    0)[quit] |");
+        console.readString("+---------------------------------------------+");
+    }
+
+    public void showFindMenu() {
         console.readString("+----------------------------+");
-        console.readString("|   1)Add DVD                |");
-        console.readString("|   2)Remove DVD             |");
-        console.readString("|   3)Find DVD by Title      |");
-        console.readString("|   4)View Collection        |");
-        console.readString("|   5)Edit DVD Info          |");
-        console.readString("|   6)Date                   |");
-        console.readString("|----------------------------|");
-        console.readString("|                      [quit]|");
+        console.readString("|    Find your DVD!          |");
+        console.readString("+----------------------------+");
+        console.readString("|   1)Find by Title          |");
+        console.readString("|   2)Find by Director       |");
+        console.readString("|   3)Find by MPAA Rating    |");
+        console.readString("|   4)Find by Studio         |");
+        console.readString("|   5)Find Newest Title      |");
+        console.readString("|   6)Find Oldest Title      |");
+        console.readString("|   7)Find by Time Frame     |");
+        console.readString("+----------------------------+");
+        console.readString("|                   0)[quit] |");
         console.readString("+----------------------------+");
     }
 
     public void showEditMenu() {
         console.readString("+----------------------------+");
-        console.readString("| Edit your DVD!             |");
+        console.readString("|   Edit your DVD!           |");
         console.readString("+----------------------------+");
         console.readString("|   1)Title                  |");
         console.readString("|   2)Director               |");
@@ -413,6 +656,8 @@ public class DVDController {
         console.readString("|   4)Studio                 |");
         console.readString("|   5)User Note              |");
         console.readString("|   6)Date                   |");
+        console.readString("+----------------------------+");
+        console.readString("|                   0)[quit] |");
         console.readString("+----------------------------+");
     }
 }

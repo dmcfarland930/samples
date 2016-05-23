@@ -4,7 +4,10 @@
  */
 package com.mycompany.dto;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -13,12 +16,14 @@ import java.util.Date;
 public class DVD {
 
     int id;
+    int dvdAge;
+    int dvdNoteAmount;
     String title;
     String rating;
     String director;
     String studio;
-    String userNote;
     Date dvdDate = new Date();
+    List <Notes> noteList = new ArrayList();
 
     public int getId() {
         return id;
@@ -60,21 +65,44 @@ public class DVD {
         this.studio = student;
     }
 
-    public String getUserNote() {
-        return userNote;
-    }
-
-    public void setUserNote(String userNote) {
-        this.userNote = userNote;
-    }
-
     public Date getDvdDate() {
         return dvdDate;
     }
 
     public void setDvdDate(Date dvdDate) {
+        setDvdAge(dvdDate);
         this.dvdDate = dvdDate;
     }
+
+    public int getDvdAge() {
+        return dvdAge;
+    }
+
+    public void setDvdAge(Date dvdDate) {
+
+        Calendar cal = Calendar.getInstance();
+        int presentYear = cal.get(Calendar.YEAR);
+        cal.setTime(dvdDate);
+        this.dvdAge = presentYear - cal.get(Calendar.YEAR);
+
+    }
+
+    public List<Notes> getNoteList() {
+        return noteList;
+    }
+
+    public void setNoteList(List<Notes> noteList) {
+        this.noteList = noteList;
+        setDvdNoteAmount(noteList);
+    }
+
+    public int getDvdNoteAmount() {
+        return dvdNoteAmount;
+    }
+
+    public void setDvdNoteAmount(List <Notes> noteList) {
+        this.dvdNoteAmount = noteList.size();
+    }
     
-    
+
 }

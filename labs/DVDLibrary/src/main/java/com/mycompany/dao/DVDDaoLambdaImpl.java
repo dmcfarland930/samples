@@ -5,6 +5,7 @@
 package com.mycompany.dao;
 
 import com.mycompany.dto.DVD;
+import com.mycompany.dto.Notes;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -13,8 +14,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 public class DVDDaoLambdaImpl implements DVDDao {
 
     List<DVD> dvdList = new ArrayList();
+    NoteDao noteDao = new NoteDao();
     private int nextId = 1000;
 
     public DVDDaoLambdaImpl() {
@@ -156,11 +159,14 @@ public class DVDDaoLambdaImpl implements DVDDao {
                 SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
                 int id = Integer.parseInt(stringParts[0]);
+                if (id == nextId) {
+                    nextId++;
+                }
                 myDVD.setId(id);
                 myDVD.setTitle(stringParts[1]);
                 myDVD.setDirector(stringParts[2]);
-                myDVD.setRating(stringParts[3]);
-                myDVD.setStudio(stringParts[4]);
+                myDVD.setStudio(stringParts[3]);
+                myDVD.setRating(stringParts[4]);
                 try {
                     Date myDate = sdf.parse(stringParts[5]);
                     myDVD.setDvdDate(myDate);
@@ -168,6 +174,16 @@ public class DVDDaoLambdaImpl implements DVDDao {
                     System.out.println("This format is incorrect.");
                 }
 
+                List<Notes> notesList = noteDao.getNoteList();
+                List<Notes> notesPerMovie = new ArrayList();
+                for (Notes note : notesList) {
+
+                    if (note.getTitle().equalsIgnoreCase(myDVD.getTitle())) {
+                        notesPerMovie.add(note);
+                    }
+
+                }
+                myDVD.setNoteList(notesPerMovie);
                 dvds.add(myDVD);
 
             }
@@ -200,18 +216,90 @@ public class DVDDaoLambdaImpl implements DVDDao {
 
     @Override
     public Map getByDirector(String director) {
-        Map<String, List<DVD>> directorMap = new HashMap();
-        return directorMap
-                = dvdList
+
+        return dvdList
                 .stream()
                 .filter(a -> a.getDirector().equalsIgnoreCase(director))
                 .collect(Collectors.groupingBy(a -> a.getRating()));
+
     }
 
     @Override
-    public List getMoviesAfterDate(Date date) {
-        
-        
+    public List getMoviesAfterDate(int years) {
+
+        List<DVD> dvds = new ArrayList();
+        Calendar cal = Calendar.getInstance();
+        int presentYear = cal.get(Calendar.YEAR);
+
+        dvdList
+                .stream()
+                .forEach((DVD myDvd) -> {
+                    Date dvdDate = myDvd.getDvdDate();
+                    cal.setTime(dvdDate);
+                    int year = cal.get(Calendar.YEAR);
+                    if (year > (presentYear - years)) {
+                        dvds.add(myDvd);
+                    }
+                });
+
+        return dvds;
+    }
+
+    @Override
+    public DVD findNewestMovie() {
+
+        DVD youngestDVD;
+
+        Comparator<DVD> compAge = (d1, d2) -> d1.getDvdDate().compareTo(d2.getDvdDate());
+
+        youngestDVD = dvdList
+                .stream()
+                .max(compAge)
+                .get();
+
+        return youngestDVD;
+    }
+
+    @Override
+    public DVD findOldestMovie() {
+
+        DVD oldestDVD;
+
+        Comparator<DVD> compAge = (d1, d2) -> d1.getDvdDate().compareTo(d2.getDvdDate());
+
+        oldestDVD = dvdList
+                .stream()
+                .min(compAge)
+                .get();
+
+        return oldestDVD;
+    }
+
+    @Override
+    public int findAverageAgeOfMovies() {
+
+        int averAge;
+        Integer sum = dvdList
+                .stream()
+                .map(DVD::getDvdAge)
+                .reduce(0, (a, b) -> a + b);
+
+        averAge = sum / dvdList.size();
+        return averAge;
+    }
+
+    @Override
+    public int findAverageAmountOfNotes() {
+
+        int averAge;
+        Integer sum = dvdList
+                .stream()
+                .map(DVD::getDvdNoteAmount)
+                .reduce(0, (a, b) -> a + b);
+
+        averAge = sum / dvdList.size();
+        return averAge;
         
     }
+
 }

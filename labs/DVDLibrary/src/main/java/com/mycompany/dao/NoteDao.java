@@ -65,12 +65,12 @@ public class NoteDao{
 
     }
 
-    public void delete(Notes note) {
+    public void delete(DVD dvd) {
 
         List<Notes> modifiedNotesList = decode();
         noteList = modifiedNotesList
                 .stream()
-                .filter(a -> a.getTitle().equals(note.getTitle()))
+                .filter(a -> a.getTitle().equals(dvd.getTitle()))
                 .collect(Collectors.toList());
 
         encode();
@@ -133,6 +133,10 @@ public class NoteDao{
         }
 
         return addressList;
+    }
+
+    public List<Notes> getNoteList() {
+        return this.noteList;
     }
 
 

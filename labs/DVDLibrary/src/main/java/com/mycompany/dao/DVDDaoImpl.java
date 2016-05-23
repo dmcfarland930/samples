@@ -5,6 +5,7 @@
 package com.mycompany.dao;
 
 import com.mycompany.dto.DVD;
+import com.mycompany.dto.Notes;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +30,7 @@ import java.util.logging.Logger;
 public class DVDDaoImpl implements DVDDao {
 
     List<DVD> dvdList = new ArrayList();
+    NoteDao noteDao = new NoteDao();
     private int nextId = 1000;
 
     public DVDDaoImpl() {
@@ -180,6 +183,9 @@ public class DVDDaoImpl implements DVDDao {
                 SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
                 int id = Integer.parseInt(stringParts[0]);
+                if (id == nextId) {
+                    nextId++;
+                }
                 myDVD.setId(id);
                 myDVD.setTitle(stringParts[1]);
                 myDVD.setDirector(stringParts[2]);
@@ -261,7 +267,121 @@ public class DVDDaoImpl implements DVDDao {
     }
 
     @Override
-    public List getMoviesAfterDate(Date date) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List getMoviesAfterDate(int years) {
+        
+        List<DVD> dvds = new ArrayList();
+        Calendar cal = Calendar.getInstance();
+        int presentYear = cal.get(Calendar.YEAR);
+        for (DVD dvd : dvdList) {
+
+            Date dvdDate = dvd.getDvdDate();
+            cal.setTime(dvdDate);
+            int year = cal.get(Calendar.YEAR);
+            if (year > (presentYear - years)) {
+                dvds.add(dvd);
+            }
+
+        }
+        return dvds;
+
     }
+
+    @Override
+    public DVD findNewestMovie() {
+
+        DVD youngestDVD = new DVD();
+        Date closestDate = new Date(Long.MIN_VALUE);
+
+        for (DVD dvd : dvdList) {
+
+            Date dvdDate = dvd.getDvdDate();
+
+            if (dvdDate.compareTo(closestDate) > 0) {
+
+                closestDate = dvdDate;
+                youngestDVD = dvd;
+
+            }
+        }
+        return youngestDVD;
+    }
+
+    @Override
+    public DVD findOldestMovie() {
+
+        DVD oldestDVD = new DVD();
+        Date closestDate = new Date();
+
+        for (DVD dvd : dvdList) {
+
+            Date dvdDate = dvd.getDvdDate();
+
+            if (dvdDate.compareTo(closestDate) < 0) {
+
+                closestDate = dvdDate;
+                oldestDVD = dvd;
+
+            }
+        }
+        return oldestDVD;
+    }
+
+    @Override
+    public int findAverageAgeOfMovies() {
+
+        int total = 0;
+        int average;
+        Calendar cal = Calendar.getInstance();
+        int presentYear = cal.get(Calendar.YEAR);
+        int dvdYear;
+        int dvdAge;
+
+        for (DVD dvd : dvdList) {
+
+            Date dvdDate = dvd.getDvdDate();
+            cal.setTime(dvdDate);
+            dvdYear = cal.get(Calendar.YEAR);
+            dvdAge = presentYear - dvdYear;
+
+            total += dvdAge;
+
+        }
+
+        average = total / dvdList.size();
+
+        return average;
+    }
+
+    @Override
+    public int findAverageAmountOfNotes() {
+
+        int total = 0;
+        int average;
+        int noteCount;
+        String title;
+        List<Notes> notesList = noteDao.getNoteList();
+
+        for (DVD dvd : dvdList) {
+
+            title = dvd.getTitle();
+            noteCount = 0;
+
+            for (Notes note : notesList) {
+
+                if (title.equalsIgnoreCase(note.getTitle())) {
+                    noteCount++;
+                }
+
+            }
+
+            total += noteCount;
+
+        }
+
+        average = total / dvdList.size();
+
+        return average;
+
+    }
+
 }

@@ -33,9 +33,18 @@ public interface DVDDao {
 
     List getByStudio(String studio);
     
-    List getMoviesAfterDate(Date date);
+    List getMoviesAfterDate(int years);
 
     Map getByDirector(String director);
+    
+    DVD findNewestMovie();
+    
+    DVD findOldestMovie();
+    
+    int findAverageAgeOfMovies();
+    
+    int findAverageAmountOfNotes();
+    
     
 
 }
