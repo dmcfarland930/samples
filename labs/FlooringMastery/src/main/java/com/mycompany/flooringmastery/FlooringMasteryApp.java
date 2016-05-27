@@ -5,6 +5,8 @@
 package com.mycompany.flooringmastery;
 
 import com.mycompany.controller.FlooringController;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -14,7 +16,8 @@ public class FlooringMasteryApp {
     
     public static void main(String[] args) {
         
-        FlooringController fc = new FlooringController();
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        FlooringController fc = ctx.getBean("flooringController", FlooringController.class);
         fc.runApp();
         
     }

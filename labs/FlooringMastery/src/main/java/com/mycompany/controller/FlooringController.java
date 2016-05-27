@@ -4,6 +4,7 @@
  */
 package com.mycompany.controller;
 
+import com.mycompany.consoleio.ConsoleIO;
 import com.mycompany.dao.OrderDao;
 import com.mycompany.dao.ProductDao;
 import com.mycompany.dao.ProductXmlDao;
@@ -16,6 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -24,15 +27,26 @@ import java.util.List;
 public class FlooringController {
 
     FlooringData fd = new FlooringData();
-    FlooringAdminControl fac = new FlooringAdminControl();
-    OrderDao orderDao = new OrderDao();
-    ProductDao productDao = new ProductDao();
-    TaxesDao taxesDao = new TaxesDao();
     ConsoleIO console = new ConsoleIO();
     List<Order> ordersList = new ArrayList();
-    ProductXmlDao pXml = new ProductXmlDao();
-    TaxesXmlDao tXml = new TaxesXmlDao();
+    OrderDao orderDao;
+    ProductDao productDao;
+    TaxesDao taxesDao;
+    ProductXmlDao pXml;
+    TaxesXmlDao tXml;
+
+    FlooringAdminControl fac;
     boolean testMode = false;
+
+    public FlooringController(OrderDao oDao, ProductDao pDao, TaxesDao tDao, ProductXmlDao pXDao, TaxesXmlDao tXDao, FlooringAdminControl fAdminControl) {
+        
+        this.orderDao = oDao;
+        this.productDao = pDao;
+        this.taxesDao = tDao;
+        this.pXml = pXDao;
+        this.tXml = tXDao;
+        this.fac = fAdminControl;
+    }
 
     public void runApp() {
 
@@ -473,7 +487,7 @@ public class FlooringController {
         console.readString("-------------------------------");
         console.readString(" Product Cost/SqFt: $" + money.format(order.getCostPerSqFt()));
         console.readString(" Labor Cost/SqFt: $" + money.format(order.getLaborCostPerSqFt()));
-        console.readString(" Tax Rate: " + money.format(order.getTaxRate())+"%");
+        console.readString(" Tax Rate: " + money.format(order.getTaxRate()) + "%");
         console.readString("-------------------------------");
         console.readString(" Total Product Cost: $" + money.format(order.getMaterialCost()));
         console.readString(" Total Labor Cost: $" + money.format(order.getTotalLaborCost()));

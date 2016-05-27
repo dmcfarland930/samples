@@ -4,6 +4,7 @@
  */
 package com.mycompany.controller;
 
+import com.mycompany.consoleio.ConsoleIO;
 import com.mycompany.dao.ProductDao;
 import com.mycompany.dao.TaxesDao;
 import com.mycompany.data.FlooringData;
@@ -19,11 +20,17 @@ import java.util.List;
 public class FlooringAdminControl {
 
     ConsoleIO console = new ConsoleIO();
-    ProductDao productDao = new ProductDao();
-    TaxesDao taxDao = new TaxesDao();
+    ProductDao productDao;
+    TaxesDao taxDao;
     FlooringData fd = new FlooringData();
     DecimalFormat df = new DecimalFormat("0.00");
 
+    public FlooringAdminControl(ProductDao pDao, TaxesDao tDao){
+        this.productDao = pDao;
+        this.taxDao = tDao;
+        
+    }
+    
     public void displayAdminControls() {
 
         boolean run = true;
