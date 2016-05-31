@@ -1,0 +1,70 @@
+.navbar .navbar-nav {
+    display: inline-block;
+    float: none;
+    vertical-align: top;
+}
+
+.navbar .navbar-collapse {
+    text-align: center;
+}
+
+
+body{
+
+    max-width: 100%;
+    overflow-x: hidden;
+    height: 100%;
+    background-color: gray;    
+
+}
+
+a:hover{
+    font-weight: bold;
+}
+
+a:active{
+    text-decoration: none;   
+}
+
+h1{
+    font-size: 22px;
+    text-align: center;
+    font-weight: bold;
+}
+
+h2{
+    font-size: 18px;
+    text-align: center;
+}
+
+h3{
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: underline;
+    text-align: center;
+}
+
+
+form {
+    display: inline-block;
+    text-align: center;
+    margin: 0 auto;
+}
+
+img{
+    margin-bottom: 20px;
+}
+
+#content{
+
+    background-color: #F8F8F8;
+    border-style: solid;
+    border-color: #F8F8F8;
+    border-width: 2px;
+    border-radius: 5px;
+    width: 75%;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    text-align: center;
+
+}
