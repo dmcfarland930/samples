@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class HomeController {
 
     private DVDDao dvdDao;
-    private NoteDao noteDao;
+    private NoteDao noteDao = new NoteDao();
 
     @Inject
     public HomeController(DVDDao dao, NoteDao notes) {
@@ -33,9 +33,17 @@ public class HomeController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Map model) {
 
-        List<DVD> addresses = dvdDao.list();
-        model.put("addresses", addresses);
+        List<DVD> dvds = dvdDao.list();
+        DVD oldest = dvdDao.findOldestMovie();
+        DVD newest = dvdDao.findNewestMovie();
+        int years = dvdDao.findAverageAgeOfMovies();
+        int noteNum = dvdDao.findAverageAmountOfNotes();
 
+        model.put("dvds", dvds);
+        model.put("oldest", oldest.getTitle());
+        model.put("newest", newest.getTitle());
+        model.put("years", years);
+        model.put("notenum", noteNum);
         return "home";
     }
 

@@ -4,13 +4,17 @@
  */
 package com.mycompany.dvdlibraryweb.dto;
 
+import com.mycompany.dvdlibraryweb.dao.DVDDao;
+
 /**
  *
  * @author apprentice
  */
 public class Notes {
+
     String title;
     String note;
+    int id;
 
     public String getTitle() {
         return title;
@@ -27,6 +31,13 @@ public class Notes {
     public void setNote(String note) {
         this.note = note;
     }
-    
-    
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
 }

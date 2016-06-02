@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Contact List</title>
+        <title>DVD Library</title>
         <!-- Bootstrap core CSS -->
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
 
@@ -22,7 +22,8 @@
             <hr/>
             <div class="navbar">
                 <ul class="nav nav-tabs">
-                    <li role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
+                    <li class="active" role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/dvd/search/">Find DVDs</a></li>
                 </ul>    
             </div>
 
@@ -33,16 +34,16 @@
                     <table class="table table-striped">    
                         <thead>
                             <tr>
-                                <th>Firstname</th>
-                                <th>Lastname</th>
+                                <th>Title</th>
+                                <th>Director</th>
                             </tr>
                         </thead>
-                        <c:forEach items="${addresses}" var="contact">
+                        <c:forEach items="${dvds}" var="dvd">
                             <tr>
-                                <td>${address.firstName}</td>
-                                <td>${address.lastName}</td>
-                                <td><a href="contact/edit?id=${address.id}">Edit</a></td>
-                                <td><a href="contact/delete?id=${address.id}">Delete</a></td>
+                                <td><a href="dvd/show/${dvd.id}">${dvd.title}</td>
+                                <td>${dvd.director}</td>
+                                <td><a href="dvd/edit/${dvd.id}">Edit</a></td>
+                                <td><a href="dvd/delete/${dvd.id}">Delete</a></td>
 
                                 <!--create edit and delete in controller-->
 
@@ -50,34 +51,43 @@
 
                         </c:forEach>
                     </table>
+                    
+                    <p>Your oldest movie is ${oldest}</p>
+                    <p>Your newest movie is ${newest}</p>
+                    <p>The average age of your movies is ${years} old</p>
+                    <p>Your movies have an average of ${notenum} notes</p>
 
                 </div>
                 <div class="col-md-6">
 
-                    <h1>Enter Contact Info</h1>
-                    <form method="POST" action="contact/create">
+                    <h1>Enter DVD Info</h1>
+                    <form method="POST" action="dvd/create">
                         <fieldset class="form-group">
-                            <label for="firstName">First Name</label>
-                            <input type="text" class="form-control" name="firstName" placeholder="ex. John">
+                            <label for="title">Title</label>
+                            <input type="text" class="form-control" name="title" placeholder="ex. Pulp Fiction">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="lastName">Last Name</label>
-                            <input type="text" class="form-control" name="lastName" placeholder="ex. Doe">
+                            <label for="director">Director</label>
+                            <input type="text" class="form-control" name="director" placeholder="ex. Quentin Tarantino">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="company">Company</label>
-                            <input type="text" class="form-control" name="company" placeholder="ex. Software Guild">
+                            <label for="rating">MPAA Rating</label>
+                            <input type="text" class="form-control" name="rating" placeholder="ex. R">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="email">Email</label>
-                            <input type="text" class="form-control" name="email" placeholder="ex. johndoe@swg.com">
+                            <label for="studio">Studio</label>
+                            <input type="text" class="form-control" name="studio" placeholder="ex. MGM">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="phone">Phone</label>
-                            <input type="text" class="form-control" name="phone" placeholder="ex. (555)867-5309">
+                            <label for="date">Date</label>
+                            <input type="text" class="form-control" name="date" placeholder="ex. 02/14/1993">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="notes">Notes</label>
+                            <textarea class="form-control" name="notes" rows="5" placeholder="Enter notes here"></textarea>
                         </fieldset>
                         
-                        <input type="submit"/>
+                        <input class="btn bg-primary" type="submit"/>
                     </form>
 
                 </div>

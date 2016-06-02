@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Contact List</title>
+        <title>Flooring Master</title>
         <!-- Bootstrap core CSS -->
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
 
@@ -18,33 +18,33 @@
     </head>
     <body>
         <div class="container">
-            <h1>Address Book</h1>
+            <h1>Flooring Master</h1>
             <hr/>
             <div class="navbar">
                 <ul class="nav nav-tabs">
-                    <li role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
+                    <li class="active" role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/order/search/">Search Orders</a></li>
                 </ul>    
             </div>
 
             <div class="row">
                 <div class="col-md-6">
 
-                    <h1>Your Address Book</h1>
+                    <h1>Your Orders on ${date}</h1>
                     <table class="table table-striped">    
                         <thead>
                             <tr>
-                                <th>Firstname</th>
-                                <th>Lastname</th>
+                                <th>Order Name</th>
+                                <th>Order Number</th>
                             </tr>
                         </thead>
-                        <c:forEach items="${addresses}" var="contact">
+                        <c:forEach items="${orders}" var="order">
                             <tr>
-                                <td>${address.firstName}</td>
-                                <td>${address.lastName}</td>
-                                <td><a href="contact/edit?id=${address.id}">Edit</a></td>
-                                <td><a href="contact/delete?id=${address.id}">Delete</a></td>
+                                <td><a href="../show/${order.orderNumber}">${order.customerName}</td>
+                                <td>${order.orderNumber}</td>
+                                <td><a href="../edit/${order.orderNumber}">Edit</a></td>
+                                <td><a href="../delete/${order.orderNumber}">Delete</a></td>
 
-                                <!--create edit and delete in controller-->
 
                             </tr>
 
@@ -52,41 +52,50 @@
                     </table>
 
                 </div>
-                <div class="col-md-6">
+                    <div class="col-md-6">
 
-                    <h1>Enter Contact Info</h1>
-                    <form method="POST" action="contact/create">
-                        <fieldset class="form-group">
-                            <label for="firstName">First Name</label>
-                            <input type="text" class="form-control" name="firstName" placeholder="ex. John">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label for="lastName">Last Name</label>
-                            <input type="text" class="form-control" name="lastName" placeholder="ex. Doe">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label for="company">Company</label>
-                            <input type="text" class="form-control" name="company" placeholder="ex. Software Guild">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label for="email">Email</label>
-                            <input type="text" class="form-control" name="email" placeholder="ex. johndoe@swg.com">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label for="phone">Phone</label>
-                            <input type="text" class="form-control" name="phone" placeholder="ex. (555)867-5309">
-                        </fieldset>
-                        
-                        <input type="submit"/>
-                    </form>
+                        <h1>Add Order</h1>
+                        <form method="POST" action="order/create">
+                            <fieldset class="form-group">
+                                <label for="customerName">Name</label>
+                                <input type="text" class="form-control" name="customerName" placeholder="Enter company name">
+                            </fieldset>
+                            <div class="form-group">
+                                <label for="productSelect">Choose Product</label>
+                                <select class="form-control" name="productType" id="productSelect">
+                                    <c:forEach items="${products}" var="productType">
+                                        <option value="${productType.productType}">${productType.productType}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
 
+                            <div class="form-group">
+                                <label for="taxSelect">Choose State Tax</label>
+                                <select class="form-control" name="state" id="taxSelect">
+                                    <c:forEach items="${taxes}" var="state">
+                                        <option value="${state.state}">${state.state}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <fieldset class="form-group">
+                                <label for="area">Area</label>
+                                <input type="text" class="form-control" name="area" placeholder="Enter area in sq/ft">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <label for="date">Date</label>
+                                <input type="text" class="form-control" name="orderDate" placeholder="ex. 02/14/1993">
+                            </fieldset>
+
+                            <input class="btn bg-primary" type="submit"/>
+                        </form>
+
+                    </div>
                 </div>
+ <!--(${tax.taxRate}%)-->
             </div>
-
-        </div>
-        <!-- Placed at the end of the document so the pages load faster -->
-        <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
-        <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+            <!-- Placed at the end of the document so the pages load faster -->
+            <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
+            <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 
     </body>
 </html>

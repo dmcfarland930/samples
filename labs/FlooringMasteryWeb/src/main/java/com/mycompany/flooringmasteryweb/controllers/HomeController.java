@@ -4,8 +4,15 @@
  */
 package com.mycompany.flooringmasteryweb.controllers;
 
-import com.mycompany.flooringmasteryweb.dao.AddressBookDao;
-import com.mycompany.flooringmasteryweb.dto.Address;
+import com.mycompany.flooringmasteryweb.dao.OrderDao;
+import com.mycompany.flooringmasteryweb.dao.ProductDao;
+import com.mycompany.flooringmasteryweb.dao.TaxesDao;
+import com.mycompany.flooringmasteryweb.data.FlooringData;
+import com.mycompany.flooringmasteryweb.dto.Order;
+import com.mycompany.flooringmasteryweb.dto.Product;
+import com.mycompany.flooringmasteryweb.dto.Taxes;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -20,22 +27,32 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class HomeController {
 
-    private AddressBookDao addressDao;
+    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyy");
+    private OrderDao orderDao;
+    private TaxesDao taxDao;
+    private ProductDao productDao;
 
     @Inject
-    public HomeController(AddressBookDao dao) {
-        this.addressDao = dao;
+    public HomeController(OrderDao oDao, TaxesDao tDao, ProductDao pDao, FlooringData fData) {
+        this.orderDao = oDao;
+        this.taxDao = tDao;
+        this.productDao = pDao;
 
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Map model) {
-
-        List<Address> addresses = addressDao.list();
-        model.put("addresses", addresses);
-
+        Date date = new Date();
+        String dateFormat = sdf.format(date);
+        String dateString = dateFormat.replace("/", "");
+        List<Order> orders = orderDao.getOrdersOnDate(dateString);
+        List<Product> products = productDao.getProductList();
+        List<Taxes> taxes = taxDao.getTaxesList();
+        model.put("date", dateFormat);
+        model.put("orders", orders);
+        model.put("products", products);
+        model.put("taxes", taxes);
         return "home";
     }
-
 
 }

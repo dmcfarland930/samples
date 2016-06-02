@@ -22,6 +22,8 @@ public class DVD {
     String rating;
     String director;
     String studio;
+    String date;
+    String notes;
     Date dvdDate = new Date();
     List <Notes> noteList = new ArrayList();
 
@@ -103,6 +105,23 @@ public class DVD {
     public void setDvdNoteAmount(List <Notes> noteList) {
         this.dvdNoteAmount = noteList.size();
     }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
     
 
+    
 }

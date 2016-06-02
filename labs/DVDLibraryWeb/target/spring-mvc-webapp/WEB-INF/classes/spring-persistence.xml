@@ -16,6 +16,7 @@
 
     <!-- Bean definitions go here -->
     
-    <bean id="addressBookDao" class="com.mycompany.dvdlibraryweb.dao.AddressBookLambdaImpl"/>
+    <bean id="dvdDao" class="com.mycompany.dvdlibraryweb.dao.DVDDaoLambdaImpl"/>
+    <bean id="noteDao" class="com.mycompany.dvdlibraryweb.dao.NoteDao"/>
     
 </beans>

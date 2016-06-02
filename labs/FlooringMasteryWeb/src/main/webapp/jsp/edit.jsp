@@ -35,62 +35,99 @@
             <div class="row">
                 <div class="col-md-6">
 
-                    <h1>Your Current Info</h1>
+                    <h1>Current Order Details #${order.orderNumber}</h1>
                     <table class="table table-striped"> 
-                            <tr>
-                                <td>First Name: ${contact.firstName}</td>
-                            </tr>
+                        <tr>
+                            <td>Date of Order: ${order.orderDate}</td>
+                        </tr>
+                        <tr>
+                            <td>Customer Name: ${order.customerName}</td>
+                        </tr>
+                        <tr>
+                            <td>State: ${order.state}</td>
+                        </tr>
+                        <tr>
+                            <td>Product: ${order.productType}</td>
+                        </tr>
+                        <tr>
+                            <td>Area: ${order.area} sq/ft</td>
+                        </tr>
+                    </table>
 
-                            <tr>
-                                <td>Last Name: ${contact.lastName}</td>
-                            </tr>
-                            <tr>
-                                <td>Company: ${contact.company}</td>
-                            </tr>
-                            <tr>
-                                <td>Contact: ${contact.email}</td>
-                            </tr>
-                            <tr>
-                                <td>Phone: ${contact.phone}</td>
-                            </tr>
+                    <table class="table table-striped"> 
+                        <tr>
+                            <td>Product Cost per Sq/Ft: $${order.costPerSqFt}</td>
+                        </tr>
+                        <tr>
+                            <td>Labor Cost/SqFt: $${order.laborCostPerSqFt}</td>
+                        </tr>
+                        <tr>
+                            <td>Tax Rate: ${order.taxRate}%</td>
+                        </tr>
+                    </table>
+
+                    <table class="table table-striped"> 
+                        <tr>
+                            <td>Total Product Cost: $${order.materialCost}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Labor Cost: $${order.totalLaborCost}</td>
+                        </tr>
+                        <tr>
+                            <td>Tax: $${order.tax}</td>
+                        </tr>
+                        <tr>
+                            <td>Total: $${order.orderTotal}</td>
+                        </tr>
                     </table>
 
                 </div>
 
                 <div class="col-md-6">
 
-                    <h1>Edit Contact Info</h1>
-                    <form method="POST" action="contact/edit">
+                    <h1>Edit Order</h1>
+                    <form method="POST" action="../edit/${order.orderNumber}">
                         <fieldset class="form-group">
-                            <label for="firstName">First Name</label>
-                            <input type="text" class="form-control" name="firstName" placeholder="${contact.firstName}">
+                            <label for="customerName">Name</label>
+                            <input type="text" class="form-control" name="customerName" placeholder="${order.customerName}">
+                        </fieldset>
+                        <div class="form-group">
+                            <label for="productSelect">Choose Product</label>
+                            <select class="form-control" name="productType" id="productSelect">
+                                <c:forEach items="${products}" var="productType">
+                                    <option value="${productType.productType}">${productType.productType}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="taxSelect">Choose State Tax</label>
+                            <select class="form-control" name="state" id="taxSelect">
+                                <c:forEach items="${taxes}" var="state">
+                                    <option value="${state.state}">${state.state}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <fieldset class="form-group">
+                            <label for="area">Area</label>
+                            <input type="text" class="form-control" name="area" placeholder="${order.area}">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="lastName">Last Name</label>
-                            <input type="text" class="form-control" name="lastName" placeholder="${contact.lastName}">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label for="company">Company</label>
-                            <input type="text" class="form-control" name="company" placeholder="${contact.company}">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label for="email">Email</label>
-                            <input type="text" class="form-control" name="email" placeholder="${contact.email}">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label for="phone">Phone</label>
-                            <input type="text" class="form-control" name="phone" placeholder="${contact.phone}">
+                            <label for="date">Date</label>
+                            <input type="text" class="form-control" name="orderDate" placeholder="ex. 02/14/1993">
                         </fieldset>
 
-                        <input type="submit"/>
+                        <input class="btn bg-primary" type="submit"/>
                     </form>
+
                 </div>
             </div>
-
         </div>
-        <!-- Placed at the end of the document so the pages load faster -->
-        <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
-        <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 
-    </body>
+    </div>
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+
+</body>
 </html>

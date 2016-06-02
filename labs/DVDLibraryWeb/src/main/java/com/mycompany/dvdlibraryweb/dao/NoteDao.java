@@ -4,7 +4,6 @@
  */
 package com.mycompany.dvdlibraryweb.dao;
 
-
 import com.mycompany.dvdlibraryweb.dto.DVD;
 import com.mycompany.dvdlibraryweb.dto.Notes;
 import java.io.BufferedReader;
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
  *
  * @author apprentice
  */
-public class NoteDao{
+public class NoteDao {
 
     List<Notes> noteList = new ArrayList();
 
@@ -33,8 +32,9 @@ public class NoteDao{
 
     }
 
-    public Notes create(Notes note) {
+    public Notes create(Notes note, int id) {
 
+        note.setId(id);
         noteList.add(note);
 
         encode();
@@ -51,7 +51,7 @@ public class NoteDao{
                 .collect(Collectors.toList()).get(0);
 
     }
-    
+
     public void update(Notes note) {
 
         List<Notes> modifiedNotesList = decode();
@@ -77,7 +77,7 @@ public class NoteDao{
         encode();
 
     }
-    
+
     public void encode() {
 
         final String TOKEN = "::";
@@ -88,6 +88,8 @@ public class NoteDao{
             noteList
                     .stream()
                     .forEach((Notes myNotes) -> {
+                        out.print(myNotes.getId());
+                        out.print(TOKEN);
                         out.print(myNotes.getTitle());
                         out.print(TOKEN);
                         out.print(myNotes.getNote());
@@ -103,7 +105,7 @@ public class NoteDao{
         }
 
     }
-    
+
     public List decode() {
 
         Scanner sc = null;
@@ -119,8 +121,10 @@ public class NoteDao{
 
                 Notes myNotes = new Notes();
 
-                myNotes.setTitle(stringParts[0]);
-                myNotes.setNote(stringParts[1]);
+                int id = Integer.parseInt(stringParts[0]);
+                myNotes.setId(id);
+                myNotes.setTitle(stringParts[1]);
+                myNotes.setNote(stringParts[2]);
 
                 addressList.add(myNotes);
 
@@ -136,10 +140,25 @@ public class NoteDao{
         return addressList;
     }
 
+    public DVD setNotesToDVD(DVD dvd) {
+
+        List<Notes> notesList = getNoteList();
+        List<Notes> notesPerMovie = new ArrayList();
+        for (Notes note : notesList) {
+
+            if (note.getId() == dvd.getId()) {
+                notesPerMovie.add(note);
+            }
+
+        }
+        dvd.setNoteList(notesPerMovie);
+
+        return dvd;
+
+    }
+
     public List<Notes> getNoteList() {
         return this.noteList;
     }
 
-
-    
 }

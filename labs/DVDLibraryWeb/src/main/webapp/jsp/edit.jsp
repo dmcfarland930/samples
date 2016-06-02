@@ -11,7 +11,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Contact List</title>
+        <title>DVD Library</title>
         <!-- Bootstrap core CSS -->
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
 
@@ -24,66 +24,78 @@
     </head>
     <body>
         <div class="container">
-            <h1>Contact List</h1>
+            <h1>DVD Library</h1>
             <hr/>
             <div class="navbar">
                 <ul class="nav nav-tabs">
                     <li role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
+                    <li class="active"  role="presentation"><a href="${pageContext.request.contextPath}/dvd/search/">Find DVDs</a></li>
                 </ul>    
             </div>
 
             <div class="row">
                 <div class="col-md-6">
 
-                    <h1>Your Current Info</h1>
+                    <h1>${dvd.title}</h1>
                     <table class="table table-striped"> 
-                            <tr>
-                                <td>First Name: ${contact.firstName}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Last Name: ${contact.lastName}</td>
-                            </tr>
-                            <tr>
-                                <td>Company: ${contact.company}</td>
-                            </tr>
-                            <tr>
-                                <td>Contact: ${contact.email}</td>
-                            </tr>
-                            <tr>
-                                <td>Phone: ${contact.phone}</td>
-                            </tr>
+                        <tr>
+                            <td>Director: ${dvd.director}</td>
+                        </tr>
+                        <tr>
+                            <td>MPAA Rating: ${dvd.rating}</td>
+                        </tr>
+                        <tr>
+                            <td>Studio: ${dvd.studio}</td>
+                        </tr>
+                        <tr>
+                            <td>Date: ${date}</td>
+                        </tr>
                     </table>
 
+                    <h2>Notes:</h2>
+                    <table class="table table-striped"> 
+                        <c:forEach items="${notes}" var="notes">
+                            <tr>
+                                <td>${notes.note}</td>
+                            </tr>
+
+                        </c:forEach>
+                    </table>
                 </div>
 
                 <div class="col-md-6">
 
-                    <h1>Edit Contact Info</h1>
-                    <form method="POST" action="contact/edit">
+                    <h1>Edit DVD Info</h1>
+                    <form method="POST" action="./">
+                        <input type="hidden" name="id" id="id" value="${dvd.id}"/>
                         <fieldset class="form-group">
-                            <label for="firstName">First Name</label>
-                            <input type="text" class="form-control" name="firstName" placeholder="${contact.firstName}">
+                            <label for="title">Title</label>
+                            <input type="text" class="form-control" name="title" placeholder="${dvd.title}">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="lastName">Last Name</label>
-                            <input type="text" class="form-control" name="lastName" placeholder="${contact.lastName}">
+                            <label for="director">Director</label>
+                            <input type="text" class="form-control" name="director" placeholder="${dvd.director}">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="company">Company</label>
-                            <input type="text" class="form-control" name="company" placeholder="${contact.company}">
+                            <label for="rating">MPAA Rating</label>
+                            <input type="text" class="form-control" name="rating" placeholder="${dvd.rating}">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="email">Email</label>
-                            <input type="text" class="form-control" name="email" placeholder="${contact.email}">
+                            <label for="studio">Studio</label>
+                            <input type="text" class="form-control" name="studio" placeholder="${dvd.studio}">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="phone">Phone</label>
-                            <input type="text" class="form-control" name="phone" placeholder="${contact.phone}">
+                            <label for="date">Date</label>
+                            <input type="text" class="form-control" name="date" placeholder="${date}">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="notes">Notes</label>
+                            <textarea class="form-control" name="notes" rows="5" placeholder="Enter notes here"></textarea>
                         </fieldset>
 
-                        <input type="submit"/>
+                        <input class="btn bg-primary" type="submit"/>
                     </form>
+
                 </div>
             </div>
 
@@ -91,6 +103,7 @@
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+
 
     </body>
 </html>

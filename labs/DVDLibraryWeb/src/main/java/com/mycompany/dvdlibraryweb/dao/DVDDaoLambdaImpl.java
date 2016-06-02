@@ -18,7 +18,6 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,12 +54,12 @@ public class DVDDaoLambdaImpl implements DVDDao {
     }
 
     @Override
-    public DVD get(String title) {
+    public List<DVD> getByTitle(String title) {
 
         return dvdList
                 .stream()
                 .filter(a -> a.getTitle().equals(title))
-                .collect(Collectors.toList()).get(0);
+                .collect(Collectors.toList());
 
     }
 
@@ -84,8 +83,10 @@ public class DVDDaoLambdaImpl implements DVDDao {
 
         dvdList.add(dvd);
 
-        encode();
+        
 
+        encode();
+        
     }
 
     @Override
@@ -141,7 +142,7 @@ public class DVDDaoLambdaImpl implements DVDDao {
     }
 
     @Override
-    public List decode() {
+    public List<DVD> decode() {
 
         Scanner sc = null;
         List<DVD> dvds = new ArrayList();
@@ -177,7 +178,7 @@ public class DVDDaoLambdaImpl implements DVDDao {
                 List<Notes> notesPerMovie = new ArrayList();
                 for (Notes note : notesList) {
 
-                    if (note.getTitle().equalsIgnoreCase(myDVD.getTitle())) {
+                    if (note.getId() == myDVD.getId()) {
                         notesPerMovie.add(note);
                     }
 
@@ -198,7 +199,7 @@ public class DVDDaoLambdaImpl implements DVDDao {
     }
 
     @Override
-    public List getByMPAA(String mpaa) {
+    public List<DVD> getByMPAA(String mpaa) {
         return dvdList
                 .stream()
                 .filter(a -> a.getRating().equalsIgnoreCase(mpaa))
@@ -206,7 +207,7 @@ public class DVDDaoLambdaImpl implements DVDDao {
     }
 
     @Override
-    public List getByStudio(String studio) {
+    public List<DVD> getByStudio(String studio) {
         return dvdList
                 .stream()
                 .filter(a -> a.getStudio().equalsIgnoreCase(studio))
@@ -214,17 +215,17 @@ public class DVDDaoLambdaImpl implements DVDDao {
     }
 
     @Override
-    public Map getByDirector(String director) {
+    public List<DVD> getByDirector(String director) {
 
         return dvdList
                 .stream()
                 .filter(a -> a.getDirector().equalsIgnoreCase(director))
-                .collect(Collectors.groupingBy(a -> a.getRating()));
+                .collect(Collectors.toList());
 
     }
 
     @Override
-    public List getMoviesAfterDate(int years) {
+    public List<DVD> getMoviesAfterDate(int years) {
 
         List<DVD> dvds = new ArrayList();
         Calendar cal = Calendar.getInstance();

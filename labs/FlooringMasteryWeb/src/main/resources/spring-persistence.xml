@@ -16,6 +16,30 @@
 
     <!-- Bean definitions go here -->
     
-    <bean id="addressBookDao" class="com.mycompany.flooringmasteryweb.dao.AddressBookLambdaImpl"/>
+    
+    <bean id="floorData" class="com.mycompany.flooringmasteryweb.data.FlooringData"/>
+    <bean id="productXmlDao" class="com.mycompany.flooringmasteryweb.dao.ProductXmlDao"/>
+    <bean id="taxesXmlDao" class="com.mycompany.flooringmasteryweb.dao.TaxesXmlDao"/>
+    
+    <bean id="productDao" class="com.mycompany.flooringmasteryweb.dao.ProductDaoImpl">    
+        <constructor-arg ref="floorData"/>
+        <constructor-arg ref="productXmlDao"/>
+    </bean>
+
+    <bean id="taxesDao" class="com.mycompany.flooringmasteryweb.dao.TaxesDaoImpl">    
+        <constructor-arg ref="floorData"/>
+        <constructor-arg ref="taxesXmlDao"/>
+    </bean>
+    
+    <bean id="orderDao" class="com.mycompany.flooringmasteryweb.dao.OrderDaoImpl">
+        <constructor-arg ref="floorData"/>
+    </bean>
+    
+    
+<!--    <bean id="flooringAdminControl" class="com.mycompany.controller.FlooringAdminControl">
+        <constructor-arg ref="productDao"/>       
+        <constructor-arg ref="taxesDao"/> 
+    </bean>-->
+        
     
 </beans>

@@ -22,7 +22,7 @@ public interface DVDDao {
 
     void encode();
 
-    DVD get(String title);
+    List<DVD> getByTitle(String title);
 
     DVD get(int id);
 
@@ -36,7 +36,7 @@ public interface DVDDao {
     
     List<DVD> getMoviesAfterDate(int years);
 
-    Map getByDirector(String director);
+    List<DVD> getByDirector(String director);
     
     DVD findNewestMovie();
     
