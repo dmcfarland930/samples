@@ -1,17 +1,25 @@
 package com.mycompany.addressbookweb.dto;
 
+import org.hibernate.validator.constraints.NotEmpty;
 
 public class Address {
 
     private Integer id;
-    private String firstName;
-    private String lastName;
-    private String streetName;
-    private String streetNumber;
-    private String city;
-    private String state;
-    private String zip;
 
+    @NotEmpty(message = "You must supply a first name")
+    private String firstName;
+    @NotEmpty(message = "You must supply a last name")
+    private String lastName;
+    @NotEmpty(message = "You must supply a street name")
+    private String streetName;
+    @NotEmpty(message = "You must supply a street number")
+    private String streetNumber;
+    @NotEmpty(message = "You must supply a city")
+    private String city;
+    @NotEmpty(message = "You must supply a state")
+    private String state;
+    @NotEmpty(message = "You must supply a zip")
+    private String zip;
 
     public Integer getId() {
         return id;

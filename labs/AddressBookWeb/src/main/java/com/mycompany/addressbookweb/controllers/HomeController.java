@@ -33,6 +33,7 @@ public class HomeController {
 
         List<Address> addresses = addressDao.list();
         model.put("addresses", addresses);
+        model.put("address", new Address());
 
         return "home";
     }

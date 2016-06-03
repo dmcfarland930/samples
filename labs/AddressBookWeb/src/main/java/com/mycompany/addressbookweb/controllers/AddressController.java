@@ -9,7 +9,9 @@ import com.mycompany.addressbookweb.dto.Address;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +36,15 @@ public class AddressController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@ModelAttribute Address address) {
+    public String create(@Valid @ModelAttribute Address address, BindingResult bindingResult, Map model) {
+
+        if (bindingResult.hasErrors()) {
+
+            List<Address> addresses = addressDao.list();
+            model.put("addresses", addresses);
+            return "home";
+
+        }
 
         addressDao.create(address);
         return "redirect:/";
@@ -46,13 +56,23 @@ public class AddressController {
 
         Address address = addressDao.get(addressId);
 
-        model.put("address", address);
+        model.put("addresses", address);
+        model.put("addressShow", address);
+        model.put("address", new Address());
 
         return "edit";
     }
 
-    @RequestMapping(value = "edit", method = RequestMethod.POST)
-    public String editSubmit(@ModelAttribute Address address) {
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+    public String editSubmit(@Valid @ModelAttribute Address address, BindingResult bindingResult, @PathVariable("id") Integer addressId, Map model) {
+
+        if (bindingResult.hasErrors()) {
+            Address addressShow = addressDao.get(addressId);
+            model.put("addressShow", addressShow);
+            model.put("addresses", address);
+            return "edit";
+
+        }
 
         addressDao.update(address);
         return "redirect:/";
@@ -66,75 +86,6 @@ public class AddressController {
         return "redirect:/";
     }
 
-    @RequestMapping(value = "/namefind", method = RequestMethod.GET)
-    public String nameFind(Map model) {
-
-        List<Address> addresses = addressDao.list();
-        model.put("addresses", addresses);
-
-        return "namefind";
-    }
-
-    @RequestMapping(value = "namefind", method = RequestMethod.POST)
-    public String nameFindSubmit(@RequestParam("lastName") String lastName, Map model) {
-
-        List<Address> addresses = addressDao.searchByLastName(lastName);
-        model.put("addresses", addresses);
-        return "namefind";
-    }
-
-    @RequestMapping(value = "/cityfind", method = RequestMethod.GET)
-    public String cityFind(Map model) {
-
-        List<Address> addresses = addressDao.list();
-        model.put("addresses", addresses);
-
-        return "cityfind";
-    }
-
-    @RequestMapping(value = "cityfind", method = RequestMethod.POST)
-    public String cityFindSubmit(@RequestParam("city") String city, Map model) {
-
-        List<Address> addresses = addressDao.searchByCity(city);
-        model.put("addresses", addresses);
-
-        return "cityfind";
-    }
-
-    @RequestMapping(value = "/statefind", method = RequestMethod.GET)
-    public String stateFind(Map model) {
-
-        List<Address> addresses = addressDao.list();
-        model.put("addresses", addresses);
-
-        return "statefind";
-    }
-
-    @RequestMapping(value = "statefind", method = RequestMethod.POST)
-    public String stateFind(@RequestParam("state") String state, Map model) {
-
-        List<Address> addresses = addressDao.searchByState(state);
-        model.put("addresses", addresses);
-        return "statefind";
-    }
-
-    @RequestMapping(value = "/zipfind", method = RequestMethod.GET)
-    public String zipFind(Map model) {
-
-        List<Address> addresses = addressDao.list();
-        model.put("addresses", addresses);
-
-        return "zipfind";
-    }
-
-    @RequestMapping(value = "zipfind", method = RequestMethod.POST)
-    public String zipFind(@RequestParam("zip") String zip, Map model) {
-
-        List<Address> addresses = addressDao.searchByZip(zip);
-        model.put("addresses", addresses);
-        return "zipfind";
-    }
-
     @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
     public String show(@PathVariable("id") Integer addressId, Map model) {
 
@@ -142,5 +93,53 @@ public class AddressController {
         model.put("address", address);
         return "show";
 
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public String show(Map model) {
+
+        List<Address> addresses = addressDao.list();
+        model.put("addresses", addresses);
+        model.put("address", new Address());
+
+        return "search";
+
+    }
+
+    @RequestMapping(value = "search", method = RequestMethod.POST)
+    public String searchSubmit(@RequestParam("entry") String entry,
+            @RequestParam("selection") String selection, Map model) {
+
+        List<Address> address;
+
+        switch (selection) {
+
+            case "lastName":
+                address = addressDao.searchByLastName(entry);
+                model.put("addresses", address);
+                model.put("address", new Address());
+                return "search";
+
+            case "city":
+                address = addressDao.searchByCity(entry);
+                model.put("addresses", address);
+                model.put("address", new Address());
+                return "search";
+
+            case "state":
+                address = addressDao.searchByState(entry);
+                model.put("addresses", address);
+                model.put("address", new Address());
+                return "search";
+
+            case "zip":
+                address = addressDao.searchByZip(entry);
+                model.put("addresses", address);
+                model.put("address", new Address());
+                return "search";
+
+            default:
+                return "search";
+        }
     }
 }

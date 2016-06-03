@@ -23,10 +23,7 @@
             <div class="navbar">
                 <ul class="nav nav-tabs">
                     <li role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/address/namefind">Find by Last Name</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/address/cityfind">Find by City</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/address/statefind">Find by State</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/address/zipfind">Find by Zip</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/address/search/">Search</a></li>
                 </ul>    
             </div>
 
@@ -55,7 +52,7 @@
                             <td>Zip Code: ${address.zip}</td>
                         </tr>
                     </table>
-                            
+
                 </div>
 
 
