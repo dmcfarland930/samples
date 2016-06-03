@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -34,14 +35,14 @@
 
                 <div class="col-md-6">
 
-                    <h1>Product Info - ${product.productType}</h1>
+                    <h1>Product Info - ${productShow.productType}</h1>
                     <br/>
                     <table class="table table-striped"> 
                         <tr>
-                            <td>Cost Per Sq/Ft. ${product.costPerSqFt}</td>
+                            <td>Cost Per Sq/Ft. ${productShow.costPerSqFt}</td>
                         </tr>
                         <tr>
-                            <td>Labor Cost Per Sq/Ft. ${product.laborCostPerSqFt}</td>
+                            <td>Labor Cost Per Sq/Ft. ${productShow.laborCostPerSqFt}</td>
                         </tr>
 
                     </table>
@@ -50,35 +51,38 @@
 
                 <div class="col-md-6">
 
+                    
                     <h1>Edit Product</h1>
-                    <form method="POST" action="${pageContext.request.contextPath}/admin/editproduct/${product.productType}">
+                    <br/>
+                     <form:form commandName="product" method="POST" action="${pageContext.request.contextPath}/admin/editproduct/${productShow.productType}">
 
-                        <div class="form-group">
-                            <fieldset class="form-group">
-                                <label for="productType">Product Type</label>
-                                <input type="text" class="form-control" name="productType" placeholder="${product.productType}">
-                            </fieldset>
-                        </div>
-
-                        <div class="form-group">
-                            <fieldset class="form-group">
-                                <label for="costPerSqFt">Cost per Sq/Ft</label>
-                                <input type="text" class="form-control" name="costPerSqFt" placeholder="${product.costPerSqFt}">
-                            </fieldset>
-                        </div>
-
-                        <div class="form-group">
-                            <fieldset class="form-group">
-                                <label for="laborCostPerSqFt">Labor Cost per Sq/Ft</label>
-                                <input type="text" class="form-control" name="laborCostPerSqFt" placeholder="${product.laborCostPerSqFt}">
-                            </fieldset>
-                        </div>
+                        <fieldset class="form-group">
+                            <label class="col-md-4" for="productType">Product Type</label>
+                            <div class="col-md-8">
+                                <form:input path="productType" class="form-control" value="${product.productType}"></form:input>
+                                <form:errors path="productType"/>
+                            </div>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label class="col-md-4" for="costPerSqFt">Cost Per Sq/Ft</label>
+                            <div class="col-md-8">
+                                <form:input path="costPerSqFt" class="form-control" value="${product.costPerSqFt}"></form:input>
+                                <form:errors path="costPerSqFt"/>
+                            </div>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label class="col-md-4" for="laborCostPerSqFt">Labor Cost Per Sq/Ft</label>
+                            <div class="col-md-8">
+                                <form:input path="laborCostPerSqFt" class="form-control" value="${product.laborCostPerSqFt}"></form:input>
+                                <form:errors path="laborCostPerSqFt"/>
+                            </div>
+                        </fieldset>
 
                         <fieldset class="form-group">
                             <input class="btn bg-primary" type="submit"/>
                         </fieldset>
-                    </form>
-
+                    </form:form>
+                    
                 </div>
 
             </div>

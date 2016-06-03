@@ -33,7 +33,7 @@
                 <div class="col-md-6 col-md-offset-3">
 
                     <h1>Admin Login</h1>
-                    <form method="POST" action="../adminlogin" class="form-inline">
+                    <form method="POST" action="${pageContext.request.contextPath}/adminlogin" class="form-inline">
 
                         <fieldset class="form-group">
                             <label for="area">Enter Password: </label>

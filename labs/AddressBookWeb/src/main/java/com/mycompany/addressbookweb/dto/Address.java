@@ -18,7 +18,7 @@ public class Address {
     private String city;
     @NotEmpty(message = "You must supply a state")
     private String state;
-    @NotEmpty(message = "You must supply a zip")
+    @NotEmpty(message = "You must supply a zip code")
     private String zip;
 
     public Integer getId() {

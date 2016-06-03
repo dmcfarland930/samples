@@ -58,6 +58,8 @@
                     <h1>Enter Contact Info</h1>
                     </br>
                     <form:form commandName="address" method="POST" action="${pageContext.request.contextPath}/address/create">
+                        
+                        
                         <fieldset class="form-group">
                             <label class="col-md-3" for="firstName">First Name</label>
                             <div class="col-md-9">
@@ -65,6 +67,9 @@
                                 <form:errors path="firstName"/>
                             </div>
                         </fieldset>
+                            
+                            
+                            
                         <fieldset class="form-group">
                             <label class="col-md-3" for="lastName">Last Name</label>
                             <div class="col-md-9">

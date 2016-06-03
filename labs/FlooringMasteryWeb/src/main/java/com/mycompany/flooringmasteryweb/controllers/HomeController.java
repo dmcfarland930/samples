@@ -9,6 +9,7 @@ import com.mycompany.flooringmasteryweb.dao.ProductDao;
 import com.mycompany.flooringmasteryweb.dao.TaxesDao;
 import com.mycompany.flooringmasteryweb.data.FlooringData;
 import com.mycompany.flooringmasteryweb.dto.Order;
+import com.mycompany.flooringmasteryweb.dto.OrderCommand;
 import com.mycompany.flooringmasteryweb.dto.Product;
 import com.mycompany.flooringmasteryweb.dto.Taxes;
 import java.text.SimpleDateFormat;
@@ -59,6 +60,7 @@ public class HomeController {
         model.put("orders", orders);
         model.put("products", products);
         model.put("taxes", taxes);
+        model.put("orderCommand", new OrderCommand());
         return "home";
     }
 
@@ -73,10 +75,14 @@ public class HomeController {
 
         if (password.equals("DOGMEAT")) {
             return "redirect:admin/adminhome";
+        } else if (password.isEmpty()) {
+            String error = "Please enter a password.";
+            model.put("error", error);
+            return "adminlogin";
         } else {
             String error = "Incorrect Password!";
             model.put("error", error);
-            return "return adminlogin";
+            return "adminlogin";
         }
 
     }

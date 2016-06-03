@@ -32,7 +32,6 @@
 
             <div class="row">
                 <div class="col-md-6">
-
                     <h1>Products</h1>
                     <table class="table table-striped">    
                         <thead>

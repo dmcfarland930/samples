@@ -86,7 +86,7 @@ public class FlooringData {
                 out.println();
 
                 for (Order myOrder : orderList) {
-                    if (dateEntry.equals(myOrder.getOrderDate())) {
+                    if (dateEntry.equals(myOrder.getOrderDate().replace("/", ""))) {
                         out.print(myOrder.getOrderNumber());
                         out.print(TOKEN);
                         customerName = escapeComma(myOrder);
@@ -416,10 +416,12 @@ public class FlooringData {
     }
 
     public boolean isTestMode() {
+        testDecode();
         return testMode;
     }
 
     public boolean isCsv() {
+        testDecode();
         return csv;
     }
 

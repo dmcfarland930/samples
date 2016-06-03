@@ -4,14 +4,21 @@
  */
 package com.mycompany.flooringmasteryweb.dto;
 
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  *
  * @author apprentice
  */
 public class Product {
-    
+
+    @NotEmpty(message = "You cannot leave this field blank!")
     private String productType;
+    @DecimalMax("999999999999.0") @DecimalMin("0.0") 
     private double costPerSqFt;
+    @DecimalMax("999999999999.0") @DecimalMin("0.0") 
     private double laborCostPerSqFt;
 
     public String getProductType() {
@@ -37,8 +44,5 @@ public class Product {
     public void setLaborCostPerSqFt(double laborCostPerSqFt) {
         this.laborCostPerSqFt = laborCostPerSqFt;
     }
-    
-    
-    
-    
+
 }

@@ -4,7 +4,6 @@
  */
 package com.mycompany.flooringmasteryweb.dao;
 
-
 import com.mycompany.flooringmasteryweb.controllers.Viewer;
 import com.mycompany.flooringmasteryweb.data.FlooringData;
 import com.mycompany.flooringmasteryweb.dto.Order;
@@ -139,9 +138,21 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Order> getOrdersOnDate(String date) {
+
+        if(testMode == false){
+        try {
+            orderList = fd.orderDecode(date);
+        } catch (Exception ex) {
+
+            List<Order> myOrderList = new ArrayList<>();
+            return myOrderList;
+            
+        }
+        }
+        
         List<Order> myOrderList = new ArrayList<>();
         for (Order myOrder : orderList) {
-            String date2 = myOrder.getOrderDate();
+            String date2 = myOrder.getOrderDate().replace("/", "");
             if (date2.equals(date)) {
                 myOrderList.add(myOrder);
             }

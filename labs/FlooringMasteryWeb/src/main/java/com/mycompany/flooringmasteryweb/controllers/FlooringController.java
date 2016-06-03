@@ -9,6 +9,7 @@ import com.mycompany.flooringmasteryweb.dao.ProductDao;
 import com.mycompany.flooringmasteryweb.dao.TaxesDao;
 import com.mycompany.flooringmasteryweb.data.FlooringData;
 import com.mycompany.flooringmasteryweb.dto.Order;
+import com.mycompany.flooringmasteryweb.dto.OrderCommand;
 import com.mycompany.flooringmasteryweb.dto.Product;
 import com.mycompany.flooringmasteryweb.dto.Taxes;
 import java.text.SimpleDateFormat;
@@ -16,7 +17,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,24 +52,45 @@ public class FlooringController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@RequestParam("productType") String product, @RequestParam("state") String state,
-            @ModelAttribute Order order, Map model) {
+    public String create(@Valid @ModelAttribute OrderCommand orderCommand, BindingResult bindingResult,
+            @RequestParam("productType") String product, @RequestParam("state") String state,
+            Map model) {
 
-        order.setProductType(product);
-        order.setCostPerSqFt(productDao.getCostPerSqFt(order.getProductType()));
-        order.setMaterialCost(productDao.calculateTotalCostPerSqFt(order.getArea(), order.getProductType()));
-        order.setLaborCostPerSqFt(productDao.getLaborCostPerSqFt(order.getProductType()));
-        order.setTotalLaborCost(productDao.calculateTotalLaborCost(order.getArea(), order.getProductType()));
+        if (bindingResult.hasErrors()) {
+
+            Date date = new Date();
+            testMode = testRead();
+            String dateFormat = sdf.format(date);
+            String dateString = dateFormat.replace("/", "");
+            List<Order> orders = orderDao.getOrdersOnDate(dateString);
+            List<Product> products = productDao.getProductList();
+            List<Taxes> taxes = taxDao.getTaxesList();
+            model.put("test", showTest(testMode));
+            model.put("date", dateFormat);
+            model.put("orders", orders);
+            model.put("products", products);
+            model.put("taxes", taxes);
+            model.put("orderCommand", orderCommand);
+            return "home";
+        }
+
+        Order order = new Order();
+        order.setCustomerName(orderCommand.getCustomerName());
+        order.setState(orderCommand.getState());
+        order.setArea(orderCommand.getArea());
+        order.setProductType(orderCommand.getProductType());
+        order.setCostPerSqFt(productDao.getCostPerSqFt(orderCommand.getProductType()));
+        order.setMaterialCost(productDao.calculateTotalCostPerSqFt(orderCommand.getArea(), orderCommand.getProductType()));
+        order.setLaborCostPerSqFt(productDao.getLaborCostPerSqFt(orderCommand.getProductType()));
+        order.setTotalLaborCost(productDao.calculateTotalLaborCost(orderCommand.getArea(), orderCommand.getProductType()));
         order.setTaxRate(taxDao.calculateTaxRate(state));
         order.setTax(taxDao.calculateTaxTotal(order.getMaterialCost(), order.getTotalLaborCost(), order.getTaxRate()));
         order.setOrderTotal(orderDao.calculateOrderTotal(order.getTotalLaborCost(), order.getMaterialCost(), order.getTax()));
+        order.setOrderDate(sdf.format(orderCommand.getDate()));
 
-        String dateString = order.getOrderDate().replace("/", "");
-        order.setOrderDate(dateString);
-        orderDao.create(order, dateString);
+        orderDao.create(order, order.getOrderDate().replace("/", ""));
 
-        String date = insertDateFormat(order.getOrderDate());
-        model.put("date", date);
+        model.put("dateShow", order.getOrderDate());
         model.put("id", order.getOrderNumber());
         return "redirect:../order/show/{id}";
 
@@ -80,6 +104,7 @@ public class FlooringController {
         List<Product> products = productDao.getProductList();
         List<Taxes> taxes = taxDao.getTaxesList();
 
+        model.put("orderCommand", new OrderCommand());
         model.put("test", showTest(testMode));
         model.put("products", products);
         model.put("taxes", taxes);
@@ -90,8 +115,25 @@ public class FlooringController {
     }
 
     @RequestMapping(value = "edit/{id}", method = RequestMethod.POST)
-    public String editSubmit(@PathVariable("id") Integer orderId, @RequestParam("productType") String product, @RequestParam("state") String state, @ModelAttribute Order order, Map model) {
+    public String editSubmit(@Valid @ModelAttribute Order orderCommand, BindingResult bindingResult, @PathVariable("id") Integer orderId, @RequestParam("productType") String product, @RequestParam("state") String state, Map model) {
 
+        if (bindingResult.hasErrors()) {
+
+            Order order = orderDao.get(orderId);
+            String date = insertDateFormat(order.getOrderDate());
+            List<Product> products = productDao.getProductList();
+            List<Taxes> taxes = taxDao.getTaxesList();
+
+            model.put("orderCommand", orderCommand);
+            model.put("test", showTest(testMode));
+            model.put("products", products);
+            model.put("taxes", taxes);
+            model.put("date", date);
+            model.put("order", order);
+
+        }
+
+        Order order = new Order();
         order.setOrderNumber(orderId);
         order.setProductType(product);
         order.setCostPerSqFt(productDao.getCostPerSqFt(order.getProductType()));

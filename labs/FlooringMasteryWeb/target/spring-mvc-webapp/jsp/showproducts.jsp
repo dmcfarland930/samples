@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -59,65 +60,39 @@
                 <div class="col-md-6">
 
                     <h1>Add Another Product</h1>
-                    <form method="POST" action="${pageContext.request.contextPath}/admin/addproducts">
+                    <br />
 
-                        <div class="form-group">
-                            <fieldset class="form-group">
-                                <label for="productType">Product Type</label>
-                                <input type="text" class="form-control" name="productType" placeholder="Enter Product Type">
-                            </fieldset>
-                        </div>
+                    <form:form commandName="product" method="POST" action="${pageContext.request.contextPath}/admin/addproducts">
 
-                        <div class="form-group">
-                            <fieldset class="form-group">
-                                <label for="costPerSqFt">Cost per Sq/Ft</label>
-                                <input type="text" class="form-control" name="costPerSqFt" placeholder="Enter Cost per Sq/Ft Type">
-                            </fieldset>
-                        </div>
-
-                        <div class="form-group">
-                            <fieldset class="form-group">
-                                <label for="laborCostPerSqFt">Labor Cost per Sq/Ft</label>
-                                <input type="text" class="form-control" name="laborCostPerSqFt" placeholder="Enter Labor Cost per Sq/Ft Type">
-                            </fieldset>
-                        </div>
+                        <fieldset class="form-group">
+                            <label class="col-md-4" for="productType">Product Type</label>
+                            <div class="col-md-8">
+                                <form:input path="productType" class="form-control" placeholder="Enter Product Name"></form:input>
+                                <form:errors path="productType"/>
+                            </div>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label class="col-md-4" for="costPerSqFt">Cost Per Sq/Ft</label>
+                            <div class="col-md-8">
+                                <form:input path="costPerSqFt" class="form-control" placeholder="Enter Cost Per Sq/Ft"></form:input>
+                                <form:errors path="costPerSqFt"/>
+                            </div>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label class="col-md-4" for="laborCostPerSqFt">Labor Cost Per Sq/Ft</label>
+                            <div class="col-md-8">
+                                <form:input path="laborCostPerSqFt" class="form-control" placeholder="Enter Labor Cost Per Sq/Ft"></form:input>
+                                <form:errors path="laborCostPerSqFt"/>
+                            </div>
+                        </fieldset>
 
                         <fieldset class="form-group">
                             <input class="btn bg-primary" type="submit"/>
                         </fieldset>
-                    </form>
+                    </form:form>
 
                 </div>
 
-            </div>
-
-            <div class="row">
-
-                <div class="col-md-6">
-
-                    <h1>Products</h1>
-                    <table class="table table-striped">    
-                        <thead>
-                            <tr>
-                                <th>Product Name</th>
-                                <th>Cost per SqFt</th>   
-                                <th>Labor Cost per SqFt</th>
-                            </tr>
-                        </thead>
-                        <c:forEach items="${products}" var="product">
-                            <tr>
-                                <td><a href="../showproducts/${product.productType}">${product.productType}</td>
-                                <td fmt:formatNumber type="currency">$${product.costPerSqFt}</td>
-                                <td fmt:formatNumber type="currency">$${product.laborCostPerSqFt}</td>
-                                <td><a href="../editproduct/${product.productType}">Edit</a></td>
-                                <td><a href="../deleteproducts/${product.productType}">Delete</a></td>
-
-
-                            </tr>
-
-                        </c:forEach>
-                    </table>
-                </div>
             </div>
 
             <!-- Placed at the end of the document so the pages load faster -->

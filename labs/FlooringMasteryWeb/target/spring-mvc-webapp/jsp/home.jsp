@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -53,52 +54,69 @@
                     </table>
 
                 </div>
-                    <div class="col-md-6">
+                <div class="col-md-6">
 
-                        <h1>Add Order</h1>
-                        <form method="POST" action="order/create">
-                            <fieldset class="form-group">
-                                <label for="customerName">Name</label>
-                                <input type="text" class="form-control" name="customerName" placeholder="Enter company name">
-                            </fieldset>
-                            <div class="form-group">
-                                <label for="productSelect">Choose Product</label>
+                    <h1>Add Order</h1>
+                    <br/>
+                    <form:form commandName="orderCommand" method="POST" action="${pageContext.request.contextPath}/order/create">
+
+                        <fieldset class="form-group">
+                            <label class="col-md-4" for="customerName">Name on Order</label>
+                            <div class="col-md-8">
+                                <form:input path="customerName" class="form-control" placeholder="ex. Joe"></form:input>
+                                <form:errors path="customerName"/>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="form-group">
+                            <label class="col-md-4" for="productSelect">Choose Product</label>
+                            <div div class="col-md-8">
                                 <select class="form-control" name="productType" id="productSelect">
                                     <c:forEach items="${products}" var="productType">
                                         <option value="${productType.productType}">${productType.productType}</option>
                                     </c:forEach>
                                 </select>
                             </div>
+                        </fieldset>
 
-                            <div class="form-group">
-                                <label for="taxSelect">Choose State Tax</label>
+                        <fieldset class="form-group">
+                            <label class="col-md-4" for="taxSelect">Choose State Tax</label>
+                            <div div class="col-md-8">
                                 <select class="form-control" name="state" id="taxSelect">
                                     <c:forEach items="${taxes}" var="state">
                                         <option value="${state.state}">${state.state}</option>
                                     </c:forEach>
                                 </select>
                             </div>
-                            <fieldset class="form-group">
-                                <label for="area">Area</label>
-                                <input type="text" class="form-control" name="area" placeholder="Enter area in sq/ft">
-                            </fieldset>
-                            <fieldset class="form-group">
-                                <label for="date">Date</label>
-                                <input type="text" class="form-control" name="orderDate" placeholder="ex. 02/14/1993">
-                            </fieldset>
+                        </fieldset>
 
-                            <fieldset class="form-group">
+                        <fieldset class="form-group">
+                            <label class="col-md-4" for="area">Area</label>
+                            <div class="col-md-8">
+                                <form:input path="area" class="form-control" placeholder="Enter area in sq/ft"></form:input>
+                                <form:errors path="area"/>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="form-group">
+                            <label class="col-md-4" for="date">Date</label>
+                            <div class="col-md-8">
+                                <form:input path="date" class="form-control" value="${date}"></form:input>
+                                <form:errors path="date"/>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="form-group">
                             <input class="btn bg-primary" type="submit"/>
-                            </fieldset>
-                        </form>
+                        </fieldset>
+                    </form:form>
 
-                    </div>
                 </div>
- <!--(${tax.taxRate}%)-->
             </div>
-            <!-- Placed at the end of the document so the pages load faster -->
-            <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
-            <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+        </div>
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 
     </body>
 </html>

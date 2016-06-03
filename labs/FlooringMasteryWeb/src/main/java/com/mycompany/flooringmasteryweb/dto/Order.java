@@ -4,6 +4,8 @@
  */
 package com.mycompany.flooringmasteryweb.dto;
 
+import java.util.Date;
+
 /**
  *
  * @author apprentice
@@ -23,6 +25,7 @@ public class Order {
     private double tax;
     private double orderTotal;
     private String orderDate;
+    private Date date;
 
     public int getOrderNumber() {
         return orderNumber;
@@ -126,6 +129,14 @@ public class Order {
 
     public void setOrderDate(String orderDate) {
         this.orderDate = orderDate;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     

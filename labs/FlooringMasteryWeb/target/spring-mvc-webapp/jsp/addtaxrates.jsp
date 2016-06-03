@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -34,6 +35,7 @@
                 <div class="col-md-6">
 
                     <h1>Tax Rates</h1>
+                    <br />
                     <table class="table table-striped">    
                         <thead>
                             <tr>
@@ -41,12 +43,12 @@
                                 <th>Tax Rate</th>
                             </tr>
                         </thead>
-                        <c:forEach items="${taxes}" var="tax">
+                        <c:forEach items="${taxesList}" var="tax">
                             <tr>
-                                <td><a href="../showtaxes/${tax.state}">${tax.state}</td>
+                                <td><a href="${pageContext.request.contextPath}/admin/showtaxes/${tax.state}">${tax.state}</td>
                                 <td fmt:formatNumber type="percent">${tax.taxRate}%</td>
-                                <td><a href="../edittaxrate/${tax.state}">Edit</a></td>
-                                <td><a href="../deletetaxes/${tax.state}">Delete</a></td>
+                                <td><a href="${pageContext.request.contextPath}/admin/edittaxrate/${tax.state}">Edit</a></td>
+                                <td><a href="${pageContext.request.contextPath}/admin/deletetaxes/${tax.state}">Delete</a></td>
 
 
                             </tr>
@@ -58,26 +60,36 @@
                 <div class="col-md-6">
 
                     <h1>Add Tax Rate</h1>
-                    <form method="POST" action="${pageContext.request.contextPath}/admin/addtaxrates">
+                    <br />
+                    
+                    <form:form commandName="taxes" method="POST" action="${pageContext.request.contextPath}/admin/addtaxrates">
 
-                        <div class="form-group">
-                            <fieldset class="form-group">
-                                <label for="state">State</label>
-                                <input type="text" class="form-control" name="state" placeholder="Enter State Type">
-                            </fieldset>
-                        </div>
+                        <fieldset class="form-group">
+                            <label class="col-md-4" for="state">State</label>
+                            <div class="col-md-8">
+                                <form:input path="state" class="form-control" placeholder="Enter State"></form:input>
+                                <form:errors path="state"/>
+                            </div>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label class="col-md-4" for="taxRate">Tax Rate</label>
+                            <div class="col-md-8">
+                                <form:input path="taxRate" class="form-control" placeholder="Enter Tax Rate"></form:input>
+                                <form:errors path="taxRate"/>
+                            </div>
+                        </fieldset>
 
-                        <div class="form-group">
-                            <fieldset class="form-group">
-                                <label for="taxRate">Tax Rate</label>
-                                <input type="text" class="form-control" name="taxRate" placeholder="Enter Tax Rate">
-                            </fieldset>
-                        </div>
 
                         <fieldset class="form-group">
                             <input class="btn bg-primary" type="submit"/>
                         </fieldset>
-                    </form>
+                    </form:form>
+
+
+
+
+
+
 
                 </div>
             </div>

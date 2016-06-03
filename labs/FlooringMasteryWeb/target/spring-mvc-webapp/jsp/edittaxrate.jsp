@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -34,11 +35,11 @@
 
                 <div class="col-md-6">
 
-                    <h1>Tax Summary - ${tax.state}</h1>
+                    <h1>Tax Summary - ${taxesShow.state}</h1>
                     <br/>
                     <table class="table table-striped"> 
                         <tr>
-                            <td>Tax Rate ${tax.taxRate}</td>
+                            <td>Tax Rate ${taxesShow.taxRate}</td>
                     </table>
 
 
@@ -46,27 +47,34 @@
 
                 <div class="col-md-6">
 
-                    <h1>Add Tax Rate</h1>
-                    <form method="POST" action="../edittaxrate/${tax.state}">
 
-                        <div class="form-group">
-                            <fieldset class="form-group">
-                                <label for="state">State</label>
-                                <input type="text" class="form-control" name="state" placeholder="${tax.state}">
-                            </fieldset>
-                        </div>
 
-                        <div class="form-group">
-                            <fieldset class="form-group">
-                                <label for="taxRate">Tax Rate</label>
-                                <input type="text" class="form-control" name="taxRate" placeholder="${tax.taxRate}">
-                            </fieldset>
-                        </div>
+                    <h1>Edit Tax Rate</h1>
+                    <br />
+
+                    <form:form commandName="taxes" method="POST" action="${pageContext.request.contextPath}/admin/edittaxrate/${taxesShow.state}">
+
+                        <fieldset class="form-group">
+                            <label class="col-md-4" for="state">State</label>
+                            <div class="col-md-8">
+                                <form:input path="state" class="form-control" value="${taxes.state}"></form:input>
+                                <form:errors path="state"/>
+                            </div>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label class="col-md-4" for="taxRate">Tax Rate</label>
+                            <div class="col-md-8">
+                                <form:input path="taxRate" class="form-control" value="${taxes.taxRate}"></form:input>
+                                <form:errors path="taxRate"/>
+                            </div>
+                        </fieldset>
+
 
                         <fieldset class="form-group">
                             <input class="btn bg-primary" type="submit"/>
                         </fieldset>
-                    </form>
+                    </form:form>
+
 
                 </div>
 

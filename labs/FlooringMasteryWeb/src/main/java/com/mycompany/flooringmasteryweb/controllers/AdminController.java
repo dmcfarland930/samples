@@ -14,7 +14,9 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,21 +66,27 @@ public class AdminController {
         List<Product> products = productDao.getProductList();
         model.put("test", showTest(testMode));
         model.put("products", products);
+        model.put("product", new Product());
 
         return "/addproducts";
 
     }
 
     @RequestMapping(value = "/addproducts", method = RequestMethod.POST)
-    public String createSubmit(@ModelAttribute Product product, Map model) {
-
-        productDao.create(product);
+    public String createSubmit(@Valid @ModelAttribute Product product, BindingResult bindingResult, Map model) {
 
         testMode = testRead();
         List<Product> products = productDao.getProductList();
         model.put("test", showTest(testMode));
         model.put("products", products);
 
+        if (bindingResult.hasErrors()) {
+
+            model.put("product", product);
+            return "/addproducts";
+        }
+
+        productDao.create(product);
         model.put("id", product.getProductType());
         return "redirect:../admin/showproducts/{id}";
 
@@ -90,22 +98,29 @@ public class AdminController {
         testMode = testRead();
         List<Taxes> taxes = taxDao.getTaxesList();
         model.put("test", showTest(testMode));
-        model.put("taxes", taxes);
+        model.put("taxesList", taxes);
+        model.put("taxes", new Taxes());
 
         return "/addtaxrates";
 
     }
 
     @RequestMapping(value = "/addtaxrates", method = RequestMethod.POST)
-    public String createSubmit(@ModelAttribute Taxes tax, Map model) {
-
-        taxDao.create(tax);
+    public String createSubmit(@Valid @ModelAttribute Taxes tax, BindingResult bindingResult, Map model) {
 
         testMode = testRead();
         List<Taxes> taxes = taxDao.getTaxesList();
         model.put("test", showTest(testMode));
-        model.put("taxes", taxes);
+        model.put("taxesList", taxes);
 
+        if (bindingResult.hasErrors()) {
+
+            model.put("taxes", tax);
+            return "/addtaxrates";
+
+        }
+
+        taxDao.create(tax);
         model.put("id", tax.getState());
         return "redirect:../admin/showtaxes/{id}";
 
@@ -117,46 +132,60 @@ public class AdminController {
         Product product = productDao.get(productType);
 
         model.put("test", showTest(testMode));
+        model.put("productShow", product);
         model.put("product", product);
 
         return "/editproduct";
     }
-    
-        @RequestMapping(value = "/edittaxrate/{id}", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/edittaxrate/{id}", method = RequestMethod.GET)
     public String editTax(@PathVariable("id") String taxRate, Map model) {
 
-        Taxes tax = taxDao.get(taxRate);
+        Taxes taxes = taxDao.get(taxRate);
 
         model.put("test", showTest(testMode));
-        model.put("tax", tax);
+        model.put("taxesShow", taxes);
+        model.put("taxes", taxes);
 
         return "/edittaxrate";
     }
 
     @RequestMapping(value = "/editproduct/{id}", method = RequestMethod.POST)
-    public String editProductSubmit(@PathVariable("id") String productType, @ModelAttribute Product product, Map model) {
-
-        productDao.update(product, productType);
+    public String editProductSubmit(@Valid @ModelAttribute Product product, BindingResult bindingResult, @PathVariable("id") String productType, Map model) {
 
         testMode = testRead();
+        
+        if (bindingResult.hasErrors()) {
+            model.put("productShow", productDao.get(productType));
+            model.put("products", product);
+            return "/editproduct";
+
+        }
+
         List<Product> products = productDao.getProductList();
         model.put("test", showTest(testMode));
         model.put("products", products);
-        
+        productDao.update(product, productType);
         model.put("id", product.getProductType());
         return "redirect:../showproducts/{id}";
     }
 
-        @RequestMapping(value = "/edittaxrate/{id}", method = RequestMethod.POST)
-    public String editProductSubmit(@PathVariable("id") String tax, @ModelAttribute Taxes taxRate, Map model) {
-
-        taxDao.update(taxRate, tax);
+    @RequestMapping(value = "/edittaxrate/{id}", method = RequestMethod.POST)
+    public String editTaxSubmit(@Valid @ModelAttribute Taxes taxRate, BindingResult bindingResult, @PathVariable("id") String tax, Map model) {
 
         testMode = testRead();
+        
+        if (bindingResult.hasErrors()) {
+            model.put("taxesShow", taxDao.get(tax));
+            model.put("taxes", taxRate);
+            return "/edittaxrate";
+
+        }
+
         List<Taxes> taxes = taxDao.getTaxesList();
         model.put("test", showTest(testMode));
         model.put("taxes", taxes);
-        
+        taxDao.update(taxRate, tax);
         model.put("id", taxRate.getState());
         return "redirect:../showtaxes/{id}";
     }
@@ -183,10 +212,10 @@ public class AdminController {
     public String showProducts(@PathVariable("productType") String productType, Map model) {
 
         Product product = productDao.get(productType);
-        List<Product> products = productDao.getProductList();
+//        List<Product> products = productDao.getProductList();
         model.put("test", showTest(testMode));
         model.put("product", product);
-        model.put("products", products);
+//        model.put("products", products);
 
         return "showproducts";
 
@@ -196,10 +225,10 @@ public class AdminController {
     public String showTaxes(@PathVariable("state") String state, Map model) {
 
         Taxes tax = taxDao.get(state);
-        List<Taxes> taxes = taxDao.getTaxesList();
+//        List<Taxes> taxes = taxDao.getTaxesList();
         model.put("test", showTest(testMode));
-        model.put("tax", tax);
-        model.put("taxes", taxes);
+//        model.put("tax", tax);
+        model.put("taxes", tax);
 
         return "showtaxes";
 

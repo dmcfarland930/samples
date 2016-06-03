@@ -34,9 +34,10 @@
                 <div class="col-md-6 col-md-offset-3">
 
                     <h1>Order Summary #${order.orderNumber}</h1>
+                    <br/>
                     <table class="table table-striped"> 
                         <tr>
-                            <td>Date of Order: ${date}</td>
+                            <td>Date of Order: ${order.orderDate}</td>
                         </tr>
                         <tr>
                             <td>Customer Name: ${order.customerName}</td>
@@ -80,14 +81,10 @@
                     </table>
 
 
-                    <form method="get" action="${pageContext.request.contextPath}">
-                        <fieldset class="form-group">
-                            <button class="btn bg-primary" type="submit"/>Go Back</button>
-                        </fieldset>
-                    </form>
+                    <a href="${pageContext.request.contextPath}"> <button class="btn bg-primary" type="submit"/>Go Back</button></a>
                 </div>
-                        
-                        
+
+
 
 
             </div>
