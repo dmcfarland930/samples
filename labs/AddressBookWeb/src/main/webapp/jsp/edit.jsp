@@ -11,7 +11,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Contact List</title>
+        <title>Address Book</title>
         <!-- Bootstrap core CSS -->
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
 
@@ -24,7 +24,7 @@
     </head>
     <body>
         <div class="container">
-            <h1>Contact List</h1>
+            <h1>Address Book</h1>
             <hr/>
             <div class="navbar">
                 <ul class="nav nav-tabs">
@@ -67,7 +67,8 @@
                 <div class="col-md-6">
 
                     <h1>Edit Contact Info</h1>
-                    <form method="POST" action="address/create">
+                    <form method="POST" action="./">
+                        <input type="hidden" name="id" id="id" value="${address.id}"/>
                         <fieldset class="form-group">
                             <label for="firstName">First Name</label>
                             <input type="text" class="form-control" name="firstName" placeholder="${address.firstName}">

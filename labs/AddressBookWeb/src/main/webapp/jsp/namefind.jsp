@@ -24,7 +24,7 @@
     </head>
     <body>
         <div class="container">
-            <h1>Find Contact by Last Name</h1>
+            <h1>Find by Last Name</h1>
             <hr/>
             <div class="navbar">
                 <ul class="nav nav-tabs">
@@ -49,10 +49,10 @@
                         </thead>
                         <c:forEach items="${addresses}" var="address">
                             <tr>
-                                <td>${address.firstName}</td>
+                                <td><a href="../../address/show/${address.id}">${address.firstName}</td>
                                 <td>${address.lastName}</td>
-                                <td><a href="address/edit?id=${address.id}">Edit</a></td>
-                                <td><a href="address/delete?id=${address.id}">Delete</a></td>
+                                <td><a href="../../address/edit/${address.id}">Edit</a></td>
+                                <td><a href="../../address/delete/${address.id}">Delete</a></td>
 
                             </tr>
 
@@ -64,12 +64,12 @@
                 <div class="col-md-6">
 
                     <h1>Search</h1>
-                    <form method="POST" action="address/namefind">
+                    <form method="POST" action="${pageContext.request.contextPath}/address/namefind/">
                         <fieldset class="form-group">
                             <label for="lastName">Enter Last Name to Find Contact</label>
                             <input type="text" class="form-control" name="lastName" placeholder="${address.lastName}">
                         </fieldset>
-                        
+
                         <input type="submit"/>
                     </form>
                 </div>

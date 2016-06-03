@@ -62,10 +62,10 @@ public class TaxesDaoImpl implements TaxesDao {
     }
 
     @Override
-    public void update(Taxes taxes) {
+    public void update(Taxes taxes, String state) {
 
         for (Taxes myTaxes : taxesList) {
-            if (myTaxes.getState().equals(taxes.getState())) {
+            if (myTaxes.getState().equals(state)) {
                 taxesList.remove(myTaxes);
                 taxesList.add(taxes);
                 break;

@@ -11,7 +11,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Contact List</title>
+        <title>Address Book</title>
         <!-- Bootstrap core CSS -->
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
 
@@ -24,7 +24,7 @@
     </head>
     <body>
         <div class="container">
-            <h1>Contact List</h1>
+            <h1>Find by City</h1>
             <hr/>
             <div class="navbar">
                 <ul class="nav nav-tabs">
@@ -49,10 +49,10 @@
                         </thead>
                         <c:forEach items="${addresses}" var="address">
                             <tr>
-                                <td>${address.firstName}</td>
+                                <td><a href="../address/show/${address.id}">${address.firstName}</td>
                                 <td>${address.lastName}</td>
-                                <td><a href="address/edit?id=${address.id}">Edit</a></td>
-                                <td><a href="address/delete?id=${address.id}">Delete</a></td>
+                                <td><a href="../../address/edit/${address.id}">Edit</a></td>
+                                <td><a href="../../address/delete/${address.id}">Delete</a></td>
 
                             </tr>
 
@@ -64,12 +64,12 @@
                 <div class="col-md-6">
 
                     <h1>Search</h1>
-                    <form method="POST" action="address/cityfind">
+                    <form method="POST" action="${pageContext.request.contextPath}/address/cityfind/">
                         <fieldset class="form-group">
                             <label for="city">Enter City to Find Contact</label>
                             <input type="text" class="form-control" name="city" placeholder="${address.city}">
                         </fieldset>
-                        
+
                         <input type="submit"/>
                     </form>
                 </div>

@@ -18,24 +18,25 @@
     </head>
     <body>
         <div class="container">
-            <h1>Flooring Master</h1>
+            <h1>Flooring Master ${test}</h1>
             <hr/>
             <div class="navbar">
                 <div class="navbar">
                     <ul class="nav nav-tabs">
                         <li role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
-                        <li role="presentation"><a href="${pageContext.request.contextPath}/order/search/">Find Your Order</a></li>
+                        <li role="presentation"><a href="${pageContext.request.contextPath}/order/search/">Search Orders</a></li>
+                        <li  role="presentation"><a href="${pageContext.request.contextPath}/adminlogin/">Admin Login</a></li>
                     </ul>    
                 </div>
             </div>
             <div class="row">
 
-                <div class="col-md-6">
+                <div class="col-md-6 col-md-offset-3">
 
                     <h1>Order Summary #${order.orderNumber}</h1>
                     <table class="table table-striped"> 
                         <tr>
-                            <td>Date of Order: ${order.orderDate}</td>
+                            <td>Date of Order: ${date}</td>
                         </tr>
                         <tr>
                             <td>Customer Name: ${order.customerName}</td>
@@ -78,7 +79,15 @@
                         </tr>
                     </table>
 
+
+                    <form method="get" action="${pageContext.request.contextPath}">
+                        <fieldset class="form-group">
+                            <button class="btn bg-primary" type="submit"/>Go Back</button>
+                        </fieldset>
+                    </form>
                 </div>
+                        
+                        
 
 
             </div>

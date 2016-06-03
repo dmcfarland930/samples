@@ -36,6 +36,7 @@ public class FlooringController {
     private TaxesDao taxDao;
     private ProductDao productDao;
     private FlooringData floorData;
+    boolean testMode;
 
     @Inject
     public FlooringController(OrderDao oDao, TaxesDao tDao, ProductDao pDao, FlooringData fData) {
@@ -43,12 +44,13 @@ public class FlooringController {
         this.taxDao = tDao;
         this.productDao = pDao;
         this.floorData = fData;
+        this.testMode = testRead();
 
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(@RequestParam("productType") String product, @RequestParam("state") String state,
-            @ModelAttribute Order order) {
+            @ModelAttribute Order order, Map model) {
 
         order.setProductType(product);
         order.setCostPerSqFt(productDao.getCostPerSqFt(order.getProductType()));
@@ -64,8 +66,9 @@ public class FlooringController {
         orderDao.create(order, dateString);
 
         String date = insertDateFormat(order.getOrderDate());
-        order.setOrderDate(date);
-        return "show";
+        model.put("date", date);
+        model.put("id", order.getOrderNumber());
+        return "redirect:../order/show/{id}";
 
     }
 
@@ -77,6 +80,7 @@ public class FlooringController {
         List<Product> products = productDao.getProductList();
         List<Taxes> taxes = taxDao.getTaxesList();
 
+        model.put("test", showTest(testMode));
         model.put("products", products);
         model.put("taxes", taxes);
         model.put("date", date);
@@ -122,6 +126,7 @@ public class FlooringController {
         String dateString = sdf.format(date).replace("/", "");
 
         List<Order> orders = orderDao.getOrdersOnDate(dateString);
+        model.put("test", showTest(testMode));
         model.put("date", sdf.format(date));
         model.put("orders", orders);
 
@@ -135,6 +140,7 @@ public class FlooringController {
         String dateString = date.replace("/", "");
         List<Order> orders = orderDao.getOrdersOnDate(dateString);
 
+        model.put("test", showTest(testMode));
         model.put("date", date);
         model.put("orders", orders);
         return "search";
@@ -146,8 +152,9 @@ public class FlooringController {
 
         Order order = orderDao.get(id);
         String date = insertDateFormat(order.getOrderDate());
-        order.setOrderDate(date);
+        model.put("test", showTest(testMode));
         model.put("order", order);
+        model.put("date", date);
 
         return "show";
 
@@ -159,6 +166,22 @@ public class FlooringController {
         date = date.substring(0, 5) + "/" + date.substring(5, date.length());
 
         return date;
+    }
+
+    public boolean testRead() {
+
+        floorData.testDecode();
+        return testMode = floorData.isTestMode();
+
+    }
+
+    public String showTest(boolean testMode) {
+        String test = "";
+        if (testMode) {
+            test = "(TEST)";
+        }
+
+        return test;
     }
 
 }

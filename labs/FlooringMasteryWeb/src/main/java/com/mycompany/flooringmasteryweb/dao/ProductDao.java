@@ -32,7 +32,7 @@ public interface ProductDao {
 
     void setTestMode(boolean testMode);
 
-    void update(Product product);
+    void update(Product product, String productType);
 
     boolean validateProductType(String productType, boolean edit);
 

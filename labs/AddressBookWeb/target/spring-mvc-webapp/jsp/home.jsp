@@ -23,7 +23,7 @@
             <div class="navbar">
                 <ul class="nav nav-tabs">
                     <li class="active" role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/address/namefind">Find by Last Name</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/address/namefind/">Find by Last Name</a></li>
                     <li role="presentation"><a href="${pageContext.request.contextPath}/address/cityfind">Find by City</a></li>
                     <li role="presentation"><a href="${pageContext.request.contextPath}/address/statefind">Find by State</a></li>
                     <li role="presentation"><a href="${pageContext.request.contextPath}/address/zipfind">Find by Zip</a></li>
@@ -43,11 +43,10 @@
                         </thead>
                         <c:forEach items="${addresses}" var="address">
                             <tr>
-                                <td>${address.firstName}</td>
+                                <td><a href="address/show/${address.id}">${address.firstName}</td>
                                 <td>${address.lastName}</td>
-                                <td><a href="address/edit?id=${address.id}">Edit</a></td>
-                                <td><a href="address/delete?id=${address.id}">Delete</a></td>
-
+                                <td><a href="address/edit/${address.id}">Edit</a></td>
+                                <td><a href="address/delete/${address.id}">Delete</a></td>
                                 <!--create edit and delete in controller-->
 
                             </tr>
@@ -88,7 +87,7 @@
                             <label for="zip">Zip Code</label>
                             <input type="text" class="form-control" name="zip" placeholder="ex. 26000">
                         </fieldset>
-                        
+
                         <input type="submit"/>
                     </form>
 

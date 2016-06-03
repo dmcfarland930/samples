@@ -18,12 +18,13 @@
     </head>
     <body>
         <div class="container">
-            <h1>Flooring Master</h1>
+            <h1>Flooring Master ${test}</h1>
             <hr/>
             <div class="navbar">
                 <ul class="nav nav-tabs">
                     <li class="active" role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
                     <li role="presentation"><a href="${pageContext.request.contextPath}/order/search/">Search Orders</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/adminlogin/">Admin Login</a></li>
                 </ul>    
             </div>
 
@@ -40,10 +41,10 @@
                         </thead>
                         <c:forEach items="${orders}" var="order">
                             <tr>
-                                <td><a href="../show/${order.orderNumber}">${order.customerName}</td>
+                                <td><a href="order/show/${order.orderNumber}">${order.customerName}</td>
                                 <td>${order.orderNumber}</td>
-                                <td><a href="../edit/${order.orderNumber}">Edit</a></td>
-                                <td><a href="../delete/${order.orderNumber}">Delete</a></td>
+                                <td><a href="order/edit/${order.orderNumber}">Edit</a></td>
+                                <td><a href="order/delete/${order.orderNumber}">Delete</a></td>
 
 
                             </tr>
@@ -86,7 +87,9 @@
                                 <input type="text" class="form-control" name="orderDate" placeholder="ex. 02/14/1993">
                             </fieldset>
 
+                            <fieldset class="form-group">
                             <input class="btn bg-primary" type="submit"/>
+                            </fieldset>
                         </form>
 
                     </div>

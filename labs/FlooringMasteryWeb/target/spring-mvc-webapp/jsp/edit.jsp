@@ -24,12 +24,16 @@
     </head>
     <body>
         <div class="container">
-            <h1>Contact List</h1>
+            <h1>Flooring Master - Edit ${test}</h1>
             <hr/>
             <div class="navbar">
-                <ul class="nav nav-tabs">
-                    <li role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
-                </ul>    
+                <div class="navbar">
+                    <ul class="nav nav-tabs">
+                        <li role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
+                        <li role="presentation"><a href="${pageContext.request.contextPath}/order/search/">Search Orders</a></li>
+                        <li role="presentation"><a href="${pageContext.request.contextPath}/adminlogin/">Admin Login</a></li>
+                    </ul>    
+                </div>
             </div>
 
             <div class="row">
@@ -38,16 +42,15 @@
                     <h1>Current Order Details #${order.orderNumber}</h1>
                     <table class="table table-striped"> 
                         <tr>
-                            <td>Date of Order: ${order.orderDate}</td>
+                            <td>Date of Order: ${date}</td>
                         </tr>
                         <tr>
                             <td>Customer Name: ${order.customerName}</td>
                         </tr>
                         <tr>
-                            <td>State: ${order.state}</td>
-                        </tr>
-                        <tr>
                             <td>Product: ${order.productType}</td>
+                        <tr>
+                            <td>State: ${order.state}</td></tr>
                         </tr>
                         <tr>
                             <td>Area: ${order.area} sq/ft</td>
@@ -95,7 +98,7 @@
                             <label for="productSelect">Choose Product</label>
                             <select class="form-control" name="productType" id="productSelect">
                                 <c:forEach items="${products}" var="productType">
-                                    <option value="${productType.productType}">${productType.productType}</option>
+                                    <option value="${productType.productType}" ${productType.productType == order.productType ? 'selected' : ''}>${productType.productType}</option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -104,7 +107,7 @@
                             <label for="taxSelect">Choose State Tax</label>
                             <select class="form-control" name="state" id="taxSelect">
                                 <c:forEach items="${taxes}" var="state">
-                                    <option value="${state.state}">${state.state}</option>
+                                    <option value="${state.state}" ${state.state == order.state ? 'selected' : ''}>${state.state}</option>
                                 </c:forEach>
                             </select>
                         </div>

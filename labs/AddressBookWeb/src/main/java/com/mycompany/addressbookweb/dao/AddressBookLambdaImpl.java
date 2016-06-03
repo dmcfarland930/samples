@@ -62,6 +62,7 @@ public class AddressBookLambdaImpl implements AddressBookDao{
                 .stream()
                 .filter(a -> a.getId() == identifier)
                 .collect(Collectors.toList()).get(0);
+        
     }
 
     @Override

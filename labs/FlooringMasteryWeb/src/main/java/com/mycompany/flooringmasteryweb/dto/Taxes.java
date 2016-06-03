@@ -29,7 +29,7 @@ public class Taxes {
     public void setTaxRate(double taxRate) {
         this.taxRate = taxRate;
     }
-    
+
     
     
 }

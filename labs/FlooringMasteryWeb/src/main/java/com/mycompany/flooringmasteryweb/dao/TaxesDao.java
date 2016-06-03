@@ -28,7 +28,7 @@ public interface TaxesDao {
 
     void setTestMode(boolean testMode);
 
-    void update(Taxes taxes);
+    void update(Taxes taxes, String state);
 
     boolean validateState(String state, boolean edit);
     

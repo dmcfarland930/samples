@@ -24,12 +24,13 @@
     </head>
     <body>
         <div class="container">
-            <h1>Search</h1>
+            <h1>Flooring Master - Search ${test}</h1>
             <hr/>
             <div class="navbar">
                 <ul class="nav nav-tabs">
                     <li role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
-                    <li class="active"  role="presentation"><a href="${pageContext.request.contextPath}/order/search/">Find Your Orders</a></li>
+                    <li class="active"  role="presentation"><a href="${pageContext.request.contextPath}/order/search/">Search Orders</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/adminlogin/">Admin Login</a></li>
                 </ul>    
             </div>
 

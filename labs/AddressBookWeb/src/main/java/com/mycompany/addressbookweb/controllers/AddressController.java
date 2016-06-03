@@ -8,12 +8,13 @@ import com.mycompany.addressbookweb.dao.AddressBookDao;
 import com.mycompany.addressbookweb.dto.Address;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import javax.inject.Inject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -40,35 +41,27 @@ public class AddressController {
 
     }
 
-    @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String edit(@ModelAttribute Address address, Map model) {
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    public String edit(@PathVariable("id") Integer addressId, Map model) {
 
-        List<Address> addresses = addressDao.list();
-        Address editAddress = new Address();
-        for (Address myAddress : addresses) {
+        Address address = addressDao.get(addressId);
 
-            if (Objects.equals(address.getId(), myAddress.getId())) {
-                editAddress = myAddress;
-                break;
-            }
-
-        }
-
-        model.put("address", editAddress);
+        model.put("address", address);
 
         return "edit";
     }
 
-    @RequestMapping(value = "address/edit", method = RequestMethod.POST)
-    public String edit(@ModelAttribute Address address) {
+    @RequestMapping(value = "edit", method = RequestMethod.POST)
+    public String editSubmit(@ModelAttribute Address address) {
 
         addressDao.update(address);
         return "redirect:/";
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String delete(@ModelAttribute Address address) {
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+    public String delete(@PathVariable("id") Integer addressId) {
 
+        Address address = addressDao.get(addressId);
         addressDao.delete(address.getId());
         return "redirect:/";
     }
@@ -82,17 +75,15 @@ public class AddressController {
         return "namefind";
     }
 
-    @RequestMapping(value = "address/namefind", method = RequestMethod.POST)
-    public String nameFind(@ModelAttribute Address address, Map model) {
+    @RequestMapping(value = "namefind", method = RequestMethod.POST)
+    public String nameFindSubmit(@RequestParam("lastName") String lastName, Map model) {
 
-        List<Address> addresses = addressDao.searchByLastName(address.getLastName());
-        model.put("address.getLastName", address.getLastName());
+        List<Address> addresses = addressDao.searchByLastName(lastName);
         model.put("addresses", addresses);
-//        return "namefind?id=${address.getLastName}";
         return "namefind";
     }
-    
-        @RequestMapping(value = "/cityfind", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/cityfind", method = RequestMethod.GET)
     public String cityFind(Map model) {
 
         List<Address> addresses = addressDao.list();
@@ -101,17 +92,16 @@ public class AddressController {
         return "cityfind";
     }
 
-    @RequestMapping(value = "address/cityfind", method = RequestMethod.POST)
-    public String cityFind(@ModelAttribute Address address, Map model) {
+    @RequestMapping(value = "cityfind", method = RequestMethod.POST)
+    public String cityFindSubmit(@RequestParam("city") String city, Map model) {
 
-        List<Address> addresses = addressDao.searchByCity(address.getCity());
-        model.put("address.getCity", address.getCity());
+        List<Address> addresses = addressDao.searchByCity(city);
         model.put("addresses", addresses);
-//        return "cityfind?id=${address.getCity}";
+
         return "cityfind";
     }
 
-            @RequestMapping(value = "/statefind", method = RequestMethod.GET)
+    @RequestMapping(value = "/statefind", method = RequestMethod.GET)
     public String stateFind(Map model) {
 
         List<Address> addresses = addressDao.list();
@@ -120,17 +110,15 @@ public class AddressController {
         return "statefind";
     }
 
-    @RequestMapping(value = "address/statefind", method = RequestMethod.POST)
-    public String stateFind(@ModelAttribute Address address, Map model) {
+    @RequestMapping(value = "statefind", method = RequestMethod.POST)
+    public String stateFind(@RequestParam("state") String state, Map model) {
 
-        List<Address> addresses = addressDao.searchByState(address.getState());
-        model.put("address.getState", address.getState());
+        List<Address> addresses = addressDao.searchByState(state);
         model.put("addresses", addresses);
-//        return "statefind?id=${address.getstate}";
         return "statefind";
     }
-    
-            @RequestMapping(value = "/zipfind", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/zipfind", method = RequestMethod.GET)
     public String zipFind(Map model) {
 
         List<Address> addresses = addressDao.list();
@@ -139,14 +127,20 @@ public class AddressController {
         return "zipfind";
     }
 
-    @RequestMapping(value = "address/zipfind", method = RequestMethod.POST)
-    public String zipFind(@ModelAttribute Address address, Map model) {
+    @RequestMapping(value = "zipfind", method = RequestMethod.POST)
+    public String zipFind(@RequestParam("zip") String zip, Map model) {
 
-        List<Address> addresses = addressDao.searchByZip(address.getZip());
-        model.put("address.getZip", address.getZip());
+        List<Address> addresses = addressDao.searchByZip(zip);
         model.put("addresses", addresses);
-//        return "zipFind?id=${address.getZip}";
         return "zipfind";
     }
 
+    @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
+    public String show(@PathVariable("id") Integer addressId, Map model) {
+
+        Address address = addressDao.get(addressId);
+        model.put("address", address);
+        return "show";
+
+    }
 }

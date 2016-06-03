@@ -63,10 +63,10 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public void update(Product product) {
+    public void update(Product product, String productType) {
 
         for (Product myProduct : productList) {
-            if (myProduct.getProductType().equals(product.getProductType())) {
+            if (myProduct.getProductType().equals(productType)) {
                 productList.remove(myProduct);
                 productList.add(product);
                 break;

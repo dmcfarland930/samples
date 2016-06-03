@@ -4,7 +4,6 @@
  */
 package com.mycompany.flooringmasteryweb.data;
 
-
 import com.mycompany.flooringmasteryweb.dao.OrderDaoImpl;
 import com.mycompany.flooringmasteryweb.dao.ProductXmlDao;
 import com.mycompany.flooringmasteryweb.dao.TaxesDaoImpl;
@@ -35,6 +34,8 @@ import java.util.logging.Logger;
  */
 public class FlooringData {
 
+    DecimalFormat df = new DecimalFormat("#.##");
+    DecimalFormat dfMoney = new DecimalFormat("#.00");
     boolean testMode = false;
     boolean csv = false;
     int nextId = 1000;
@@ -74,7 +75,6 @@ public class FlooringData {
 
     public void orderEncode(String dateEntry, List<Order> orderList) {
         if (!testMode) {
-            DecimalFormat df = new DecimalFormat("0.00");
             final String TOKEN = ",";
             String customerName;
             PrintWriter out = null;
@@ -100,17 +100,17 @@ public class FlooringData {
                         out.print(TOKEN);
                         out.print(df.format(myOrder.getArea()));
                         out.print(TOKEN);
-                        out.print(df.format(myOrder.getCostPerSqFt()));
+                        out.print(dfMoney.format(myOrder.getCostPerSqFt()));
                         out.print(TOKEN);
-                        out.print(df.format(myOrder.getLaborCostPerSqFt()));
+                        out.print(dfMoney.format(myOrder.getLaborCostPerSqFt()));
                         out.print(TOKEN);
-                        out.print(df.format(myOrder.getMaterialCost()));
+                        out.print(dfMoney.format(myOrder.getMaterialCost()));
                         out.print(TOKEN);
-                        out.print(df.format(myOrder.getTotalLaborCost()));
+                        out.print(dfMoney.format(myOrder.getTotalLaborCost()));
                         out.print(TOKEN);
-                        out.print(df.format(myOrder.getTax()));
+                        out.print(dfMoney.format(myOrder.getTax()));
                         out.print(TOKEN);
-                        out.print(df.format(myOrder.getOrderTotal()));
+                        out.print(dfMoney.format(myOrder.getOrderTotal()));
                         out.println();
                     }
                 }
@@ -220,7 +220,7 @@ public class FlooringData {
 
                     out.print(myTaxes.getState());
                     out.print(TOKEN);
-                    out.print(myTaxes.getTaxRate());
+                    out.print(df.format(myTaxes.getTaxRate()));
                     out.println();
 
                 }
@@ -295,7 +295,7 @@ public class FlooringData {
                     out.print(TOKEN);
                     out.print(myProduct.getCostPerSqFt());
                     out.print(TOKEN);
-                    out.print(myProduct.getLaborCostPerSqFt());
+                    out.print(dfMoney.format(myProduct.getLaborCostPerSqFt()));
                     out.println();
 
                 }
