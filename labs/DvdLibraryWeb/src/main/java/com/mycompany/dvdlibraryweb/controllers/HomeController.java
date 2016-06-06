@@ -5,7 +5,6 @@
 package com.mycompany.dvdlibraryweb.controllers;
 
 import com.mycompany.dvdlibraryweb.dao.DvdDao;
-import com.mycompany.dvdlibraryweb.dao.NoteDao;
 import com.mycompany.dvdlibraryweb.dto.Dvd;
 import java.util.List;
 import java.util.Map;
@@ -32,16 +31,31 @@ public class HomeController {
     public String home(Map model) {
 
         List<Dvd> dvds = dvdDao.list();
+        
+        try{
+            
         Dvd oldest = dvdDao.findOldestMovie();
         Dvd newest = dvdDao.findNewestMovie();
         int years = dvdDao.findAverageAgeOfMovies();
-        int noteNum = dvdDao.findAverageAmountOfNotes();
-
-        model.put("dvds", dvds);
         model.put("oldest", oldest.getTitle());
         model.put("newest", newest.getTitle());
         model.put("years", years);
+        
+        int noteNum = dvdDao.findAverageAmountOfNotes();
         model.put("notenum", noteNum);
+        
+        }catch(Exception ex){
+            
+            
+        model.put("oldest", "You have no movies!");
+        model.put("newest", "You have no movies!");
+        model.put("years", "0");
+        model.put("notenum", "0");
+        
+            
+        }
+        
+        model.put("dvds", dvds);
         model.put("dvd", new Dvd());
         return "home";
     }

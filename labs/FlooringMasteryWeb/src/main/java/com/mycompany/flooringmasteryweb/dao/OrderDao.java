@@ -34,8 +34,6 @@ public interface OrderDao {
 
     void setDatesToOrders();
 
-    List decodeListToDisplay(String dateString);
-
     int setIdForDate(Order order, String date);
 
     void setTestMode(boolean testMode);

@@ -144,6 +144,7 @@ public class DvdDaoLambdaImpl implements DvdDao {
     @Override
     public List<Dvd> decode() {
 
+        int lastId = 0;
         Scanner sc = null;
         List<Dvd> dvds = new ArrayList();
 
@@ -159,9 +160,10 @@ public class DvdDaoLambdaImpl implements DvdDao {
                 SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
                 int id = Integer.parseInt(stringParts[0]);
-                if (id == nextId) {
-                    nextId++;
+                if (id > lastId) {
+                    lastId = id;
                 }
+                
                 myDvd.setId(id);
                 myDvd.setTitle(stringParts[1]);
                 myDvd.setDirector(stringParts[2]);
@@ -179,7 +181,7 @@ public class DvdDaoLambdaImpl implements DvdDao {
                 List<Notes> notesPerMovie = new ArrayList();
                 for (Notes note : notesList) {
 
-                    if (note.getId() == myDvd.getId()) {
+                    if (note.getDvdId() == myDvd.getId()) {
                         notesPerMovie.add(note);
                     }
 
@@ -196,6 +198,7 @@ public class DvdDaoLambdaImpl implements DvdDao {
             sc.close();
         }
 
+        this.nextId = (lastId + 1);
         return dvds;
     }
 

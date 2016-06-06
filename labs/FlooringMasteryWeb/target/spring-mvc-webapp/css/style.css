@@ -1,0 +1,115 @@
+.navbar{
+    font-family: Roboto Slab;
+}
+
+.navbar .navbar-nav {
+    display: inline-block;
+    float: none;
+    vertical-align: top;
+}
+
+.navbar .navbar-collapse {
+    text-align: center;
+}
+
+
+body{
+
+    max-width: 100%;
+    overflow-x: hidden;
+    height: 100%;
+    /*background-color: gray;*/    
+
+}
+
+a:hover{
+    font-weight: bold;
+}
+
+a:active{
+    text-decoration: none;   
+}
+
+h1{
+    font-family: Roboto Slab;
+    font-size: 22px;
+    text-align: center;
+    font-weight: bold;
+}
+
+h2{
+    font-family: Roboto Slab;
+    font-size: 18px;
+    text-align: center;
+}
+
+h3{
+    font-family: Roboto Slab;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: underline;
+    text-align: center;
+}
+
+
+#button{
+    font-family: Roboto Slab;
+    padding-right: 35px;
+}
+
+.button-size{
+    font-family: Roboto Slab;
+    width: 300px;
+}
+
+.form-control{
+    width: 300px;
+    margin: 0 auto;
+}
+
+#login{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#buttonLogin{
+    text-align: center;
+}
+
+#errorMessage, p{
+    color: red;
+    font-weight: bold;
+    text-align: center;
+
+}
+
+.formDiv{
+    font-family: Roboto Slab;
+    margin-top: 50px;
+    border-color: #DDDDDD;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 5px;
+}
+
+.order-form{
+    margin-bottom: 50px;
+}
+
+
+label{
+    padding-top: 5px;
+    text-align: right;
+}
+
+table{
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: #DDDDDD;
+    font-family: Roboto Slab;
+}
+
+.table td{
+    width: 500px;
+}

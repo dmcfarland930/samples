@@ -26,28 +26,29 @@ import java.util.stream.Collectors;
 public class NoteDao {
 
     List<Notes> noteList = new ArrayList();
-
+    private int nextId = 1000;
+    
     public NoteDao() {
         noteList = decode();
 
     }
 
-    public Notes create(Notes note, int id) {
+    public Notes create(Notes note) {
 
-        note.setId(id);
+        note.setNoteId(nextId);
         noteList.add(note);
-
+        nextId++;
         encode();
 
         return note;
 
     }
 
-    public Notes get(String title) {
+    public Notes get(int id) {
 
         return noteList
                 .stream()
-                .filter(a -> a.getTitle().equals(title))
+                .filter(a -> a.getNoteId() == id)
                 .collect(Collectors.toList()).get(0);
 
     }
@@ -66,12 +67,12 @@ public class NoteDao {
 
     }
 
-    public void delete(Dvd dvd) {
+    public void delete(Notes note) {
 
         List<Notes> modifiedNotesList = decode();
         noteList = modifiedNotesList
                 .stream()
-                .filter(a -> a.getTitle().equals(dvd.getTitle()))
+                .filter(a -> a.getNoteId() != note.getNoteId())
                 .collect(Collectors.toList());
 
         encode();
@@ -88,7 +89,9 @@ public class NoteDao {
             noteList
                     .stream()
                     .forEach((Notes myNotes) -> {
-                        out.print(myNotes.getId());
+                        out.print(myNotes.getNoteId());
+                        out.print(TOKEN);
+                        out.print(myNotes.getDvdId());
                         out.print(TOKEN);
                         out.print(myNotes.getTitle());
                         out.print(TOKEN);
@@ -108,6 +111,7 @@ public class NoteDao {
 
     public List decode() {
 
+        int lastId = 0;
         Scanner sc = null;
         List<Notes> notes = new ArrayList();
 
@@ -122,14 +126,20 @@ public class NoteDao {
                 Notes myNotes = new Notes();
 
                 int id = Integer.parseInt(stringParts[0]);
-                myNotes.setId(id);
-                myNotes.setTitle(stringParts[1]);
-                myNotes.setNote(stringParts[2]);
+                if (id > lastId) {
+                    lastId = id;
+                }
+                myNotes.setNoteId(id);
+                int dvdId = Integer.parseInt(stringParts[1]);
+                myNotes.setDvdId(dvdId);
+                myNotes.setTitle(stringParts[2]);
+                myNotes.setNote(stringParts[3]);
 
                 notes.add(myNotes);
 
             }
 
+        
         } catch (FileNotFoundException ex) {
             Logger.getLogger(NoteDao.class.getName()).log(Level.SEVERE, null, ex);
 
@@ -137,6 +147,8 @@ public class NoteDao {
             sc.close();
         }
 
+        
+        this.nextId = (lastId + 1);
         return notes;
     }
 
@@ -146,7 +158,7 @@ public class NoteDao {
         List<Notes> notesPerMovie = new ArrayList();
         for (Notes note : notesList) {
 
-            if (note.getId() == dvd.getId()) {
+            if (note.getDvdId() == dvd.getId()) {
                 notesPerMovie.add(note);
             }
 

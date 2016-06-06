@@ -16,6 +16,11 @@
         <!-- SWC Icon -->
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icon.png">
 
+        <!-- External Styling -->
+        <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+
+
     </head>
     <body>
         <div class="container">
@@ -24,8 +29,14 @@
             <div class="navbar">
                 <ul class="nav nav-tabs">
                     <li class="active" role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/order/search/">Search Orders</a></li>
                     <li role="presentation"><a href="${pageContext.request.contextPath}/adminlogin/">Admin Login</a></li>
+                    <form class="form-inline pull-right" method="POST" action="${pageContext.request.contextPath}/order/search/">
+
+                        <fieldset class="form-group">
+                            <input type="text" class="form-control" name="date" placeholder="Enter date to find order.">
+                        </fieldset>
+                        <button class="btn bg-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                    </form>
                 </ul>    
             </div>
 
@@ -38,38 +49,42 @@
                             <tr>
                                 <th>Order Name</th>
                                 <th>Order Number</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
                             </tr>
                         </thead>
                         <c:forEach items="${orders}" var="order">
                             <tr>
                                 <td><a href="order/show/${order.orderNumber}">${order.customerName}</td>
                                 <td>${order.orderNumber}</td>
-                                <td><a href="order/edit/${order.orderNumber}">Edit</a></td>
-                                <td><a href="order/delete/${order.orderNumber}">Delete</a></td>
+                                <td><a href="order/edit/${order.orderNumber}"><i class="glyphicon glyphicon-wrench"></i></a></td>
+                                <td><a href="order/delete/${order.orderNumber}"><i class="glyphicon glyphicon-trash"></i></a></td>
 
 
                             </tr>
 
                         </c:forEach>
                     </table>
-
+                    <h2>${noOrders}</h2>
                 </div>
-                <div class="col-md-6">
+
+
+                <div class="col-md-6 formDiv">
 
                     <h1>Add Order</h1>
                     <br/>
                     <form:form commandName="orderCommand" method="POST" action="${pageContext.request.contextPath}/order/create">
 
                         <fieldset class="form-group">
-                            <label class="col-md-4" for="customerName">Name on Order</label>
+                            <label class="col-md-4" for="customerName">Name on Order:</label>
                             <div class="col-md-8">
-                                <form:input path="customerName" class="form-control" placeholder="ex. Joe"></form:input>
+                                <form:input path="customerName" class="form-control" placeholder="Enter a name for this order."></form:input>
                                 <form:errors path="customerName"/>
                             </div>
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label class="col-md-4" for="productSelect">Choose Product</label>
+                            <label class="col-md-4" for="productSelect">Choose Product:</label>
                             <div div class="col-md-8">
                                 <select class="form-control" name="productType" id="productSelect">
                                     <c:forEach items="${products}" var="productType">
@@ -80,7 +95,7 @@
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label class="col-md-4" for="taxSelect">Choose State Tax</label>
+                            <label class="col-md-4" for="taxSelect">Choose State Tax:</label>
                             <div div class="col-md-8">
                                 <select class="form-control" name="state" id="taxSelect">
                                     <c:forEach items="${taxes}" var="state">
@@ -91,7 +106,7 @@
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label class="col-md-4" for="area">Area</label>
+                            <label class="col-md-4" for="area">Area:</label>
                             <div class="col-md-8">
                                 <form:input path="area" class="form-control" placeholder="Enter area in sq/ft"></form:input>
                                 <form:errors path="area"/>
@@ -99,16 +114,18 @@
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label class="col-md-4" for="date">Date</label>
+                            <label class="col-md-4" for="date">Date:</label>
                             <div class="col-md-8">
                                 <form:input path="date" class="form-control" value="${date}"></form:input>
                                 <form:errors path="date"/>
                             </div>
                         </fieldset>
 
-                        <fieldset class="form-group">
-                            <input class="btn bg-primary" type="submit"/>
-                        </fieldset>
+                        <div id="button">
+                            <fieldset class="form-group ">
+                                <input class="btn bg-primary pull-right button-size" type="submit" value="Submit Order"/>
+                            </fieldset>
+                        </div>
                     </form:form>
 
                 </div>

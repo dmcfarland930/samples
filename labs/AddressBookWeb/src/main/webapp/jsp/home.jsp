@@ -41,10 +41,10 @@
                         </thead>
                         <c:forEach items="${addresses}" var="address">
                             <tr>
-                                <td><a href="address/show/${address.id}">${address.firstName}</td>
+                                <td><a href="${pageContext.request.contextPath}/address/show/${address.id}">${address.firstName}</td>
                                 <td>${address.lastName}</td>
                                 <td><a href="${pageContext.request.contextPath}/address/edit/${address.id}">Edit</a></td>
-                                <td><a href="${pageContext.request.contextPath}/adress/delete/${address.id}">Delete</a></td>
+                                <td><a href="${pageContext.request.contextPath}/address/delete/${address.id}">Delete</a></td>
                                 <!--create edit and delete in controller-->
 
                             </tr>
@@ -112,7 +112,7 @@
                                 <form:errors path="zip"/>
                             </div>
                         </fieldset>
-                        <input class="btn btn-default" type="submit"/>
+                        <input  class="btn btn-default" type="submit"/>
                     </form:form>
 
                 </div>

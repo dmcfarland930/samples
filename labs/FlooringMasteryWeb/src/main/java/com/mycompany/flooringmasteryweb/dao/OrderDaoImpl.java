@@ -4,7 +4,6 @@
  */
 package com.mycompany.flooringmasteryweb.dao;
 
-import com.mycompany.flooringmasteryweb.controllers.Viewer;
 import com.mycompany.flooringmasteryweb.data.FlooringData;
 import com.mycompany.flooringmasteryweb.dto.Order;
 import java.io.File;
@@ -236,24 +235,6 @@ public class OrderDaoImpl implements OrderDao {
         return ordersWithDateEntry;
     }
 
-    @Override
-    public List decodeListToDisplay(String dateString) {
-        Viewer view = new Viewer();
 
-        if (testMode == true) {
-            orderList = getOrdersOnDate(dateString);
-        } else {
-            orderList = fd.orderDecode(dateString);
-        }
-
-        orderList
-                .stream()
-                .forEach((orderOnFile) -> {
-                    view.displayOrderSummary(orderOnFile);
-                });
-
-        return orderList;
-
-    }
 
 }

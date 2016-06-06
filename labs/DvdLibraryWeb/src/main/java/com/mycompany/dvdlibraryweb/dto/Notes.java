@@ -14,7 +14,8 @@ public class Notes {
 
     String title;
     String note;
-    int id;
+    int dvdId;
+    int noteId;
 
     public String getTitle() {
         return title;
@@ -32,12 +33,23 @@ public class Notes {
         this.note = note;
     }
 
-    public int getId() {
-        return id;
+    public int getDvdId() {
+        return dvdId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setDvdId(int dvdId) {
+        this.dvdId = dvdId;
     }
+
+    public int getNoteId() {
+        return noteId;
+    }
+
+    public void setNoteId(int noteId) {
+        this.noteId = noteId;
+    }
+    
+    
+    
 
 }

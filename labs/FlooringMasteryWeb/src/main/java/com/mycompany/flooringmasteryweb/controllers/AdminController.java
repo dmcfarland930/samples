@@ -4,7 +4,6 @@
  */
 package com.mycompany.flooringmasteryweb.controllers;
 
-import com.mycompany.flooringmasteryweb.dao.OrderDao;
 import com.mycompany.flooringmasteryweb.dao.ProductDao;
 import com.mycompany.flooringmasteryweb.dao.TaxesDao;
 import com.mycompany.flooringmasteryweb.data.FlooringData;
@@ -31,15 +30,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class AdminController {
 
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-    private OrderDao orderDao;
     private TaxesDao taxDao;
     private ProductDao productDao;
     private FlooringData floorData;
     boolean testMode;
 
     @Inject
-    public AdminController(OrderDao oDao, TaxesDao tDao, ProductDao pDao, FlooringData fData) {
-        this.orderDao = oDao;
+    public AdminController(TaxesDao tDao, ProductDao pDao, FlooringData fData) {
+
         this.taxDao = tDao;
         this.productDao = pDao;
         this.floorData = fData;
@@ -79,11 +77,16 @@ public class AdminController {
         List<Product> products = productDao.getProductList();
         model.put("test", showTest(testMode));
         model.put("products", products);
-
+        
+        String lower = product.getProductType().toLowerCase();
+        String capProductType = lower.substring(0, 1).toUpperCase() + lower.substring(1);
+        product.setProductType(capProductType);
+        
         if (bindingResult.hasErrors()) {
 
             model.put("product", product);
             return "/addproducts";
+
         }
 
         productDao.create(product);
@@ -112,6 +115,8 @@ public class AdminController {
         List<Taxes> taxes = taxDao.getTaxesList();
         model.put("test", showTest(testMode));
         model.put("taxesList", taxes);
+        String stateUpper = tax.getState().toUpperCase();
+        tax.setState(stateUpper);
 
         if (bindingResult.hasErrors()) {
 
@@ -154,7 +159,7 @@ public class AdminController {
     public String editProductSubmit(@Valid @ModelAttribute Product product, BindingResult bindingResult, @PathVariable("id") String productType, Map model) {
 
         testMode = testRead();
-        
+
         if (bindingResult.hasErrors()) {
             model.put("productShow", productDao.get(productType));
             model.put("products", product);
@@ -174,7 +179,7 @@ public class AdminController {
     public String editTaxSubmit(@Valid @ModelAttribute Taxes taxRate, BindingResult bindingResult, @PathVariable("id") String tax, Map model) {
 
         testMode = testRead();
-        
+
         if (bindingResult.hasErrors()) {
             model.put("taxesShow", taxDao.get(tax));
             model.put("taxes", taxRate);
@@ -205,7 +210,7 @@ public class AdminController {
         Taxes tax = taxDao.get(state);
 
         taxDao.delete(tax);
-        return "redirect:/";
+        return "redirect:/./admin/adminhome";
     }
 
     @RequestMapping(value = "/showproducts/{productType}", method = RequestMethod.GET)

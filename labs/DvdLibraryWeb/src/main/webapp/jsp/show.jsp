@@ -30,7 +30,7 @@
             </div>
             <div class="row">
                 
-                <div class="col-md-6">
+                <div class="col-md-6 col-offset-md-6">
 
                     <h1>${dvd.title}</h1>
                     <table class="table table-striped"> 
@@ -53,6 +53,7 @@
                         <c:forEach items="${notes}" var="notes">
                             <tr>
                                 <td>${notes.note}</td>
+                                <td><a href="${pageContext.request.contextPath}/dvd/deletenote/${notes.noteId}">Delete</a></td>
                             </tr>
 
                         </c:forEach>

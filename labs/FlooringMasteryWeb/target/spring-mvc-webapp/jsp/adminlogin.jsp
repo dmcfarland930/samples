@@ -15,41 +15,55 @@
         <!-- SWC Icon -->
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icon.png">
 
+        <!-- External Styling -->
+        <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+        
+
     </head>
     <body>
         <div class="container">
-            <h1>Flooring Master - Login ${test}</h1>
+            <h1>Flooring Master ${test}</h1>
             <hr/>
             <div class="navbar">
                 <ul class="nav nav-tabs">
                     <li role="presentation"><a href="${pageContext.request.contextPath}/">Home</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/order/search/">Search Orders</a></li>
                     <li class="active" role="presentation"><a href="${pageContext.request.contextPath}/adminlogin/">Admin Login</a></li>
+                    <form class="form-inline pull-right" method="POST" action="${pageContext.request.contextPath}/order/search/">
+
+                        <fieldset class="form-group">
+                            <input type="text" class="form-control" name="date" placeholder="Enter date to find order.">
+                        </fieldset>
+                        <button class="btn bg-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                    </form>
                 </ul>    
             </div>
 
             <div class="row">
-                <h1>${error}</h1>
                 <div class="col-md-6 col-md-offset-3">
-
                     <h1>Admin Login</h1>
-                    <form method="POST" action="${pageContext.request.contextPath}/adminlogin" class="form-inline">
 
-                        <fieldset class="form-group">
-                            <label for="area">Enter Password: </label>
-                            <input type="text" class="form-control" name="password">
-                        </fieldset>
+                    <div id="login" >
+                        <form method="POST" action="${pageContext.request.contextPath}/adminlogin">
 
-                        <input class="btn bg-primary" type="submit"/>
-                    </form>
 
+                            <fieldset class="form-group ${hasError}">
+                                <input type="text" class="form-control" name="password" placeholder="Password">
+                            </fieldset>
+                            <div id="buttonLogin">
+                                <input class="btn bg-primary button-size" type="submit" value="Log In"/>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="errorMessage">
+                        <p>${error}</p>
+                    </div>
                 </div>
             </div>
-<!--(${tax.taxRate}%)-->
-        </div>
-        <!-- Placed at the end of the document so the pages load faster -->
-        <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
-        <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+            <!-- Placed at the end of the document so the pages load faster -->
+            <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
+            <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 
     </body>
 </html>

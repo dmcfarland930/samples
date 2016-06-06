@@ -22,12 +22,13 @@ import java.util.stream.Collectors;
  *
  * @author apprentice
  */
-public class AddressBookLambdaImpl implements AddressBookDao{
+public class AddressBookLambdaImpl implements AddressBookDao {
 
     List<Address> addresses = new ArrayList();
     private int nextId = 1;
 
     public AddressBookLambdaImpl() {
+        
         addresses = decode();
 
     }
@@ -54,7 +55,7 @@ public class AddressBookLambdaImpl implements AddressBookDao{
 //                .collect(Collectors.toList()).get(0);
 //
 //    }
-
+    
     @Override
     public Address get(Integer identifier) {
 
@@ -62,7 +63,7 @@ public class AddressBookLambdaImpl implements AddressBookDao{
                 .stream()
                 .filter(a -> a.getId() == identifier)
                 .collect(Collectors.toList()).get(0);
-        
+
     }
 
     @Override
@@ -119,13 +120,10 @@ public class AddressBookLambdaImpl implements AddressBookDao{
                         out.print(myAddress.getState());
                         out.print(TOKEN);
                         out.print(myAddress.getZip());
-//                        out.print(TOKEN);
-//                        out.print(myAddress.getCountry());
-//                        out.print(TOKEN);
-//                        out.print(myAddress.getSecAdd());
                         out.println();
                     }
                     );
+            
             out.flush();
             out.close();
 
@@ -138,6 +136,7 @@ public class AddressBookLambdaImpl implements AddressBookDao{
 
     public List decode() {
 
+        int lastId = 0;
         Scanner sc = null;
         List<Address> addressList = new ArrayList();
 
@@ -152,8 +151,8 @@ public class AddressBookLambdaImpl implements AddressBookDao{
                 Address myAddress = new Address();
 
                 int id = Integer.parseInt(stringParts[0]);
-                if (id == nextId) {
-                    nextId++;
+                if (id > lastId) {
+                    lastId = id;
                 }
                 myAddress.setId(id);
                 myAddress.setFirstName(stringParts[1]);
@@ -163,13 +162,13 @@ public class AddressBookLambdaImpl implements AddressBookDao{
                 myAddress.setCity(stringParts[5]);
                 myAddress.setState(stringParts[6]);
                 myAddress.setZip(stringParts[7]);
-//                myAddress.setCountry(stringParts[7]);
-//                myAddress.setSecAdd(stringParts[8]);
 
                 addressList.add(myAddress);
 
             }
 
+            this.nextId = (lastId + 1);
+            
         } catch (FileNotFoundException ex) {
             Logger.getLogger(AddressBookLambdaImpl.class.getName()).log(Level.SEVERE, null, ex);
 
@@ -191,7 +190,7 @@ public class AddressBookLambdaImpl implements AddressBookDao{
     }
 
     @Override
-    public List<Address>  searchByCity(String city) {
+    public List<Address> searchByCity(String city) {
         return addresses
                 .stream()
                 .filter(a -> a.getCity().equalsIgnoreCase(city))
@@ -199,7 +198,7 @@ public class AddressBookLambdaImpl implements AddressBookDao{
     }
 
     @Override
-    public List<Address>  searchByState(String state) {
+    public List<Address> searchByState(String state) {
 
         return addresses
                 .stream()
@@ -209,7 +208,7 @@ public class AddressBookLambdaImpl implements AddressBookDao{
     }
 
     @Override
-    public List<Address>  searchByZip(String zip) {
+    public List<Address> searchByZip(String zip) {
         return addresses
                 .stream()
                 .filter(a -> a.getZip().equalsIgnoreCase(zip))

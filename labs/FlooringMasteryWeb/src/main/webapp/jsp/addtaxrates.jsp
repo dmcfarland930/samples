@@ -16,6 +16,10 @@
         <!-- SWC Icon -->
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icon.png">
 
+        <!-- External Styling --> 
+        <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+
     </head>
     <body>
         <div class="container">
@@ -26,7 +30,8 @@
                     <li role="presentation"><a href="${pageContext.request.contextPath}/admin/adminhome">Home</a></li>
                     <li role="presentation"><a href="${pageContext.request.contextPath}/admin/addproducts/">Add Products</a></li>
                     <li class="active"  role="presentation"><a href="${pageContext.request.contextPath}/admin/addtaxrates/">Add Tax Rate</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}">Return to Flooring Master</a></li>
+                    <a href="${pageContext.request.contextPath}"> <button class="btn bg-primary col-md-2 pull-right" type="submit"/>Return to Flooring Master</button></a>
+
 
                 </ul>    
             </div>
@@ -41,14 +46,16 @@
                             <tr>
                                 <th>State</th>
                                 <th>Tax Rate</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
                             </tr>
                         </thead>
                         <c:forEach items="${taxesList}" var="tax">
                             <tr>
                                 <td><a href="${pageContext.request.contextPath}/admin/showtaxes/${tax.state}">${tax.state}</td>
                                 <td fmt:formatNumber type="percent">${tax.taxRate}%</td>
-                                <td><a href="${pageContext.request.contextPath}/admin/edittaxrate/${tax.state}">Edit</a></td>
-                                <td><a href="${pageContext.request.contextPath}/admin/deletetaxes/${tax.state}">Delete</a></td>
+                                <td><a href="${pageContext.request.contextPath}/admin/edittaxrate/${tax.state}"><i class="glyphicon glyphicon-wrench"></i></a></td>
+                                <td><a href="${pageContext.request.contextPath}/admin/deletetaxes/${tax.state}"><i class="glyphicon glyphicon-trash"></i></a></td>
 
 
                             </tr>
@@ -57,32 +64,33 @@
                     </table>
 
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 formDiv">
 
                     <h1>Add Tax Rate</h1>
                     <br />
-                    
+
                     <form:form commandName="taxes" method="POST" action="${pageContext.request.contextPath}/admin/addtaxrates">
 
                         <fieldset class="form-group">
-                            <label class="col-md-4" for="state">State</label>
+                            <label class="col-md-4" for="state">State:</label>
                             <div class="col-md-8">
                                 <form:input path="state" class="form-control" placeholder="Enter State"></form:input>
                                 <form:errors path="state"/>
                             </div>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label class="col-md-4" for="taxRate">Tax Rate</label>
+                            <label class="col-md-4" for="taxRate">Tax Rate:</label>
                             <div class="col-md-8">
                                 <form:input path="taxRate" class="form-control" placeholder="Enter Tax Rate"></form:input>
                                 <form:errors path="taxRate"/>
                             </div>
                         </fieldset>
 
-
-                        <fieldset class="form-group">
-                            <input class="btn bg-primary" type="submit"/>
-                        </fieldset>
+                        <div id="button">
+                            <fieldset class="form-group">
+                                <input class="btn bg-primary button-size pull-right" value="Add Tax Rate" type="submit"/>
+                            </fieldset>
+                        </div>
                     </form:form>
 
 

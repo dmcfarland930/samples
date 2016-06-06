@@ -16,6 +16,10 @@
         <!-- SWC Icon -->
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icon.png">
 
+        <!-- External Styling --> 
+        <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+
     </head>
     <body>
         <div class="container">
@@ -25,8 +29,9 @@
                 <ul class="nav nav-tabs">
                     <li role="presentation"><a href="${pageContext.request.contextPath}/admin/adminhome">Home</a></li>
                     <li class="active" role="presentation"><a href="${pageContext.request.contextPath}/admin/addproducts/">Add Products</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/admin/addtaxrates/">Add Tax Rate</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}">Return to Flooring Master</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/admin/addtaxrates/">Add Tax Rate</a></li>  
+                    <a href="${pageContext.request.contextPath}"> <button class="btn bg-primary col-md-2 pull-right" type="submit"/>Return to Flooring Master</button></a>
+
 
                 </ul>    
             </div>
@@ -40,8 +45,10 @@
                         <thead>
                             <tr>
                                 <th>Product Name</th>
-                                <th>Cost per SqFt</th>   
-                                <th>Labor Cost per SqFt</th>
+                                <th>Cost/SqFt</th>   
+                                <th>Labor Cost/SqFt</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
                             </tr>
                         </thead>
                         <c:forEach items="${products}" var="product">
@@ -49,8 +56,8 @@
                                 <td><a href="${pageContext.request.contextPath}/admin/showproducts/${product.productType}">${product.productType}</td>
                                 <td fmt:formatNumber type="currency">$${product.costPerSqFt}</td>
                                 <td fmt:formatNumber type="currency">$${product.laborCostPerSqFt}</td>
-                                <td><a href="${pageContext.request.contextPath}/admin/editproduct/${product.productType}">Edit</a></td>
-                                <td><a href="${pageContext.request.contextPath}/admin/deleteproducts/${product.productType}">Delete</a></td>
+                                <td><a href="${pageContext.request.contextPath}/admin/editproduct/${product.productType}"><i class="glyphicon glyphicon-wrench"></i></a></td>
+                                <td><a href="${pageContext.request.contextPath}/admin/deleteproducts/${product.productType}"><i class="glyphicon glyphicon-trash"></i></a></td>
 
 
                             </tr>
@@ -59,10 +66,7 @@
                     </table>
 
                 </div>
-                <div class="col-md-6">
-
-
-
+                <div class="col-md-6 formDiv">
 
                     <h1>Add Product</h1>
                     <br />
@@ -70,30 +74,32 @@
                     <form:form commandName="product" method="POST" action="${pageContext.request.contextPath}/admin/addproducts">
 
                         <fieldset class="form-group">
-                            <label class="col-md-4" for="productType">Product Type</label>
+                            <label class="col-md-4" for="productType">Product Type:</label>
                             <div class="col-md-8">
                                 <form:input path="productType" class="form-control" placeholder="Enter Product Name"></form:input>
                                 <form:errors path="productType"/>
                             </div>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label class="col-md-4" for="costPerSqFt">Cost Per Sq/Ft</label>
+                            <label class="col-md-4" for="costPerSqFt">Cost Per Sq/Ft:</label>
                             <div class="col-md-8">
                                 <form:input path="costPerSqFt" class="form-control" placeholder="Enter Cost Per Sq/Ft"></form:input>
                                 <form:errors path="costPerSqFt"/>
                             </div>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label class="col-md-4" for="laborCostPerSqFt">Labor Cost Per Sq/Ft</label>
+                            <label class="col-md-4" for="laborCostPerSqFt">Labor Cost Per Sq/Ft:</label>
                             <div class="col-md-8">
                                 <form:input path="laborCostPerSqFt" class="form-control" placeholder="Enter Labor Cost Per Sq/Ft"></form:input>
                                 <form:errors path="laborCostPerSqFt"/>
                             </div>
                         </fieldset>
 
-                        <fieldset class="form-group">
-                            <input class="btn bg-primary" type="submit"/>
-                        </fieldset>
+                        <div id="button">
+                            <fieldset class="form-group">
+                                <input class="btn bg-primary button-size pull-right" value="Add Product" type="submit"/>
+                            </fieldset>
+                        </div>
                     </form:form>
 
 

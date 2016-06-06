@@ -126,6 +126,7 @@ public class FlooringData {
 
     public List orderDecode(String dateEntry) {
 
+        int lastId = 999;
         Scanner sc = null;
         String customerName;
         int i;
@@ -150,8 +151,8 @@ public class FlooringData {
                 String[] stringParts = currentLine.split(",");
                 int id = Integer.parseInt(stringParts[0]);
 
-                if (id == nextId) {
-                    nextId++;
+                if (id > lastId) {
+                    lastId = id;
                 }
 
                 myOrder.setOrderNumber(id);
@@ -203,6 +204,7 @@ public class FlooringData {
             sc.close();
         }
 
+        this.nextId = (lastId + 1);
         return orders;
     }
 

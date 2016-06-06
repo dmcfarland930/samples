@@ -15,6 +15,11 @@
         <!-- SWC Icon -->
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icon.png">
 
+        <!-- External Styling --> 
+        <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" /> 
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+
+
     </head>
     <body>
         <div class="container">
@@ -25,20 +30,23 @@
                     <li class="active" role="presentation"><a href="${pageContext.request.contextPath}/admin/adminhome">Home</a></li>
                     <li role="presentation"><a href="${pageContext.request.contextPath}/admin/addproducts/">Add Products</a></li>
                     <li role="presentation"><a href="${pageContext.request.contextPath}/admin/addtaxrates/">Add Tax Rate</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}">Return to Flooring Master</a></li>
+                    <a href="${pageContext.request.contextPath}"> <button class="btn bg-primary col-md-2 pull-right" type="submit"/>Return to Flooring Master</button></a>
+
 
                 </ul>    
             </div>
-
             <div class="row">
                 <div class="col-md-6">
                     <h1>Products</h1>
+                    <br/>
                     <table class="table table-striped">    
                         <thead>
                             <tr>
                                 <th>Product Name</th>
-                                <th>Cost per SqFt</th>   
-                                <th>Labor Cost per SqFt</th>
+                                <th>Cost/SqFt</th>   
+                                <th>Labor Cost/SqFt</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
                             </tr>
                         </thead>
                         <c:forEach items="${products}" var="product">
@@ -46,8 +54,8 @@
                                 <td><a href="../admin/showproducts/${product.productType}">${product.productType}</td>
                                 <td fmt:formatNumber type="currency">$${product.costPerSqFt}</td>
                                 <td fmt:formatNumber type="currency">$${product.laborCostPerSqFt}</td>
-                                <td><a href="../admin/editproduct/${product.productType}">Edit</a></td>
-                                <td><a href="../admin/deleteproducts/${product.productType}">Delete</a></td>
+                                <td><a href="../admin/editproduct/${product.productType}"><i class="glyphicon glyphicon-wrench"></i></a></td>
+                                <td><a href="../admin/deleteproducts/${product.productType}"><i class="glyphicon glyphicon-trash"></i></a></td>
 
 
                             </tr>
@@ -59,19 +67,22 @@
                 <div class="col-md-6">
 
                     <h1>Tax Rates</h1>
+                    <br/>
                     <table class="table table-striped">    
                         <thead>
                             <tr>
                                 <th>State</th>
                                 <th>Tax Rate</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
                             </tr>
                         </thead>
                         <c:forEach items="${taxes}" var="tax">
                             <tr>
                                 <td><a href="../admin/showtaxes/${tax.state}">${tax.state}</td>
                                 <td fmt:formatNumber type="percent">${tax.taxRate}%</td>
-                                <td><a href="../admin/edittaxrate/${tax.state}">Edit</a></td>
-                                <td><a href="../admin/deletetaxes/${tax.state}">Delete</a></td>
+                                <td><a href="../admin/edittaxrate/${tax.state}"><i class="glyphicon glyphicon-wrench"></i></a></td>
+                                <td><a href="../admin/deletetaxes/${tax.state}"><i class="glyphicon glyphicon-trash"></i></a></td>
 
 
                             </tr>

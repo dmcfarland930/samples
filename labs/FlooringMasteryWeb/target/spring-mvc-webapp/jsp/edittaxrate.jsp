@@ -16,6 +16,9 @@
         <!-- SWC Icon -->
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icon.png">
 
+        <!-- External Styling --> 
+        <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
+
     </head>
     <body>
         <div class="container">
@@ -26,7 +29,8 @@
                     <li role="presentation"><a href="${pageContext.request.contextPath}/admin/adminhome">Home</a></li>
                     <li role="presentation"><a href="${pageContext.request.contextPath}/admin/addproducts/">Add Products</a></li>
                     <li role="presentation"><a href="${pageContext.request.contextPath}/admin/addtaxrates/">Add Tax Rate</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}">Return to Flooring Master</a></li>
+                    <a href="${pageContext.request.contextPath}"> <button class="btn bg-primary col-md-2 pull-right" type="submit"/>Return to Flooring Master</button></a>
+
 
                 </ul>    
             </div>
@@ -39,13 +43,13 @@
                     <br/>
                     <table class="table table-striped"> 
                         <tr>
-                            <td>Tax Rate ${taxesShow.taxRate}</td>
+                            <td>Tax Rate: ${taxesShow.taxRate}%</td>
                     </table>
 
 
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6 formDiv">
 
 
 
@@ -55,24 +59,25 @@
                     <form:form commandName="taxes" method="POST" action="${pageContext.request.contextPath}/admin/edittaxrate/${taxesShow.state}">
 
                         <fieldset class="form-group">
-                            <label class="col-md-4" for="state">State</label>
+                            <label class="col-md-4" for="state">State:</label>
                             <div class="col-md-8">
                                 <form:input path="state" class="form-control" value="${taxes.state}"></form:input>
                                 <form:errors path="state"/>
                             </div>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label class="col-md-4" for="taxRate">Tax Rate</label>
+                            <label class="col-md-4" for="taxRate">Tax Rate:</label>
                             <div class="col-md-8">
                                 <form:input path="taxRate" class="form-control" value="${taxes.taxRate}"></form:input>
                                 <form:errors path="taxRate"/>
                             </div>
                         </fieldset>
 
-
-                        <fieldset class="form-group">
-                            <input class="btn bg-primary" type="submit"/>
-                        </fieldset>
+                        <div id="button">
+                            <fieldset class="form-group">
+                                <input class="btn bg-primary pull-right button-size" value="Edit Tax Rate" type="submit"/>
+                            </fieldset>
+                        </div>
                     </form:form>
 
 

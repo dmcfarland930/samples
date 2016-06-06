@@ -49,7 +49,7 @@ public class HomeController {
     public String home(Map model) {
 
         Date date = new Date();
-        testMode = testRead();
+        testMode = readTest();
         String dateFormat = sdf.format(date);
         String dateString = dateFormat.replace("/", "");
         List<Order> orders = orderDao.getOrdersOnDate(dateString);
@@ -57,7 +57,13 @@ public class HomeController {
         List<Taxes> taxes = taxDao.getTaxesList();
         model.put("test", showTest(testMode));
         model.put("date", dateFormat);
-        model.put("orders", orders);
+
+        if (orders.isEmpty()) {
+            model.put("noOrders", "No orders were found for this date!");
+        } else {
+            model.put("orders", orders);
+        }
+
         model.put("products", products);
         model.put("taxes", taxes);
         model.put("orderCommand", new OrderCommand());
@@ -77,17 +83,19 @@ public class HomeController {
             return "redirect:admin/adminhome";
         } else if (password.isEmpty()) {
             String error = "Please enter a password.";
+            model.put("hasError", "has-error");
             model.put("error", error);
             return "adminlogin";
         } else {
             String error = "Incorrect Password!";
+            model.put("hasError", "has-error");
             model.put("error", error);
             return "adminlogin";
         }
 
     }
 
-    public boolean testRead() {
+    public boolean readTest() {
 
         floorData.testDecode();
         return testMode = floorData.isTestMode();

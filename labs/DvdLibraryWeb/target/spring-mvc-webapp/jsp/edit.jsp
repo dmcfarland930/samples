@@ -58,6 +58,7 @@
                         <c:forEach items="${notes}" var="notes">
                             <tr>
                                 <td>${notes.note}</td>
+                                <td><a href="${pageContext.request.contextPath}/dvd/deletenote/${notes.noteId}">Delete</a></td>
                             </tr>
 
                         </c:forEach>
@@ -69,9 +70,9 @@
                     <h1>Edit Dvd Info</h1>
                     <br/>
                     <form:form method="POST" commandName="dvd" action="${pageContext.request.contextPath}/dvd/edit/${dvdShow.id}">
-                        
-                        
-                        
+
+
+
                         <fieldset class="form-group">
                             <label class="col-md-3" for="title">Title</label>
                             <div class="col-md-9">
@@ -79,7 +80,7 @@
                                 <form:errors path="title"/>
                             </div>
                         </fieldset>
-                                                        
+
                         <fieldset class="form-group">
                             <label class="col-md-3" for="director">Director</label>
                             <div class="col-md-9">
@@ -109,7 +110,7 @@
                             </div>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label class="col-md-3" for="notes">Notes</label>
+                            <label class="col-md-3" for="notes">Add Notes</label>
                             <div class="col-md-9">
                                 <textarea class="form-control" name="notes" rows="5" placeholder="Enter notes here"></textarea>
                             </div>

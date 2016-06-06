@@ -23,7 +23,7 @@ public class OrderCommand {
     private String state;
     private double taxRate;
     private String productType;
-    @DecimalMax("999999999999.0") @DecimalMin("0.0") 
+    @DecimalMax("999999999999.0") @DecimalMin("1.0") 
     private double area;
     private double costPerSqFt;
     private double laborCostPerSqFt;

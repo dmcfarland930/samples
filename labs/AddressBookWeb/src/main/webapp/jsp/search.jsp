@@ -45,9 +45,10 @@
                                 <th>Last Name</th>
                             </tr>
                         </thead>
+                        
                         <c:forEach items="${addresses}" var="address">
                             <tr>
-                                <td><a href="address/show/${address.id}">${address.firstName}</td>
+                                <td><a href="${pageContext.request.contextPath}/address/show/${address.id}">${address.firstName}</td>
                                 <td>${address.lastName}</td>
                                 <td><a href="${pageContext.request.contextPath}/address/edit/${address.id}">Edit</a></td>
                                 <td><a href="${pageContext.request.contextPath}/address/delete/${address.id}">Delete</a></td>

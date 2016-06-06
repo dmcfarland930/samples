@@ -12,6 +12,7 @@ import com.mycompany.flooringmasteryweb.dto.Order;
 import com.mycompany.flooringmasteryweb.dto.OrderCommand;
 import com.mycompany.flooringmasteryweb.dto.Product;
 import com.mycompany.flooringmasteryweb.dto.Taxes;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -135,19 +136,28 @@ public class FlooringController {
 
         Order order = new Order();
         order.setOrderNumber(orderId);
-        order.setProductType(product);
-        order.setCostPerSqFt(productDao.getCostPerSqFt(order.getProductType()));
-        order.setMaterialCost(productDao.calculateTotalCostPerSqFt(order.getArea(), order.getProductType()));
-        order.setLaborCostPerSqFt(productDao.getLaborCostPerSqFt(order.getProductType()));
-        order.setTotalLaborCost(productDao.calculateTotalLaborCost(order.getArea(), order.getProductType()));
+        order.setCustomerName(orderCommand.getCustomerName());
+        order.setState(orderCommand.getState());
+        order.setArea(orderCommand.getArea());
+        order.setProductType(orderCommand.getProductType());
+        order.setCostPerSqFt(productDao.getCostPerSqFt(orderCommand.getProductType()));
+        order.setMaterialCost(productDao.calculateTotalCostPerSqFt(orderCommand.getArea(), orderCommand.getProductType()));
+        order.setLaborCostPerSqFt(productDao.getLaborCostPerSqFt(orderCommand.getProductType()));
+        order.setTotalLaborCost(productDao.calculateTotalLaborCost(orderCommand.getArea(), orderCommand.getProductType()));
         order.setTaxRate(taxDao.calculateTaxRate(state));
         order.setTax(taxDao.calculateTaxTotal(order.getMaterialCost(), order.getTotalLaborCost(), order.getTaxRate()));
         order.setOrderTotal(orderDao.calculateOrderTotal(order.getTotalLaborCost(), order.getMaterialCost(), order.getTax()));
+        order.setOrderDate(sdf.format(orderCommand.getDate()));
 
+        model.put("dateShow", order.getOrderDate());
+        
         String dateString = order.getOrderDate().replace("/", "");
         order.setOrderDate(dateString);
         orderDao.update(order, dateString, false);
-        return "redirect:/";
+        
+        
+        model.put("id", order.getOrderNumber());
+        return "redirect:../show/{id}";
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
@@ -170,7 +180,11 @@ public class FlooringController {
         List<Order> orders = orderDao.getOrdersOnDate(dateString);
         model.put("test", showTest(testMode));
         model.put("date", sdf.format(date));
-        model.put("orders", orders);
+        if (orders.isEmpty()) {
+            model.put("noOrders", "No orders were found for this date!");
+        } else {
+            model.put("orders", orders);
+        }
 
         return "search";
 
@@ -184,16 +198,20 @@ public class FlooringController {
 
         model.put("test", showTest(testMode));
         model.put("date", date);
-        model.put("orders", orders);
+        if (orders.isEmpty()) {
+            model.put("noOrders", "No orders were found for this date!");
+        } else {
+            model.put("orders", orders);
+        }
         return "search";
 
     }
 
     @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
-    public String show(@PathVariable("id") Integer id, Map model) {
+    public String show(@PathVariable("id") Integer id, Map model) throws ParseException {
 
         Order order = orderDao.get(id);
-        String date = insertDateFormat(order.getOrderDate());
+        String date = insertDateFormat(order.getOrderDate().replace("/", ""));
         model.put("test", showTest(testMode));
         model.put("order", order);
         model.put("date", date);

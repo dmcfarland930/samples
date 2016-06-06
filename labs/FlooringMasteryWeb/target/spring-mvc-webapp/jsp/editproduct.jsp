@@ -16,6 +16,9 @@
         <!-- SWC Icon -->
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icon.png">
 
+        <!-- External Styling --> 
+        <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
+
     </head>
     <body>
         <div class="container">
@@ -26,7 +29,8 @@
                     <li role="presentation"><a href="${pageContext.request.contextPath}/admin/adminhome">Home</a></li>
                     <li role="presentation"><a href="${pageContext.request.contextPath}/admin/addproducts/">Add Products</a></li>
                     <li role="presentation"><a href="${pageContext.request.contextPath}/admin/addtaxrates/">Add Tax Rate</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}">Return to Flooring Master</a></li>
+                    <a href="${pageContext.request.contextPath}"> <button class="btn bg-primary col-md-2 pull-right" type="submit"/>Return to Flooring Master</button></a>
+
 
                 </ul>    
             </div>
@@ -39,50 +43,52 @@
                     <br/>
                     <table class="table table-striped"> 
                         <tr>
-                            <td>Cost Per Sq/Ft. ${productShow.costPerSqFt}</td>
+                            <td>Cost Per Sq/Ft.: $${productShow.costPerSqFt}</td>
                         </tr>
                         <tr>
-                            <td>Labor Cost Per Sq/Ft. ${productShow.laborCostPerSqFt}</td>
+                            <td>Labor Cost Per Sq/Ft.: $${productShow.laborCostPerSqFt}</td>
                         </tr>
 
                     </table>
 
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6 formDiv">
 
-                    
+
                     <h1>Edit Product</h1>
                     <br/>
-                     <form:form commandName="product" method="POST" action="${pageContext.request.contextPath}/admin/editproduct/${productShow.productType}">
+                    <form:form commandName="product" method="POST" action="${pageContext.request.contextPath}/admin/editproduct/${productShow.productType}">
 
                         <fieldset class="form-group">
-                            <label class="col-md-4" for="productType">Product Type</label>
+                            <label class="col-md-4" for="productType">Product Type:</label>
                             <div class="col-md-8">
                                 <form:input path="productType" class="form-control" value="${product.productType}"></form:input>
                                 <form:errors path="productType"/>
                             </div>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label class="col-md-4" for="costPerSqFt">Cost Per Sq/Ft</label>
+                            <label class="col-md-4" for="costPerSqFt">Cost Per Sq/Ft:</label>
                             <div class="col-md-8">
                                 <form:input path="costPerSqFt" class="form-control" value="${product.costPerSqFt}"></form:input>
                                 <form:errors path="costPerSqFt"/>
                             </div>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label class="col-md-4" for="laborCostPerSqFt">Labor Cost Per Sq/Ft</label>
+                            <label class="col-md-4" for="laborCostPerSqFt">Labor Cost Per Sq/Ft:</label>
                             <div class="col-md-8">
                                 <form:input path="laborCostPerSqFt" class="form-control" value="${product.laborCostPerSqFt}"></form:input>
                                 <form:errors path="laborCostPerSqFt"/>
                             </div>
                         </fieldset>
 
-                        <fieldset class="form-group">
-                            <input class="btn bg-primary" type="submit"/>
-                        </fieldset>
+                        <div id="button">
+                            <fieldset class="form-group">
+                                <input class="btn bg-primary button-size pull-right" value="Edit Product" type="submit"/>
+                            </fieldset>
+                        </div>
                     </form:form>
-                    
+
                 </div>
 
             </div>

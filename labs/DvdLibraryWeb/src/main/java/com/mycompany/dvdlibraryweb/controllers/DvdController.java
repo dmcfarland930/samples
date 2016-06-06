@@ -41,7 +41,8 @@ public class DvdController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute Dvd dvd, BindingResult bindingResult, Map model) {
+    public String create(@Valid @ModelAttribute Dvd dvd, BindingResult bindingResult, 
+            @RequestParam("dvdDate") Date date, Map model) {
 
         if (bindingResult.hasErrors()) {
 
@@ -60,13 +61,14 @@ public class DvdController {
 
         }
 
-        Date date = new Date();
-
+        
+        dvdDao.create(dvd, date);
         Notes newNote = new Notes();
         newNote.setTitle(dvd.getTitle());
+        newNote.setDvdId(dvd.getId());
         newNote.setNote(dvd.getNotes());
-        noteDao.create(newNote, dvd.getId());
-        dvdDao.create(dvd, date);
+        noteDao.create(newNote);
+        noteDao.setNotesToDvd(dvd);
         return "redirect:/";
 
     }
@@ -76,7 +78,7 @@ public class DvdController {
 
         Dvd dvd = dvdDao.get(dvdId);
         List<Notes> notes = dvd.getNoteList();
-        
+
         model.put("date", dvd.getDate());
         model.put("notes", notes);
         model.put("dvdShow", dvd);
@@ -104,7 +106,8 @@ public class DvdController {
         Notes newNote = new Notes();
         newNote.setTitle(dvd.getTitle());
         newNote.setNote(notes);
-        noteDao.create(newNote, dvd.getId());
+        newNote.setDvdId(dvdId);
+        noteDao.create(newNote);
         noteDao.setNotesToDvd(dvd);
 
         dvdDao.update(dvd);
@@ -117,6 +120,20 @@ public class DvdController {
         Dvd dvd = dvdDao.get(dvdId);
         dvdDao.delete(dvd);
         return "redirect:/";
+    }
+
+    @RequestMapping(value = "/deletenote/{id}", method = RequestMethod.GET)
+    public String deleteNote(@PathVariable("id") Integer noteId, Map model) {
+
+        Notes note = noteDao.get(noteId);
+        Dvd dvd = dvdDao.get(note.getDvdId());
+        int dvdId = note.getDvdId();
+        noteDao.delete(note);
+        noteDao.setNotesToDvd(dvd);
+        
+        model.put("dvdId", dvdId);
+        model.put("notes", dvd.getNoteList());
+        return "redirect:/dvd/show/{dvdId}";
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)

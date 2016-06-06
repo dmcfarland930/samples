@@ -28,7 +28,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 col-offset-md-3">
 
 
                     <table class="table table-striped"> 
@@ -52,6 +52,7 @@
                             <td>Zip Code: ${address.zip}</td>
                         </tr>
                     </table>
+                    <a href="${pageContext.request.contextPath}"> <button class="btn bg-primary" type="submit"/>Go Back</button></a>
 
                 </div>
 

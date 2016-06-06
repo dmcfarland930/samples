@@ -23,7 +23,7 @@
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icon.png">
 
     </head>
-    <body>
+    <body> 
         <div class="container">
             <h1>Address Book</h1>
             <hr/>

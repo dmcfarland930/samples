@@ -53,9 +53,9 @@
                         </c:forEach>
                     </table>
 
-                    <p>Your oldest movie is ${oldest}</p>
-                    <p>Your newest movie is ${newest}</p>
-                    <p>The average age of your movies is ${years} years old</p>
+                    <p>Your Oldest Movie: ${oldest}</p>
+                    <p>Your Newest Movie: ${newest}</p>
+                    <p>Average Age of Your Movies: ${years} years old</p>
                     <p>Your movies have an average of ${notenum} notes</p>
 
                 </div>
