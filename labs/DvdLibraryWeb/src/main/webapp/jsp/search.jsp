@@ -45,11 +45,11 @@
                             </tr>
                         </thead>
                         <c:forEach items="${dvds}" var="dvd">
-                            <tr>
-                                <td><a href="../show/${dvd.id}">${dvd.title}</td>
+                            <tr id="dvd-row-${dvd.id}">
+                                <td><a data-dvd-id="${dvd.id}" data-toggle="modal" data-target="#showDvdModal">${dvd.title}</td>
                                 <td>${dvd.director}</td>
-                                <td><a href="../edit/${dvd.id}">Edit</a></td>
-                                <td><a href="../delete/${dvd.id}">Delete</a></td>
+                                <td><a data-dvd-id="${dvd.id}" data-toggle="modal" data-target="#editDvdModal">Edit</a></td>
+                                <td><a data-dvd-id="${dvd.id}" class="delete-link">Delete</a></td>
 
                                 <!--create edit and delete in controller-->
 
@@ -86,9 +86,19 @@
             </div>
 
         </div>
+                    
+                    
+        <%@include file="showModal.jsp"%> 
+        <%@include file="editModal.jsp"%>  
+        
+        
         <!-- Placed at the end of the document so the pages load faster -->
+        <script>
+            var contextRoot = '${pageContext.request.contextPath}/';
+        </script>
         <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/app.js"></script>
 
     </body>
 </html>

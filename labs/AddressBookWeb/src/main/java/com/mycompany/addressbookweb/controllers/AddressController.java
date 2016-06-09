@@ -14,9 +14,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
@@ -35,19 +37,11 @@ public class AddressController {
 
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute Address address, BindingResult bindingResult, Map model) {
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @ResponseBody
+    public Address create(@RequestBody Address address) {
 
-        if (bindingResult.hasErrors()) {
-
-            List<Address> addresses = addressDao.list();
-            model.put("addresses", addresses);
-            return "home";
-
-        }
-
-        addressDao.create(address);
-        return "redirect:/";
+        return addressDao.create(address);
 
     }
 
@@ -63,35 +57,30 @@ public class AddressController {
         return "edit";
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public String editSubmit(@Valid @ModelAttribute Address address, BindingResult bindingResult, @PathVariable("id") Integer addressId, Map model) {
+    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    @ResponseBody
+    public Address edit(@RequestBody Address address) {
 
-        if (bindingResult.hasErrors()) {
-            Address addressShow = addressDao.get(addressId);
-            model.put("addressShow", addressShow);
-            model.put("addresses", address);
-            return "edit";
-
-        }
 
         addressDao.update(address);
-        return "redirect:/";
+        return address;
+        
     }
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public String delete(@PathVariable("id") Integer addressId) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void delete(@PathVariable("id") Integer addressId) {
 
         Address address = addressDao.get(addressId);
         addressDao.delete(address.getId());
-        return "redirect:/";
     }
 
-    @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
-    public String show(@PathVariable("id") Integer addressId, Map model) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Address show(@PathVariable("id") Integer addressId) {
 
         Address address = addressDao.get(addressId);
-        model.put("address", address);
-        return "show";
+        return address;
 
     }
 

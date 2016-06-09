@@ -35,11 +35,5 @@
         <constructor-arg ref="floorData"/>
     </bean>
     
-    
-<!--    <bean id="flooringAdminControl" class="com.mycompany.controller.FlooringAdminControl">
-        <constructor-arg ref="productDao"/>       
-        <constructor-arg ref="taxesDao"/> 
-    </bean>-->
-        
-    
+       
 </beans>

@@ -34,7 +34,8 @@ public class HomeController {
         List<Contact> contacts = contactDao.list();
         
         model.put("contacts", contacts);
-
+        model.put("contact", new Contact());
+        
         return "home";
     }
 

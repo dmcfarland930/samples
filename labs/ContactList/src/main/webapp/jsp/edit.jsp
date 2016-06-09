@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%-- 
     Document   : edit
     Created on : May 31, 2016, 6:55:31 PM
@@ -37,22 +38,22 @@
 
                     <h1>Your Current Info</h1>
                     <table class="table table-striped"> 
-                            <tr>
-                                <td>First Name: ${contact.firstName}</td>
-                            </tr>
+                        <tr>
+                            <td>First Name: ${contact.firstName}</td>
+                        </tr>
 
-                            <tr>
-                                <td>Last Name: ${contact.lastName}</td>
-                            </tr>
-                            <tr>
-                                <td>Company: ${contact.company}</td>
-                            </tr>
-                            <tr>
-                                <td>Contact: ${contact.email}</td>
-                            </tr>
-                            <tr>
-                                <td>Phone: ${contact.phone}</td>
-                            </tr>
+                        <tr>
+                            <td>Last Name: ${contact.lastName}</td>
+                        </tr>
+                        <tr>
+                            <td>Company: ${contact.company}</td>
+                        </tr>
+                        <tr>
+                            <td>Contact: ${contact.email}</td>
+                        </tr>
+                        <tr>
+                            <td>Phone: ${contact.phone}</td>
+                        </tr>
                     </table>
 
                 </div>
@@ -60,30 +61,59 @@
                 <div class="col-md-6">
 
                     <h1>Edit Contact Info</h1>
-                    <form method="POST" action="contact/edit">
+                    <form:form commandName="cotact" method="POST" action="./">
                         <fieldset class="form-group">
-                            <label for="firstName">First Name</label>
-                            <input type="text" class="form-control" name="firstName" placeholder="${contact.firstName}">
+                            <label class="col-md-3" for="firstName">First Name</label>
+                            <div class="col-md-9">
+                                <form:input path="firstName" class="form-control" placeholder="${address.firstName}"></form:input>
+                                <form:errors path="firstName"/>
+                            </div>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="lastName">Last Name</label>
-                            <input type="text" class="form-control" name="lastName" placeholder="${contact.lastName}">
+                            <label  class="col-md-3" for="lastName">Last Name</label>
+                            <div class="col-md-9">
+                                <form:input path="lastName" class="form-control" placeholder="${address.lastName}"></form:input>
+                                <form:errors path="lastName"/>
+                            </div>                           
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="company">Company</label>
-                            <input type="text" class="form-control" name="company" placeholder="${contact.company}">
+                            <label  class="col-md-3" for="streetNumber">Street Number</label>
+                            <div class="col-md-9">
+                                <form:input path="streetNumber" class="form-control" placeholder="${address.streetNumber}"></form:input>
+                                <form:errors path="streetNumber"/>
+                            </div>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="email">Email</label>
-                            <input type="text" class="form-control" name="email" placeholder="${contact.email}">
+                            <label  class="col-md-3" for="streetName">Street Name</label>
+                            <div class="col-md-9">
+                                <form:input path="streetName" class="form-control" placeholder="${address.streetName}"></form:input>
+                                <form:errors path="streetName"/>
+                            </div>
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="phone">Phone</label>
-                            <input type="text" class="form-control" name="phone" placeholder="${contact.phone}">
+                            <label  class="col-md-3" for="city">City</label>
+                            <div class="col-md-9">
+                                <form:input path="city" class="form-control" placeholder="${address.city}"></form:input>
+                                <form:errors path="city"/>
+                            </div>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label  class="col-md-3" for="state">State</label>
+                            <div class="col-md-9">
+                                <form:input path="state" class="form-control" placeholder="${address.state}"></form:input>
+                                <form:errors path="state"/>
+                            </div>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <div  class="col-md-3" class="col-md-9">                            
+                                <label for="zip">Zip Code</label>
+                                <form:input path="zip" class="form-control" placeholder="${address.zip}"></form:input>
+                                <form:errors path="zip"/>
+                            </div>
                         </fieldset>
 
                         <input type="submit"/>
-                    </form>
+                    </form:form>
                 </div>
             </div>
 

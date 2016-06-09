@@ -28,7 +28,7 @@
             <div class="navbar">
                 <ul class="nav nav-tabs">
                     <li role="presentation"><a href="${pageContext.request.contextPath}/">Home</a></li>
-                    <li class="active" role="presentation"><a href="${pageContext.request.contextPath}/adminlogin/">Admin Login</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/adminlogin/">Admin Login</a></li>
                     <form class="form-inline pull-right" method="POST" action="${pageContext.request.contextPath}/order/search/">
 
                         <fieldset class="form-group">
@@ -40,7 +40,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6 col-md-offset-3">
+                <div class="col-md-6 col-md-offset-3 formDiv">
                     <h1>Admin Login</h1>
 
                     <div id="login" >
@@ -48,7 +48,7 @@
 
 
                             <fieldset class="form-group ${hasError}">
-                                <input type="text" class="form-control" name="password" placeholder="Password">
+                                <input type="password" class="form-control" name="password" placeholder="Password">
                             </fieldset>
                             <div id="buttonLogin">
                                 <input class="btn bg-primary button-size" type="submit" value="Log In"/>

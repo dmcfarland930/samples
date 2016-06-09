@@ -17,7 +17,7 @@ public interface ContactDao {
 
     public void update(Contact contact);
 
-    public void remove(Integer id);
+    public void remove(Contact contact);
 
     public Contact get(Integer id);
 

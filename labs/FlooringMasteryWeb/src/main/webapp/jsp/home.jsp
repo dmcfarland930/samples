@@ -18,7 +18,9 @@
 
         <!-- External Styling -->
         <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+
 
 
     </head>
@@ -28,10 +30,9 @@
             <hr/>
             <div class="navbar">
                 <ul class="nav nav-tabs">
-                    <li class="active" role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
                     <li role="presentation"><a href="${pageContext.request.contextPath}/adminlogin/">Admin Login</a></li>
                     <form class="form-inline pull-right" method="POST" action="${pageContext.request.contextPath}/order/search/">
-
                         <fieldset class="form-group">
                             <input type="text" class="form-control" name="date" placeholder="Enter date to find order.">
                         </fieldset>
@@ -44,96 +45,48 @@
                 <div class="col-md-6">
 
                     <h1>Your Orders on ${date}</h1>
-                    <table class="table table-striped">    
+                    <table id="order-table" class="table table-striped">    
                         <thead>
                             <tr>
-                                <th>Order Name</th>
                                 <th>Order Number</th>
+                                <th>Order Name</th>
                                 <th>Edit</th>
                                 <th>Delete</th>
                             </tr>
                         </thead>
                         <c:forEach items="${orders}" var="order">
-                            <tr>
-                                <td><a href="order/show/${order.orderNumber}">${order.customerName}</td>
-                                <td>${order.orderNumber}</td>
-                                <td><a href="order/edit/${order.orderNumber}"><i class="glyphicon glyphicon-wrench"></i></a></td>
-                                <td><a href="order/delete/${order.orderNumber}"><i class="glyphicon glyphicon-trash"></i></a></td>
-
-
+                            <tr id="order-row-${order.orderNumber}">
+                                <td><a data-order-id="${order.orderNumber}" data-toggle="modal" data-target="#showOrderModal">${order.orderNumber}</td>
+                                <td> ${order.customerName}</td>
+                                <td><a data-toggle="modal"  data-order-id="${order.orderNumber}"  data-target="#editOrderModal"><i class="glyphicon glyphicon-wrench"></a></td>
+                                <td><a class="delete-link"><i data-order-id="${order.orderNumber}" class="glyphicon glyphicon-trash"></i></a></td>
                             </tr>
-
                         </c:forEach>
                     </table>
                     <h2>${noOrders}</h2>
                 </div>
 
+                <%@include file="addOrderForm.jsp"%> 
 
-                <div class="col-md-6 formDiv">
-
-                    <h1>Add Order</h1>
-                    <br/>
-                    <form:form commandName="orderCommand" method="POST" action="${pageContext.request.contextPath}/order/create">
-
-                        <fieldset class="form-group">
-                            <label class="col-md-4" for="customerName">Name on Order:</label>
-                            <div class="col-md-8">
-                                <form:input path="customerName" class="form-control" placeholder="Enter a name for this order."></form:input>
-                                <form:errors path="customerName"/>
-                            </div>
-                        </fieldset>
-
-                        <fieldset class="form-group">
-                            <label class="col-md-4" for="productSelect">Choose Product:</label>
-                            <div div class="col-md-8">
-                                <select class="form-control" name="productType" id="productSelect">
-                                    <c:forEach items="${products}" var="productType">
-                                        <option value="${productType.productType}">${productType.productType}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                        </fieldset>
-
-                        <fieldset class="form-group">
-                            <label class="col-md-4" for="taxSelect">Choose State Tax:</label>
-                            <div div class="col-md-8">
-                                <select class="form-control" name="state" id="taxSelect">
-                                    <c:forEach items="${taxes}" var="state">
-                                        <option value="${state.state}">${state.state}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                        </fieldset>
-
-                        <fieldset class="form-group">
-                            <label class="col-md-4" for="area">Area:</label>
-                            <div class="col-md-8">
-                                <form:input path="area" class="form-control" placeholder="Enter area in sq/ft"></form:input>
-                                <form:errors path="area"/>
-                            </div>
-                        </fieldset>
-
-                        <fieldset class="form-group">
-                            <label class="col-md-4" for="date">Date:</label>
-                            <div class="col-md-8">
-                                <form:input path="date" class="form-control" value="${date}"></form:input>
-                                <form:errors path="date"/>
-                            </div>
-                        </fieldset>
-
-                        <div id="button">
-                            <fieldset class="form-group ">
-                                <input class="btn bg-primary pull-right button-size" type="submit" value="Submit Order"/>
-                            </fieldset>
-                        </div>
-                    </form:form>
-
-                </div>
             </div>
         </div>
+
+
         <!-- Placed at the end of the document so the pages load faster -->
+        <%@include file="showOrderModal.jsp"%> 
+        <%@include file="editOrderModal.jsp"%> 
+        <script>
+            var contextRoot = '${pageContext.request.contextPath}';
+        </script>
         <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/appOrder.js" ></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script>
+            $(function () {
+                $(".datepicker").datepicker();
+            });
+        </script>
 
     </body>
 </html>

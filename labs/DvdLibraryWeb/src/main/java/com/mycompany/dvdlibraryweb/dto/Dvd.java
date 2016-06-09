@@ -4,12 +4,12 @@
  */
 package com.mycompany.dvdlibraryweb.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -37,7 +37,7 @@ public class Dvd {
     
     String notes;
     
-    @DateTimeFormat(pattern="MM/dd/yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy", timezone="EST")
     Date dvdDate = new Date();
     
     List <Notes> noteList = new ArrayList();

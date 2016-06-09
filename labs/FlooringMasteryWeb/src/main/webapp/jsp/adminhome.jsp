@@ -50,18 +50,19 @@
                             </tr>
                         </thead>
                         <c:forEach items="${products}" var="product">
-                            <tr>
-                                <td><a href="../admin/showproducts/${product.productType}">${product.productType}</td>
-                                <td fmt:formatNumber type="currency">$${product.costPerSqFt}</td>
-                                <td fmt:formatNumber type="currency">$${product.laborCostPerSqFt}</td>
-                                <td><a href="../admin/editproduct/${product.productType}"><i class="glyphicon glyphicon-wrench"></i></a></td>
-                                <td><a href="../admin/deleteproducts/${product.productType}"><i class="glyphicon glyphicon-trash"></i></a></td>
-
-
+                            <tr id="product-row-${product.productType}">
+                                <td>${product.productType}</td>
+                                <td><fmt:formatNumber type="currency" value="${product.costPerSqFt}"/></td>
+                                <td><fmt:formatNumber type="currency" value="${product.laborCostPerSqFt}"/></td>
+                                <td><a data-toggle="modal"  data-product-type="${product.productType}"  data-target="#editProductModal"><i class="glyphicon glyphicon-wrench"></a></td>
+                                <td><a class="delete-link"><i data-product-type="${product.productType}" class="glyphicon glyphicon-trash"></i></a></td>
                             </tr>
 
                         </c:forEach>
                     </table>
+
+                    <%@include file="editProductModal.jsp"%> 
+
 
                 </div>
                 <div class="col-md-6">
@@ -78,25 +79,29 @@
                             </tr>
                         </thead>
                         <c:forEach items="${taxes}" var="tax">
-                            <tr>
-                                <td><a href="../admin/showtaxes/${tax.state}">${tax.state}</td>
-                                <td fmt:formatNumber type="percent">${tax.taxRate}%</td>
-                                <td><a href="../admin/edittaxrate/${tax.state}"><i class="glyphicon glyphicon-wrench"></i></a></td>
-                                <td><a href="../admin/deletetaxes/${tax.state}"><i class="glyphicon glyphicon-trash"></i></a></td>
-
-
+                            <tr id="taxes-row-${tax.state}">
+                                <td>${tax.state}</td>
+                                <td> <fmt:formatNumber type="number" value="${tax.taxRate}"/>%</td>
+                                <td><a data-toggle="modal"  data-taxes-type="${tax.state}"  data-target="#editTaxesModal"><i class="glyphicon glyphicon-wrench"></a></td>
+                                <td><a class="delete-tax-link"><i data-taxes-type="${tax.state}" class="glyphicon glyphicon-trash"></i></a></td>
                             </tr>
 
                         </c:forEach>
                     </table>
 
+                    <%@include file="editTaxesModal.jsp"%> 
                 </div>
             </div>
-<!--(${tax.taxRate}%)-->
         </div>
         <!-- Placed at the end of the document so the pages load faster -->
+        <script>
+            var contextRoot = '${pageContext.request.contextPath}';
+        </script>
+
         <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/appProduct.js" ></script>
+        <script src="${pageContext.request.contextPath}/js/appTaxes.js" ></script>
 
     </body>
 </html>

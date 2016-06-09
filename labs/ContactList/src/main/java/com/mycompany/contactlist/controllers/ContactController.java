@@ -6,13 +6,15 @@ package com.mycompany.contactlist.controllers;
 
 import com.mycompany.contactlist.dao.ContactDao;
 import com.mycompany.contactlist.dto.Contact;
-import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
@@ -31,45 +33,51 @@ public class ContactController {
 
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@ModelAttribute Contact contact) {
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @ResponseBody
+    public Contact create(@RequestBody Contact contact) {
 
-        contactDao.add(contact);
-        return "redirect:/";
-
+        return contactDao.add(contact);
+        
     }
 
-    @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String edit(@ModelAttribute Contact contact, Map model) {
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    public String edit(@PathVariable("id") Integer contactId, Map model) {
 
-        List<Contact> contacts = contactDao.list();
-        Contact editContact = new Contact();
-        for (Contact myContact : contacts) {
+        Contact contact = contactDao.get(contactId);
 
-            if (myContact.getId() == contact.getId()) {
-                editContact = myContact;
-                break;
-            }
-
-        }
-
-        model.put("contact", editContact);
+        model.put("contact", contact);
 
         return "edit";
     }
 
-    @RequestMapping(value = "contact/edit", method = RequestMethod.POST)
-    public String edit(@ModelAttribute Contact contact) {
+    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    @ResponseBody
+    public Contact edit(@RequestBody Contact contact) {
 
+        
         contactDao.update(contact);
-        return "redirect:/";
+        
+        return contact;
+        
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String delete(@ModelAttribute Contact contact) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void delete(@PathVariable("id") Integer contactId) {
 
-        contactDao.remove(contact.getId());
-        return "redirect:/";
+        Contact contact = contactDao.get(contactId);
+        contactDao.remove(contact);
+        
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Contact show(@PathVariable("id") Integer contactId) {
+
+        Contact contact = contactDao.get(contactId);
+        
+        return contact;
+        
+    }
 }

@@ -42,9 +42,8 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
-    public void remove(Integer id) {
-
-        Contact contact = get(id);
+    public void remove(Contact contact) {
+        
         data.remove(contact);
 
     }

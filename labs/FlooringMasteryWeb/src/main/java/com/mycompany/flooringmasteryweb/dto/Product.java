@@ -14,11 +14,14 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class Product {
 
+    private String id;
     @NotEmpty(message = "You cannot leave this field blank!")
     private String productType;
-    @DecimalMax("999999999999.0") @DecimalMin("0.0") 
+    @DecimalMax("999999999999.0")
+    @DecimalMin("0.0")
     private double costPerSqFt;
-    @DecimalMax("999999999999.0") @DecimalMin("0.0") 
+    @DecimalMax("999999999999.0")
+    @DecimalMin("0.0")
     private double laborCostPerSqFt;
 
     public String getProductType() {
@@ -43,6 +46,14 @@ public class Product {
 
     public void setLaborCostPerSqFt(double laborCostPerSqFt) {
         this.laborCostPerSqFt = laborCostPerSqFt;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

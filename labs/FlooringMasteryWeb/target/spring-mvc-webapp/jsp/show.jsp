@@ -47,7 +47,7 @@
 
                     <h1>Order Summary #${order.orderNumber}</h1>
                     <br/>
-                    
+
                     <table class="table table-striped"> 
                         <tr>
                             <td>Date of Order:</td> <td>${date}</td>
@@ -67,7 +67,7 @@
                         </tr>
                     </table>
 
-                        <table class="table table-striped">
+                    <table class="table table-striped">
                         <tr>
                             <td>Product Cost/SqFt:</td>
                             <td><fmt:formatNumber type="currency" 
@@ -83,8 +83,8 @@
                             <td><fmt:formatNumber type="number" 
                                               maxIntegerDigits="10" value="${order.taxRate}"/>%</td>
                         </tr>
-        
-                        </table>
+
+                    </table>
                     <table class="table table-striped"> 
                         <tr>
                             <td>Total Product Cost:</td> <td><fmt:formatNumber type="currency" 
@@ -107,9 +107,6 @@
 
                     <a href="${pageContext.request.contextPath}"> <button class="btn bg-primary col-md-12" type="submit"/>Go Back</button></a>
                 </div>
-
-
-
 
             </div>
             <!-- Placed at the end of the document so the pages load faster -->

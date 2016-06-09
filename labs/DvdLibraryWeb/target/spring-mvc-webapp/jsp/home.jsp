@@ -7,11 +7,13 @@
 <html>
     <head>
         <title>Dvd Library</title>
-        <!-- Bootstrap core CSS -->
-        <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Custom styles for this template -->
         <link href="${pageContext.request.contextPath}/css/starter-template.css" rel="stylesheet">
+
+        <!-- Bootstrap core CSS -->
+        <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
+
 
         <!-- SWC Icon -->
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icon.png">
@@ -32,7 +34,7 @@
                 <div class="col-md-6">
 
                     <h1>Your Dvd Library</h1>
-                    <table class="table table-striped">    
+                    <table class="table table-striped" id="dvd-table">    
                         <thead>
                             <tr>
                                 <th>Title</th>
@@ -40,11 +42,11 @@
                             </tr>
                         </thead>
                         <c:forEach items="${dvds}" var="dvd">
-                            <tr>
-                                <td><a href="${pageContext.request.contextPath}/dvd/show/${dvd.id}">${dvd.title}</td>
+                            <tr id="dvd-row-${dvd.id}">
+                                <td><a data-dvd-id="${dvd.id}" data-toggle="modal" data-target="#showDvdModal">${dvd.title}</td>
                                 <td>${dvd.director}</td>
-                                <td><a href="${pageContext.request.contextPath}/dvd/edit/${dvd.id}">Edit</a></td>
-                                <td><a href="${pageContext.request.contextPath}/dvd/delete/${dvd.id}">Delete</a></td>
+                                <td><a data-dvd-id="${dvd.id}" data-toggle="modal" data-target="#editDvdModal">Edit</a></td>
+                                <td><a data-dvd-id="${dvd.id}" class="delete-link">Delete</a></td>
 
                                 <!--create edit and delete in controller-->
 
@@ -63,61 +65,69 @@
 
                     <h1>Enter Dvd Info</h1>
                     <br/>
-                    <form:form method="POST" commandName="dvd" action="${pageContext.request.contextPath}/dvd/create">
-                                               
-                        
+                    <form method="POST" class="form-horizontal">
+
                         <fieldset class="form-group">
                             <label class="col-md-3" for="title">Title</label>
                             <div class="col-md-9">
-                                <form:input path="title" class="form-control" placeholder="ex. Pulp Fiction"></form:input>
-                                <form:errors path="title"/>
+                                <input type="text" id="title-input" class="form-control"/>
                             </div>
                         </fieldset>                            
-                            
+
                         <fieldset class="form-group">
                             <label class="col-md-3" for="director">Director</label>
                             <div class="col-md-9">
-                                <form:input path="director" class="form-control" placeholder="ex. Quentin Tarantino"></form:input>
-                                <form:errors path="director"/>
+                                <input type="text" id="director-input" class="form-control"/>
                             </div>                           
                         </fieldset>
+
                         <fieldset class="form-group">
                             <label class="col-md-3" for="rating">MPAA Rating</label>
                             <div class="col-md-9">
-                                <form:input path="rating" class="form-control" placeholder="ex. R"></form:input>
-                                <form:errors path="rating"/>
+                                <input type="text" id="rating-input" class="form-control"/>
                             </div>
                         </fieldset>
+
                         <fieldset class="form-group">
                             <label class="col-md-3" for="studio">Studio</label>
                             <div class="col-md-9">
-                                <form:input path="studio" class="form-control" placeholder="ex. MGM Studios "></form:input>
-                                <form:errors path="studio"/>
+                                <input type="text" id="studio-input" class="form-control"/>
                             </div>
                         </fieldset>
+
                         <fieldset class="form-group">
                             <label class="col-md-3" for="dvdDate">Date</label>
                             <div class="col-md-9">
-                                <form:input path="dvdDate" class="form-control" placeholder="ex. 02/18/1993"></form:input>
-                                <form:errors path="dvdDate"/>
+                                <input type="text" id="date-input" class="form-control"/>
                             </div>
                         </fieldset>
+
                         <fieldset class="form-group">
                             <label class="col-md-3" for="notes">Notes</label>
                             <div class="col-md-9">
                                 <textarea class="form-control" name="notes" rows="5" placeholder="Enter notes here"></textarea>
                             </div>
-                        </fieldset>                                              
-                        <input class="btn bg-primary" type="submit"/>
-                    </form:form>
+                        </fieldset>
+                        <input id="create-submit" class="btn btn-default pull-right" type="submit"/>
+                    </form>
 
                 </div>
             </div>
 
         </div>
+
+        <%@include file="showModal.jsp"%> 
+        <%@include file="editModal.jsp"%> 
+
+
         <!-- Placed at the end of the document so the pages load faster -->
+        <script>
+            var contextRoot = '${pageContext.request.contextPath}';
+        </script>
+
         <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/app.js" ></script>
 
     </body>
 </html>

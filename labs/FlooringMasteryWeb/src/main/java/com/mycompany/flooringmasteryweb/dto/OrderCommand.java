@@ -4,6 +4,7 @@
  */
 package com.mycompany.flooringmasteryweb.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
@@ -23,7 +24,8 @@ public class OrderCommand {
     private String state;
     private double taxRate;
     private String productType;
-    @DecimalMax("999999999999.0") @DecimalMin("1.0") 
+    @DecimalMax("999999999999.0") 
+    @DecimalMin("1.0") 
     private double area;
     private double costPerSqFt;
     private double laborCostPerSqFt;
@@ -32,7 +34,7 @@ public class OrderCommand {
     private double tax;
     private double orderTotal;
     private String orderDate;
-    @DateTimeFormat(pattern="MM/dd/yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy", timezone="EST")
     private Date date;
 
     public int getOrderNumber() {

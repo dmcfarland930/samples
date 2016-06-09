@@ -8,19 +8,19 @@ import com.mycompany.dvdlibraryweb.dao.DvdDao;
 import com.mycompany.dvdlibraryweb.dao.NoteDao;
 import com.mycompany.dvdlibraryweb.dto.Dvd;
 import com.mycompany.dvdlibraryweb.dto.Notes;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
-import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
@@ -40,36 +40,22 @@ public class DvdController {
         this.noteDao = notes;
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute Dvd dvd, BindingResult bindingResult, 
-            @RequestParam("dvdDate") Date date, Map model) {
-
-        if (bindingResult.hasErrors()) {
-
-            List<Dvd> dvds = dvdDao.decode();
-            Dvd oldest = dvdDao.findOldestMovie();
-            Dvd newest = dvdDao.findNewestMovie();
-            int years = dvdDao.findAverageAgeOfMovies();
-            int noteNum = dvdDao.findAverageAmountOfNotes();
-            model.put("dvds", dvds);
-            model.put("oldest", oldest.getTitle());
-            model.put("newest", newest.getTitle());
-            model.put("years", years);
-            model.put("notenum", noteNum);
-            model.put("dvd", dvd);
-            return "home";
-
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @ResponseBody
+    public Dvd create(@RequestBody Dvd dvd) {
+        Date date = new Date();
+        try {
+            date = sdf.parse(dvd.getDate());
+        } catch (ParseException ex) {
         }
-
-        
-        dvdDao.create(dvd, date);
+        Dvd newDvd = dvdDao.create(dvd, date);
         Notes newNote = new Notes();
         newNote.setTitle(dvd.getTitle());
         newNote.setDvdId(dvd.getId());
         newNote.setNote(dvd.getNotes());
         noteDao.create(newNote);
-        noteDao.setNotesToDvd(dvd);
-        return "redirect:/";
+        noteDao.setNotesToDvd(newDvd);
+        return newDvd;
 
     }
 
@@ -87,39 +73,26 @@ public class DvdController {
         return "edit";
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-    public String editSubmit(@Valid @ModelAttribute Dvd dvd, BindingResult bindingResult,
-            @RequestParam("notes") String notes,
-            @PathVariable("id") Integer dvdId, Map model) {
+    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    @ResponseBody
+    public Dvd edit(@RequestBody Dvd dvd) {
 
-        if (bindingResult.hasErrors()) {
-
-            Dvd dvdShow = dvdDao.get(dvdId);
-            model.put("dvdShow", dvdShow);
-            model.put("date", dvdShow.getDate());
-            model.put("notes", dvdShow.getNoteList());
-            model.put("dvd", dvd);
-            return "edit";
-
-        }
-
-        Notes newNote = new Notes();
-        newNote.setTitle(dvd.getTitle());
-        newNote.setNote(notes);
-        newNote.setDvdId(dvdId);
-        noteDao.create(newNote);
-        noteDao.setNotesToDvd(dvd);
-
+//        Notes newNote = new Notes();
+//        newNote.setTitle(dvd.getTitle());
+//        newNote.setNote(notes);
+//        newNote.setDvdId(dvdId);
+//        noteDao.create(newNote);
+//        noteDao.setNotesToDvd(dvd);
         dvdDao.update(dvd);
-        return "redirect:/";
+        return dvd;
     }
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public String delete(@PathVariable("id") Integer dvdId) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void delete(@PathVariable("id") Integer dvdId) {
 
         Dvd dvd = dvdDao.get(dvdId);
         dvdDao.delete(dvd);
-        return "redirect:/";
     }
 
     @RequestMapping(value = "/deletenote/{id}", method = RequestMethod.GET)
@@ -130,7 +103,7 @@ public class DvdController {
         int dvdId = note.getDvdId();
         noteDao.delete(note);
         noteDao.setNotesToDvd(dvd);
-        
+
         model.put("dvdId", dvdId);
         model.put("notes", dvd.getNoteList());
         return "redirect:/dvd/show/{dvdId}";
@@ -185,16 +158,13 @@ public class DvdController {
         }
     }
 
-    @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
-    public String show(@PathVariable("id") Integer id, Map model) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Dvd show(@PathVariable("id") Integer id) {
 
         Dvd dvd = dvdDao.get(id);
-        List<Notes> notes = dvd.getNoteList();
-        Date date = dvd.getDvdDate();
-        model.put("date", sdf.format(date));
-        model.put("notes", notes);
-        model.put("dvd", dvd);
-        return "show";
+
+        return dvd;
 
     }
 }

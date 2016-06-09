@@ -31,6 +31,7 @@ public class OrderDaoImpl implements OrderDao {
     public OrderDaoImpl(FlooringData fData) {
 
         this.fd = fData;
+        fd.orderDecode(dateString);
         setDatesToOrders();
         orderList
                 .stream()
@@ -86,6 +87,7 @@ public class OrderDaoImpl implements OrderDao {
         for (Order myOrder : orderList) {
             if (myOrder.getOrderNumber() == order.getOrderNumber() && myOrder.getOrderDate().equals(order.getOrderDate())) {
                 orderList.remove(myOrder);
+                nextId++;
                 orderList.add(order);
                 if (!testMode) {
                     fd.orderEncode(date, orderList);
@@ -138,17 +140,17 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public List<Order> getOrdersOnDate(String date) {
 
-        if(testMode == false){
-        try {
-            orderList = fd.orderDecode(date);
-        } catch (Exception ex) {
+        if (testMode == false) {
+            try {
+                orderList = fd.orderDecode(date);
+            } catch (Exception ex) {
 
-            List<Order> myOrderList = new ArrayList<>();
-            return myOrderList;
-            
+                List<Order> myOrderList = new ArrayList<>();
+                return myOrderList;
+
+            }
         }
-        }
-        
+
         List<Order> myOrderList = new ArrayList<>();
         for (Order myOrder : orderList) {
             String date2 = myOrder.getOrderDate().replace("/", "");
@@ -234,7 +236,5 @@ public class OrderDaoImpl implements OrderDao {
         }
         return ordersWithDateEntry;
     }
-
-
 
 }

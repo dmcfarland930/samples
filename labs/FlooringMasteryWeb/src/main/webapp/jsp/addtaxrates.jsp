@@ -41,7 +41,7 @@
 
                     <h1>Tax Rates</h1>
                     <br />
-                    <table class="table table-striped">    
+                    <table id="taxes-table"class="table table-striped">    
                         <thead>
                             <tr>
                                 <th>State</th>
@@ -51,13 +51,11 @@
                             </tr>
                         </thead>
                         <c:forEach items="${taxesList}" var="tax">
-                            <tr>
-                                <td><a href="${pageContext.request.contextPath}/admin/showtaxes/${tax.state}">${tax.state}</td>
+                            <tr id="taxes-row-${tax.state}">
+                                <td>${tax.state}</td>
                                 <td fmt:formatNumber type="percent">${tax.taxRate}%</td>
-                                <td><a href="${pageContext.request.contextPath}/admin/edittaxrate/${tax.state}"><i class="glyphicon glyphicon-wrench"></i></a></td>
-                                <td><a href="${pageContext.request.contextPath}/admin/deletetaxes/${tax.state}"><i class="glyphicon glyphicon-trash"></i></a></td>
-
-
+                                <td><a data-toggle="modal"  data-taxes-type="${tax.state}"  data-target="#editTaxesModal"><i class="glyphicon glyphicon-wrench"></a></td>
+                                <td><a class="delete-tax-link"><i data-taxes-type="${tax.state}" class="glyphicon glyphicon-trash"></i></a></td>
                             </tr>
 
                         </c:forEach>
@@ -69,31 +67,31 @@
                     <h1>Add Tax Rate</h1>
                     <br />
 
-                    <form:form commandName="taxes" method="POST" action="${pageContext.request.contextPath}/admin/addtaxrates">
+                    <form method="POST" >
 
                         <fieldset class="form-group">
                             <label class="col-md-4" for="state">State:</label>
                             <div class="col-md-8">
-                                <form:input path="state" class="form-control" placeholder="Enter State"></form:input>
-                                <form:errors path="state"/>
+                                <input type="text" id="state-input" class="form-control"/>
                             </div>
                         </fieldset>
                         <fieldset class="form-group">
                             <label class="col-md-4" for="taxRate">Tax Rate:</label>
                             <div class="col-md-8">
-                                <form:input path="taxRate" class="form-control" placeholder="Enter Tax Rate"></form:input>
-                                <form:errors path="taxRate"/>
+                                <input type="text" id="rate-input" class="form-control"/>
                             </div>
                         </fieldset>
 
                         <div id="button">
                             <fieldset class="form-group">
-                                <input class="btn bg-primary button-size pull-right" value="Add Tax Rate" type="submit"/>
+                                <input id="create-tax-submit" class="btn bg-primary button-size pull-right" value="Add Tax Rate" type="submit"/>
                             </fieldset>
                         </div>
-                    </form:form>
+                    </form>
 
 
+                    <%@include file="editTaxesModal.jsp"%> 
+                    <%@include file="showTaxesModal.jsp"%> 
 
 
 
@@ -103,9 +101,13 @@
             </div>
         </div>
         <!-- Placed at the end of the document so the pages load faster -->
+        <script>
+            var contextRoot = '${pageContext.request.contextPath}';
+        </script>
+
         <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-
+        <script src="${pageContext.request.contextPath}/js/appTaxes.js" ></script>
     </body>
 </html>
 

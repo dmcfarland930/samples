@@ -50,40 +50,44 @@
             <div class="row">
                 <div class="col-md-6 col-md-offset-3">
 
-                    <h1>Your Orders on ${date}</h1>
+                    <h1>Results for "${date}"</h1>
                     <table class="table table-striped">    
                         <thead>
                             <tr>
-                                <th>Order Name</th>
                                 <th>Order Number</th>
+                                <th>Order Name</th>
                                 <th>Edit</th>
                                 <th>Delete</th>
                             </tr>
                         </thead>
                         <c:forEach items="${orders}" var="order">
                             <tr>
-                                <td><a href="../show/${order.orderNumber}">${order.customerName}</td>
-                                <td>${order.orderNumber}</td>
-                                <td><a href="../edit/${order.orderNumber}"><i class="glyphicon glyphicon-wrench"></i></a></td>
-                                <td><a href="../delete/${order.orderNumber}"><i class="glyphicon glyphicon-trash"></i></a></td>
-
-                                <!--create edit and delete in controller-->
-
+                            <tr id="order-row-${order.orderNumber}">
+                                <td><a data-order-id="${order.orderNumber}" data-toggle="modal" data-target="#showOrderModal">${order.orderNumber}</td>
+                                <td> ${order.customerName}</td>
+                                <td><a data-toggle="modal"  data-order-id="${order.orderNumber}"  data-target="#editOrderModal"><i class="glyphicon glyphicon-wrench"></a></td>
+                                <td><a class="delete-link"><i data-order-id="${order.orderNumber}" class="glyphicon glyphicon-trash"></i></a></td>
                             </tr>
-
+                            </tr>
                         </c:forEach>
                     </table>
                     <h2>${noOrders}</h2>
-
                 </div>
-
-
-
             </div>
         </div>
-        <!-- Placed at the end of the document so the pages load faster -->
+        <%@include file="showOrderModal.jsp"%> 
+        <%@include file="editOrderModal.jsp"%> 
+        <script>
+            var contextRoot = '${pageContext.request.contextPath}';
+        </script>
         <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-
+        <script src="${pageContext.request.contextPath}/js/appOrder.js" ></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script>
+            $(function () {
+                $(".datepicker").datepicker();
+            });
+        </script>
     </body>
 </html>
