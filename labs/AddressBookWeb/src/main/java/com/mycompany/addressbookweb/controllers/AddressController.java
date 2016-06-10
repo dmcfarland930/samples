@@ -39,7 +39,7 @@ public class AddressController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
-    public Address create(@RequestBody Address address) {
+    public Address create(@Valid @RequestBody Address address) {
 
         return addressDao.create(address);
 
@@ -59,7 +59,7 @@ public class AddressController {
 
     @RequestMapping(value = "/", method = RequestMethod.PUT)
     @ResponseBody
-    public Address edit(@RequestBody Address address) {
+    public Address edit(@Valid @RequestBody Address address) {
 
 
         addressDao.update(address);

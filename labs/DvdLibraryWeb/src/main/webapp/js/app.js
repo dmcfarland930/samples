@@ -35,7 +35,13 @@ $(document).ready(function () {
                 $("#notes-input").val('');
             },
             error: function (data, status) {
-                alert("error");
+                var errors = data.responseJSON.errors;
+
+                $.each(errors, function (index, error) {
+
+                    $('#create-dvd-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+
+                });
             }
 
 
@@ -139,7 +145,13 @@ $(document).ready(function () {
 
             },
             error: function (data, status) {
-                alert("error");
+                var errors = data.responseJSON.errors;
+
+                $.each(errors, function (index, error) {
+
+                    $('#edit-dvd-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+
+                });
             }
 
         });

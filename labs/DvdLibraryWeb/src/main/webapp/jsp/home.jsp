@@ -108,6 +108,8 @@
                                 <textarea class="form-control" name="notes" rows="5" placeholder="Enter notes here"></textarea>
                             </div>
                         </fieldset>
+                        <div id="create-dvd-validation-errors">
+                        </div>
                         <input id="create-submit" class="btn btn-default pull-right" type="submit"/>
                     </form>
 

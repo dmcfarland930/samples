@@ -60,7 +60,7 @@
                     <h1>Enter Address Info</h1>
                     </br>
                     <form method="POST" class="form-horizontal">
-                        
+
                         <fieldset class="form-group" class="form-horizontal">
                             <label class="col-md-3" for="firstName">First Name</label>
                             <div class="col-md-9">
@@ -103,6 +103,9 @@
                                 <input type="text" id="zip-code-input" class="form-control"/>
                             </div>
                         </fieldset>
+                        <div id="add-address-validation-errors">
+                        </div>
+
                         <input id="create-submit" class="btn btn-default pull-right" type="submit"/>
                     </form>
 
@@ -151,6 +154,7 @@
 
                         </table>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
@@ -188,7 +192,7 @@
                                     <input type="text" id="edit-address-street-number"/>
                                 </td>
                             </tr>
-                            
+
                             <tr>
                                 <th>Street Name</th>
                                 <td>
@@ -218,6 +222,8 @@
                             </tr>
 
                         </table>
+                    </div>
+                    <div id="edit-address-validation-errors">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

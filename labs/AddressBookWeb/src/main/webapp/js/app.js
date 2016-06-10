@@ -37,9 +37,14 @@ $(document).ready(function () {
                 $("#zip-code-input").val('');
             },
             error: function (data, status) {
-                alert("error");
-            }
+                var errors = data.responseJSON.errors;
 
+                $.each(errors, function (index, error) {
+
+                    $('#add-address-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+
+                });
+            }
         });
     });
 
@@ -107,7 +112,7 @@ $(document).ready(function () {
     });
 
 
-    $(document).on('click', '#edit-address-button',function (e) {
+    $(document).on('click', '#edit-address-button', function (e) {
 
         e.preventDefault();
 
@@ -142,7 +147,13 @@ $(document).ready(function () {
 
             },
             error: function (data, status) {
-                alert("error");
+                var errors = data.responseJSON.errors;
+
+                $.each(errors, function (index, error) {
+
+                    $('#edit-address-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+
+                });
             }
 
         });

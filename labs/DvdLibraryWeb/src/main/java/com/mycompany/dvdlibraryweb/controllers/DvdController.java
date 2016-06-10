@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,7 +43,7 @@ public class DvdController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
-    public Dvd create(@RequestBody Dvd dvd) {
+    public Dvd create(@Valid @RequestBody Dvd dvd) {
         Date date = new Date();
         try {
             date = sdf.parse(dvd.getDate());
@@ -75,7 +76,7 @@ public class DvdController {
 
     @RequestMapping(value = "/", method = RequestMethod.PUT)
     @ResponseBody
-    public Dvd edit(@RequestBody Dvd dvd) {
+    public Dvd edit(@Valid @RequestBody Dvd dvd) {
 
 //        Notes newNote = new Notes();
 //        newNote.setTitle(dvd.getTitle());
