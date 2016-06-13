@@ -4,10 +4,9 @@
  */
 package com.mycompany.flooringmasteryweb.dto;
 
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
+import com.mycompany.flooringmasteryweb.validation.ValidState;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -15,11 +14,13 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class Taxes {
     
-    @NotEmpty(message="You cannot leave this field blank!")
     @Size (min=2, max=2, message="You must enter a state abbreviation!")
+    @ValidState
     private String state;
-    @DecimalMax("999999999999.0") @DecimalMin("0.0") 
-    private double taxRate;
+    
+    
+    @NotNull(message="Please enter a tax rate!")
+    private Double taxRate;
     
 
     
@@ -31,11 +32,11 @@ public class Taxes {
         this.state = state;
     }
 
-    public double getTaxRate() {
+    public Double getTaxRate() {
         return taxRate;
     }
 
-    public void setTaxRate(double taxRate) {
+    public void setTaxRate(Double taxRate) {
         this.taxRate = taxRate;
     }
 

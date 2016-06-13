@@ -39,7 +39,7 @@
                 <div class="col-md-6">
                     <h1>Products</h1>
                     <br/>
-                    <table class="table table-striped">    
+                    <table id="product-table" class="table table-striped">    
                         <thead>
                             <tr>
                                 <th>Product Name</th>
@@ -69,7 +69,7 @@
 
                     <h1>Tax Rates</h1>
                     <br/>
-                    <table class="table table-striped">    
+                    <table id="taxes-table" class="table table-striped">    
                         <thead>
                             <tr>
                                 <th>State</th>

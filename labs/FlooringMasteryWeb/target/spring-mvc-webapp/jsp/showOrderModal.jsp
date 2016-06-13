@@ -12,7 +12,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="show-header"></h4>
+                    <h4 class="modal-title">Order Details</h4>
                 </div>
                 <div class="modal-body">
                     <table class="table table-striped" id="show-order-table"> 

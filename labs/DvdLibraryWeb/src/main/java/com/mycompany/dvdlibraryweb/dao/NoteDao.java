@@ -27,7 +27,7 @@ public class NoteDao {
 
     List<Notes> noteList = new ArrayList();
     private int nextId = 1000;
-    
+
     public NoteDao() {
         noteList = decode();
 
@@ -35,11 +35,12 @@ public class NoteDao {
 
     public Notes create(Notes note) {
 
-        note.setNoteId(nextId);
-        noteList.add(note);
-        nextId++;
-        encode();
-
+        if (!note.getNote().isEmpty()) {
+            note.setNoteId(nextId);
+            noteList.add(note);
+            nextId++;
+            encode();
+        }
         return note;
 
     }
@@ -139,7 +140,6 @@ public class NoteDao {
 
             }
 
-        
         } catch (FileNotFoundException ex) {
             Logger.getLogger(NoteDao.class.getName()).log(Level.SEVERE, null, ex);
 
@@ -147,7 +147,6 @@ public class NoteDao {
             sc.close();
         }
 
-        
         this.nextId = (lastId + 1);
         return notes;
     }

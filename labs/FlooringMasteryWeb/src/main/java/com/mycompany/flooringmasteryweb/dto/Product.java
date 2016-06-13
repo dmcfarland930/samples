@@ -4,8 +4,8 @@
  */
 package com.mycompany.flooringmasteryweb.dto;
 
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
+import com.mycompany.flooringmasteryweb.validation.ValidProductName;
+import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -16,13 +16,12 @@ public class Product {
 
     private String id;
     @NotEmpty(message = "You cannot leave this field blank!")
+    @ValidProductName
     private String productType;
-    @DecimalMax("999999999999.0")
-    @DecimalMin("0.0")
-    private double costPerSqFt;
-    @DecimalMax("999999999999.0")
-    @DecimalMin("0.0")
-    private double laborCostPerSqFt;
+    @NotNull(message="Please enter a cost of materials!")
+    private Double costPerSqFt;
+    @NotNull(message="Please enter a cost of labor!")
+    private Double laborCostPerSqFt;
 
     public String getProductType() {
         return productType;
@@ -32,19 +31,19 @@ public class Product {
         this.productType = productType;
     }
 
-    public double getCostPerSqFt() {
+    public Double getCostPerSqFt() {
         return costPerSqFt;
     }
 
-    public void setCostPerSqFt(double costPerSqFt) {
+    public void setCostPerSqFt(Double costPerSqFt) {
         this.costPerSqFt = costPerSqFt;
     }
 
-    public double getLaborCostPerSqFt() {
+    public Double getLaborCostPerSqFt() {
         return laborCostPerSqFt;
     }
 
-    public void setLaborCostPerSqFt(double laborCostPerSqFt) {
+    public void setLaborCostPerSqFt(Double laborCostPerSqFt) {
         this.laborCostPerSqFt = laborCostPerSqFt;
     }
 

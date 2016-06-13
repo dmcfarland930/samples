@@ -31,7 +31,13 @@ $(document).ready(function () {
                 $('#showTaxesModal').modal('show');
             },
             error: function (data, status) {
-                alert("error");
+                var errors = data.responseJSON.errors;
+
+                $.each(errors, function (index, error) {
+
+                    $('#add-taxes-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+
+                });
             }
 
 
@@ -87,7 +93,13 @@ $(document).ready(function () {
 
             },
             error: function (data, status) {
-                alert("error");
+                var errors = data.responseJSON.errors;
+
+                $.each(errors, function (index, error) {
+
+                    $('#edit-taxes-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+
+                });
             }
 
 
@@ -117,16 +129,21 @@ $(document).ready(function () {
                 xhr.setRequestHeader("Content-type", "application/json");
             },
             success: function (data, status) {
-
                 $('#editTaxesModal').modal('hide');
 
                 var tableRow = buildTaxesRow(data);
 
-                $('#taxes-row-' + data.state).replaceWith($(tableRow));
+                $('#taxes-row-' + $('#edit-taxes-id').val()).replaceWith($(tableRow));
 
             },
             error: function (data, status) {
-                alert("error");
+                var errors = data.responseJSON.errors;
+
+                $.each(errors, function (index, error) {
+
+                    $('#edit-taxes-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+
+                });
             }
 
         });
@@ -167,7 +184,7 @@ $(document).ready(function () {
                 <td> " + data.state + "</td> \n\
                 <td> " + data.taxRate + "</td> \n\
                 <td> <a data-taxes-id='" + data.state + "' data-toggle='modal' data-target='#editTaxesModal'><i class='glyphicon glyphicon-wrench'></i></a>  </td>   \n\
-                <td> <a class='delete-link'><i data-taxes-type='" + data.state + "' class='glyphicon glyphicon-trash'></i></a>  </td>   \n\
+                <td> <a class='delete-tax-link'><i data-taxes-type='" + data.state + "' class='glyphicon glyphicon-trash'></i></a>  </td>   \n\
                 </tr>  ";
 
 

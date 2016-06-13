@@ -35,7 +35,13 @@ $(document).ready(function () {
                 $('#showProductModal').modal('show');
             },
             error: function (data, status) {
-                alert("error");
+                var errors = data.responseJSON.errors;
+
+                $.each(errors, function (index, error) {
+
+                    $('#add-product-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+
+                });
             }
 
 
@@ -75,6 +81,7 @@ $(document).ready(function () {
         var link = $(e.relatedTarget);
 
         var productId = link.data('product-type');
+        
         $.ajax({
             url: contextRoot + "/admin/editProduct/" + productId,
             type: 'GET',
@@ -88,7 +95,6 @@ $(document).ready(function () {
                 $('#edit-product-cost').val(data.costPerSqFt);
                 $('#edit-product-labor').val(data.laborCostPerSqFt);
             },
-            
             error: function (data, status) {
                 alert("error");
             }
@@ -108,10 +114,8 @@ $(document).ready(function () {
             laborCostPerSqFt: $("#edit-product-labor").val()
         });
 
-                alert($("#edit-id"));
-
         $.ajax({
-            url: contextRoot + "/admin/productSave/" + $("#edit-id").val,
+            url: contextRoot + "/admin/productSave/" + $("#edit-id").val(),
             type: "PUT",
             data: productData,
             dataType: 'json',
@@ -125,11 +129,17 @@ $(document).ready(function () {
 
                 var tableRow = buildProductRow(data);
 
-                $('#product-row-' + data.id).replaceWith($(tableRow));
+                $('#product-row-' + $("#edit-id").val()).replaceWith($(tableRow));
 
             },
             error: function (data, status) {
-                alert("error");
+                var errors = data.responseJSON.errors;
+
+                $.each(errors, function (index, error) {
+
+                    $('#edit-product-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+
+                });
             }
 
         });
@@ -154,7 +164,13 @@ $(document).ready(function () {
 
             },
             error: function (data, status) {
+                var errors = data.responseJSON.errors;
 
+                $.each(errors, function (index, error) {
+
+                    $('#edit-product-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+
+                });
             }
         });
 
@@ -170,7 +186,7 @@ $(document).ready(function () {
                 <td> " + "$" + data.costPerSqFt + "</td> \n\
                 <td> " + "$" + data.laborCostPerSqFt + "</td> \n\
                 <td> <a data-product-id='" + data.productType + "' data-toggle='modal' data-target='#editProductModal'><i class='glyphicon glyphicon-wrench'></i></a>  </td>   \n\
-                <td> <a class='delete-link'><i data-product-type='" + data.productType + "' class='glyphicon glyphicon-trash'></i></a>  </td>   \n\
+                <td> <a class='delete-tax-link'><i data-product-type='" + data.productType + "' class='glyphicon glyphicon-trash'></i></a>  </td>   \n\
                 </tr>  ";
 
 

@@ -15,7 +15,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -74,7 +74,7 @@ public class AdminController {
 
     @RequestMapping(value = "/addproducts", method = RequestMethod.POST)
     @ResponseBody
-    public Product createSubmit(@RequestBody Product product) {
+    public Product createSubmit(@Valid @RequestBody Product product, Model Map) {
 
         String lower = product.getProductType().toLowerCase();
         String capProductType = lower.substring(0, 1).toUpperCase() + lower.substring(1);
@@ -99,10 +99,13 @@ public class AdminController {
 
     @RequestMapping(value = "/addtaxrates", method = RequestMethod.POST)
     @ResponseBody
-    public Taxes createSubmit(@RequestBody Taxes tax) {
+    public Taxes createSubmit(@Valid @RequestBody Taxes tax, Map model) {
 
         testMode = testRead();
         List<Taxes> taxes = taxDao.getTaxesList();
+
+        model.put("stateExists", "That state already exists!");
+
         String stateUpper = tax.getState().toUpperCase();
         tax.setState(stateUpper);
 
@@ -128,7 +131,7 @@ public class AdminController {
 
     @RequestMapping(value = "/productSave/{productType}", method = RequestMethod.PUT)
     @ResponseBody
-    public Product editProductSubmit(@RequestBody Product product, @PathVariable("productType") String productType) {
+    public Product editProductSubmit(@Valid @RequestBody Product product, @PathVariable("productType") String productType) {
 
         testMode = testRead();
 
@@ -140,7 +143,7 @@ public class AdminController {
 
     @RequestMapping(value = "/taxSave{tax}", method = RequestMethod.PUT)
     @ResponseBody
-    public Taxes editTaxSubmit(@RequestBody Taxes taxRate, @PathVariable("tax") String tax) {
+    public Taxes editTaxSubmit(@Valid @RequestBody Taxes taxRate, @PathVariable("tax") String tax) {
 
         testMode = testRead();
 

@@ -81,6 +81,8 @@
                                 <input type="text" id="labor-input" class="form-control"/>
                             </div>
                         </fieldset>
+                        <div id="add-product-validation-errors">
+                        </div>
 
                         <div id="button">
                             <fieldset class="form-group">

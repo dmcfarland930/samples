@@ -33,19 +33,19 @@ $(document).ready(function () {
                 $("#order-date-input").val('');
 
                 $('#show-header').text("Order Added");
-                
-                $('#order-date').text(data.orderDate);
+
+                $('#order-date').text(data.date);
                 $('#order-name').text(data.customerName);
                 $('#order-state').text(data.state);
                 $('#order-product').text(data.productType);
                 $('#order-area').text(data.area);
-                
-                
+
+
                 $('#order-product-cost').text(data.costPerSqFt);
                 $('#order-labor-cost').text(data.laborCostPerSqFt);
                 $('#order-tax-rate').text(data.taxRate);
-                
-                
+
+
                 $('#order-product-total').text(data.materialCost);
                 $('#order-labor-total').text(data.totalLaborCost);
                 $('#order-tax-total').text(data.tax);
@@ -54,7 +54,13 @@ $(document).ready(function () {
                 $('#showOrderModal').modal('show');
             },
             error: function (data, status) {
-                alert("error");
+                var errors = data.responseJSON.errors;
+
+                $.each(errors, function (index, error) {
+
+                    $('#add-order-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+
+                });
             }
 
 
@@ -69,26 +75,26 @@ $(document).ready(function () {
         var orderId = link.data('order-id');
 
         $.ajax({
-            url: contextRoot + "/order/" +orderId,
+            url: contextRoot + "/order/" + orderId,
             type: 'GET',
             dataType: 'json',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Accept", "application/json");
             },
             success: function (data, status) {
-                
+
                 $('#order-date').html(data.orderDate);
                 $('#order-name').html(data.customerName);
                 $('#order-state').html(data.state);
                 $('#order-product').html(data.productType);
                 $('#order-area').html(data.area);
-                
-                
+
+
                 $('#order-product-cost').html(data.costPerSqFt);
                 $('#order-labor-cost').html(data.laborCostPerSqFt);
                 $('#order-tax-rate').html(data.taxRate);
-                
-                
+
+
                 $('#order-product-total').html(data.materialCost);
                 $('#order-labor-total').html(data.totalLaborCost);
                 $('#order-tax-total').html(data.tax);
@@ -116,8 +122,6 @@ $(document).ready(function () {
                 xhr.setRequestHeader("Accept", "application/json");
             },
             success: function (data, status) {
-                
-                
                 $('#edit-order-name').val(data.customerName);
                 $('#edit-order-product').val(data.productType);
                 $('#edit-order-tax').val(data.state);
@@ -126,7 +130,13 @@ $(document).ready(function () {
                 $('#edit-id').val(data.orderNumber);
             },
             error: function (data, status) {
-                alert("error");
+                var errors = data.responseJSON.errors;
+
+                $.each(errors, function (index, error) {
+
+                    $('#edit-order-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+
+                });
             }
 
         });
@@ -159,28 +169,28 @@ $(document).ready(function () {
             success: function (data, status) {
 
                 $('#editOrderModal').modal('hide');
-                
+
                 $('#show-header').text("Order Updated");
-                
+
                 $('#order-date').text(data.orderDate);
                 $('#order-name').text(data.customerName);
                 $('#order-state').text(data.state);
                 $('#order-product').text(data.productType);
                 $('#order-area').text(data.area);
-                
-                
+
+
                 $('#order-product-cost').text(data.costPerSqFt);
                 $('#order-labor-cost').text(data.laborCostPerSqFt);
                 $('#order-tax-rate').text(data.taxRate);
-                
-                
+
+
                 $('#order-product-total').text(data.materialCost);
                 $('#order-labor-total').text(data.totalLaborCost);
                 $('#order-tax-total').text(data.tax);
                 $('#order-grand-total').text(data.orderTotal);
 
                 $('#showOrderModal').modal('show');
-                
+
 
                 var tableRow = buildOrderRow(data);
 
@@ -188,7 +198,13 @@ $(document).ready(function () {
 
             },
             error: function (data, status) {
-                alert("error");
+                var errors = data.responseJSON.errors;
+
+                $.each(errors, function (index, error) {
+
+                    $('#edit-order-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+
+                });
             }
 
         });

@@ -12,7 +12,6 @@ import com.mycompany.flooringmasteryweb.dto.Order;
 import com.mycompany.flooringmasteryweb.dto.OrderCommand;
 import com.mycompany.flooringmasteryweb.dto.Product;
 import com.mycompany.flooringmasteryweb.dto.Taxes;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +19,6 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,7 +53,7 @@ public class FlooringController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
-    public Order create(@RequestBody OrderCommand orderCommand) {
+    public Order create(@Valid @RequestBody OrderCommand orderCommand) {
 
 //        if (bindingResult.hasErrors()) {
 //
@@ -112,7 +110,7 @@ public class FlooringController {
 
     @RequestMapping(value = "/", method = RequestMethod.PUT)
     @ResponseBody
-    public Order editSubmit(@RequestBody Order orderCommand) {
+    public Order editSubmit(@Valid @RequestBody Order orderCommand) {
 
 //        if (bindingResult.hasErrors()) {
 //
@@ -196,10 +194,10 @@ public class FlooringController {
 
         List<Product> products = productDao.getProductList();
         List<Taxes> taxes = taxDao.getTaxesList();
-        model.put("test", showTest(testMode));
-        model.put("date", date);
         model.put("products", products);
         model.put("taxes", taxes);
+        model.put("test", showTest(testMode));
+        model.put("date", date);
         if (orders.isEmpty()) {
             model.put("noOrders", "No orders were found for this date!");
         } else {
@@ -214,7 +212,10 @@ public class FlooringController {
     public Order show(@PathVariable("id") Integer id) {
 
         Order order = orderDao.get(id);
-        String dateString = insertDateFormat(order.getOrderDate());
+        String dateString = order.getOrderDate(); 
+        if(!dateString.contains("/")){
+            dateString = insertDateFormat(order.getOrderDate());
+        }
         order.setOrderDate(dateString);
 
         return order;

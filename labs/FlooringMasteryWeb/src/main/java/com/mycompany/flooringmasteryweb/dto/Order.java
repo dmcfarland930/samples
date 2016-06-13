@@ -4,7 +4,11 @@
  */
 package com.mycompany.flooringmasteryweb.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -13,10 +17,12 @@ import java.util.Date;
 public class Order {
     
     private int orderNumber;
+    @NotEmpty(message=("This field cannot be blank!"))
     private String customerName;
     private String state;
     private double taxRate;
     private String productType;
+    @DecimalMin("1.0") 
     private double area;
     private double costPerSqFt;
     private double laborCostPerSqFt;
@@ -25,6 +31,7 @@ public class Order {
     private double tax;
     private double orderTotal;
     private String orderDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy", timezone="EST")
     private Date date;
 
     public int getOrderNumber() {

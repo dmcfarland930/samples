@@ -59,7 +59,7 @@ public class HomeController {
         model.put("date", dateFormat);
 
         if (orders.isEmpty()) {
-            model.put("noOrders", "No orders were found for this date!");
+            model.put("noOrders", "No orders placed today!!");
         } else {
             model.put("orders", orders);
         }
@@ -94,6 +94,7 @@ public class HomeController {
         }
 
     }
+
 
     public boolean readTest() {
 

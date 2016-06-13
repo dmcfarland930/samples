@@ -98,6 +98,12 @@ public class DvdDaoLambdaImpl implements DvdDao {
                 .filter(a -> a.getId() != dvd.getId())
                 .collect(Collectors.toList());
 
+        List<Notes> notes = noteDao.getNoteList();
+        for(Notes note : notes){
+            if(note.getDvdId() == dvd.getId()){
+                noteDao.delete(note);
+            }
+        }
         encode();
 
     }
@@ -187,6 +193,7 @@ public class DvdDaoLambdaImpl implements DvdDao {
 
                 }
                 myDvd.setNoteList(notesPerMovie);
+                myDvd.setDvdNoteAmount(notesPerMovie);
                 dvds.add(myDvd);
 
             }

@@ -58,6 +58,8 @@
                         </tr>       
                     </table>
                 </div>
+                <div id="edit-order-validation-errors">
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-danger" id="edit-order-button">Save</button>

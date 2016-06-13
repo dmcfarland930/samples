@@ -105,7 +105,7 @@
                         <fieldset class="form-group">
                             <label class="col-md-3" for="notes">Notes</label>
                             <div class="col-md-9">
-                                <textarea class="form-control" name="notes" rows="5" placeholder="Enter notes here"></textarea>
+                                <textarea class="form-control" id="notes-input" name="notes" rows="5" placeholder="Enter notes here"></textarea>
                             </div>
                         </fieldset>
                         <div id="create-dvd-validation-errors">
