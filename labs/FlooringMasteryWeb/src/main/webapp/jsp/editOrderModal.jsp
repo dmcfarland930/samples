@@ -18,10 +18,14 @@
                 <div class="modal-body">
                     <table class="table table-bordered" id="show-product-table">
                         <input type="hidden" id="edit-id"/>
+                        <input type="hidden" id="last-date"/>
+                        <input type="hidden" id="order-number"/>
                         <tr>
                             <th>Name on Order:</th>
                             <td>
                                 <input type="text" id="edit-order-name"/>
+                                <div id="name-edit-error" class="col-md-8">
+                                </div>
                             </td>
                         </tr>                   
                         <tr>
@@ -29,7 +33,7 @@
                             <td>
                                 <select class="form-control" name="productType" id="edit-order-product">
                                     <c:forEach items="${products}" var="productType">
-                                        <option value="${productType.productType}">${productType.productType}</option>
+                                        <option value="${productType.id}">${productType.productType}</option>
                                     </c:forEach>
                                 </select>
                             </td>
@@ -39,7 +43,7 @@
                             <td>
                                 <select class="form-control" name="state" id="edit-order-tax">
                                     <c:forEach items="${taxes}" var="state">
-                                        <option value="${state.state}">${state.state}</option>
+                                        <option value="${state.id}">${state.state}</option>
                                     </c:forEach>
                                 </select>
                             </td>
@@ -48,6 +52,8 @@
                             <th>Area:</th>
                             <td>
                                 <input type="text" id="edit-order-area"/>
+                                <div id="area-edit-error" class="col-md-8">
+                                </div>
                             </td>
                         </tr>    
                         <tr>

@@ -14,12 +14,15 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class Product {
 
-    private String id;
+    private int id;
+    
     @NotEmpty(message = "You cannot leave this field blank!")
     @ValidProductName
     private String productType;
+    
     @NotNull(message="Please enter a cost of materials!")
     private Double costPerSqFt;
+    
     @NotNull(message="Please enter a cost of labor!")
     private Double laborCostPerSqFt;
 
@@ -47,11 +50,11 @@ public class Product {
         this.laborCostPerSqFt = laborCostPerSqFt;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

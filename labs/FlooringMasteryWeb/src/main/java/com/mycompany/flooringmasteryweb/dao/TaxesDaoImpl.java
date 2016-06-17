@@ -50,7 +50,6 @@ public class TaxesDaoImpl implements TaxesDao {
 
     }
 
-    @Override
     public Taxes get(String state) {
 
         for (Taxes myTaxes : taxesList) {
@@ -61,7 +60,7 @@ public class TaxesDaoImpl implements TaxesDao {
         return null;
     }
 
-    @Override
+ 
     public void update(Taxes taxes, String state) {
 
         for (Taxes myTaxes : taxesList) {
@@ -175,6 +174,16 @@ public class TaxesDaoImpl implements TaxesDao {
     @Override
     public List<Taxes> getTaxesList() {
         return taxesList;
+    }
+
+    @Override
+    public Taxes get(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void update(Taxes taxes) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

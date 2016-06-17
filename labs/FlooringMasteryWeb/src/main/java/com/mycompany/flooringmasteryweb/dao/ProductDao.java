@@ -20,9 +20,13 @@ public interface ProductDao {
 
     Product create(Product product);
 
+    Product get(Integer id);
+    
+    void update(Product product);
+    
     void delete(Product product);
-
-    Product get(String productType);
+    
+    List<Product> getProductList();
 
     double getCostPerSqFt(String productType);
 
@@ -31,11 +35,8 @@ public interface ProductDao {
     void setCsv(boolean csvXml);
 
     void setTestMode(boolean testMode);
-
-    void update(Product product, String productType);
-
+    
     boolean validateProductType(String productType, boolean edit);
 
-    List<Product> getProductList();
 
 }

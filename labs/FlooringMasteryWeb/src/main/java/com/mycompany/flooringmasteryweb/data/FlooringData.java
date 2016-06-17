@@ -4,7 +4,7 @@
  */
 package com.mycompany.flooringmasteryweb.data;
 
-import com.mycompany.flooringmasteryweb.dao.OrderDaoImpl;
+import com.mycompany.flooringmasteryweb.dao.OrderDaoDbImpl;
 import com.mycompany.flooringmasteryweb.dao.ProductXmlDao;
 import com.mycompany.flooringmasteryweb.dao.TaxesDaoImpl;
 import com.mycompany.flooringmasteryweb.dao.TaxesXmlDao;
@@ -117,7 +117,7 @@ public class FlooringData {
                 out.flush();
 
             } catch (IOException ex) {
-                Logger.getLogger(OrderDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(OrderDaoDbImpl.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 out.close();
             }

@@ -41,8 +41,6 @@ public class HomeController {
         model.put("newest", newest.getTitle());
         model.put("years", years);
         
-        int noteNum = dvdDao.findAverageAmountOfNotes();
-        model.put("notenum", noteNum);
         
         }catch(Exception ex){
             

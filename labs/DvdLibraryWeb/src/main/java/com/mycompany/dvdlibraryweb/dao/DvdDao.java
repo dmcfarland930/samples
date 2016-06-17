@@ -4,7 +4,6 @@
  */
 package com.mycompany.dvdlibraryweb.dao;
 import com.mycompany.dvdlibraryweb.dto.Dvd;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,17 +12,13 @@ import java.util.List;
  */
 public interface DvdDao {
 
-    Dvd create(Dvd dvd, Date date);
-
-    List<Dvd> decode();
+    Dvd create(Dvd dvd);
 
     void delete(Dvd dvd);
 
-    void encode();
-
     List<Dvd> getByTitle(String title);
 
-    Dvd get(int id);
+    Dvd get(Integer id);
 
     void update(Dvd dvd);
 
@@ -42,8 +37,6 @@ public interface DvdDao {
     Dvd findOldestMovie();
     
     int findAverageAgeOfMovies();
-    
-    int findAverageAmountOfNotes();
     
     
 

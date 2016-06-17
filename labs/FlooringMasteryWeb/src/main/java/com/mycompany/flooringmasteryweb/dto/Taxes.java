@@ -14,16 +14,15 @@ import javax.validation.constraints.Size;
  */
 public class Taxes {
     
+    private int id;
+    
     @Size (min=2, max=2, message="You must enter a state abbreviation!")
     @ValidState
     private String state;
-    
-    
+        
     @NotNull(message="Please enter a tax rate!")
     private Double taxRate;
-    
-
-    
+        
     public String getState() {
         return state;
     }
@@ -40,6 +39,12 @@ public class Taxes {
         this.taxRate = taxRate;
     }
 
-    
-    
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
 }

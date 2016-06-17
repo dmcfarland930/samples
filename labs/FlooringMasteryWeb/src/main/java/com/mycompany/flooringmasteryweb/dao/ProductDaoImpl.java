@@ -51,7 +51,6 @@ public class ProductDaoImpl implements ProductDao {
 
     }
 
-    @Override
     public Product get(String productType) {
 
         for (Product myProduct : productList) {
@@ -62,7 +61,6 @@ public class ProductDaoImpl implements ProductDao {
         return null;
     }
 
-    @Override
     public void update(Product product, String productType) {
 
         for (Product myProduct : productList) {
@@ -225,6 +223,16 @@ public class ProductDaoImpl implements ProductDao {
 
     public List<Product> getProductList() {
         return productList;
+    }
+
+    @Override
+    public Product get(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void update(Product product) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     

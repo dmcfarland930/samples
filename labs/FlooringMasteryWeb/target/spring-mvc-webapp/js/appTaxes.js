@@ -32,10 +32,17 @@ $(document).ready(function () {
             },
             error: function (data, status) {
                 var errors = data.responseJSON.errors;
+                $('rate-error').empty();
 
                 $.each(errors, function (index, error) {
 
-                    $('#add-taxes-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+                    switch (error.fieldName) {
+                        case "taxRate":
+                            $('#rate-error').append(error.message);
+                            break;
+                        default:
+                            break;
+                    }
 
                 });
             }
@@ -93,13 +100,7 @@ $(document).ready(function () {
 
             },
             error: function (data, status) {
-                var errors = data.responseJSON.errors;
 
-                $.each(errors, function (index, error) {
-
-                    $('#edit-taxes-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
-
-                });
             }
 
 
@@ -138,10 +139,17 @@ $(document).ready(function () {
             },
             error: function (data, status) {
                 var errors = data.responseJSON.errors;
+                $('rate-edit-error').empty();
 
                 $.each(errors, function (index, error) {
 
-                    $('#edit-taxes-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+                    switch (error.fieldName) {
+                        case "taxRate":
+                            $('#rate-edit-error').append(error.message);
+                            break;
+                        default:
+                            break;
+                    }
 
                 });
             }

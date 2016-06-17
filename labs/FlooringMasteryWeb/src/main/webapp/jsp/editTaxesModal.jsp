@@ -28,6 +28,8 @@
                             <th>Tax Rate</th>
                             <td>
                                 <input type="text" id="edit-taxes-rate"/>
+                                <div id="rate-edit-error" class="col-md-8">
+                                </div>
                             </td>
                         </tr>
 

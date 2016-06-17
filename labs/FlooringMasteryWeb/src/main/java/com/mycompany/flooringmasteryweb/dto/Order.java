@@ -6,7 +6,6 @@ package com.mycompany.flooringmasteryweb.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
-import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -15,14 +14,14 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author apprentice
  */
 public class Order {
-    
+
     private int orderNumber;
-    @NotEmpty(message=("This field cannot be blank!"))
+    @NotEmpty(message = ("This field cannot be blank!"))
     private String customerName;
     private String state;
     private double taxRate;
     private String productType;
-    @DecimalMin("1.0") 
+    @DecimalMin("1.0")
     private double area;
     private double costPerSqFt;
     private double laborCostPerSqFt;
@@ -31,8 +30,10 @@ public class Order {
     private double tax;
     private double orderTotal;
     private String orderDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy", timezone="EST")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy", timezone = "UTC")
     private Date date;
+    private Product product;
+    private Taxes taxes;
 
     public int getOrderNumber() {
         return orderNumber;
@@ -146,5 +147,20 @@ public class Order {
         this.date = date;
     }
 
-    
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Taxes getTaxes() {
+        return taxes;
+    }
+
+    public void setTaxes(Taxes taxes) {
+        this.taxes = taxes;
+    }
+
 }

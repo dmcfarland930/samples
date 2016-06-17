@@ -22,13 +22,13 @@ public interface TaxesDao {
 
     void delete(Taxes taxes);
 
-    Taxes get(String state);
+    Taxes get(Integer id);
 
     void setCsv(boolean csvXml);
 
     void setTestMode(boolean testMode);
 
-    void update(Taxes taxes, String state);
+    void update(Taxes taxes);
 
     boolean validateState(String state, boolean edit);
     

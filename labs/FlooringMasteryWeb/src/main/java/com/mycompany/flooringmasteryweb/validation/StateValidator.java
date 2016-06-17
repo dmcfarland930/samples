@@ -32,17 +32,17 @@ public class StateValidator implements ConstraintValidator<ValidState, String> {
     public boolean isValid(String state, ConstraintValidatorContext context) {
 
         List<Taxes> taxes = taxDao.getTaxesList();
-        boolean productDoesNotExist = true;
+        boolean stateDoesNotExist = true;
         
         for (Taxes taxesOnList : taxes) {
 
             if (taxesOnList.getState().equalsIgnoreCase(state)) {
-                productDoesNotExist = false;
+                stateDoesNotExist = false;
             }
 
         }
 
-        return productDoesNotExist;
+        return stateDoesNotExist;
     }
     
     public void setTaxDao(TaxesDao taxDao){

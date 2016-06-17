@@ -36,10 +36,26 @@ $(document).ready(function () {
             },
             error: function (data, status) {
                 var errors = data.responseJSON.errors;
+                $('type-error').empty();
+                $('cost-error').empty();
+                $('labor-error').empty();
 
                 $.each(errors, function (index, error) {
 
-                    $('#add-product-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+                    switch (error.fieldName) {
+                        case "productType":
+                            $('#type-error').append(error.message);
+
+                            break;
+                        case "costPerSqFt":
+                            $('#cost-error').append(error.message);
+                            break;
+                        case "laborCostPerSqFt":
+                            $('#labor-error').append(error.message);
+                            break;
+                        default:
+                            break;
+                    }
 
                 });
             }
@@ -81,7 +97,7 @@ $(document).ready(function () {
         var link = $(e.relatedTarget);
 
         var productId = link.data('product-type');
-        
+
         $.ajax({
             url: contextRoot + "/admin/editProduct/" + productId,
             type: 'GET',
@@ -134,10 +150,26 @@ $(document).ready(function () {
             },
             error: function (data, status) {
                 var errors = data.responseJSON.errors;
+                $('type-edit-error').empty();
+                $('cost-edit-error').empty();
+                $('labor-edit-error').empty();
 
                 $.each(errors, function (index, error) {
 
-                    $('#edit-product-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+                    switch (error.fieldName) {
+                        case "productType":
+                            $('#type-edit-error').append(error.message);
+
+                            break;
+                        case "costPerSqFt":
+                            $('#cost-edit-error').append(error.message);
+                            break;
+                        case "laborCostPerSqFt":
+                            $('#labor-edit-error').append(error.message);
+                            break;
+                        default:
+                            break;
+                    }
 
                 });
             }
@@ -164,13 +196,8 @@ $(document).ready(function () {
 
             },
             error: function (data, status) {
-                var errors = data.responseJSON.errors;
 
-                $.each(errors, function (index, error) {
 
-                    $('#edit-product-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
-
-                });
             }
         });
 

@@ -68,17 +68,23 @@
                             <div class="col-md-8">                                
                                 <input type="text" id="product-type-input" class="form-control"/>
                             </div>
+                            <div id="type-error" class="col-md-8">
+                            </div>
                         </fieldset>
                         <fieldset class="form-group">
                             <label class="col-md-4" for="costPerSqFt">Cost Per Sq/Ft:</label>
                             <div class="col-md-8">
                                 <input type="text" id="cost-input" class="form-control"/>
                             </div>
+                            <div id="cost-error" class="col-md-8">
+                            </div>
                         </fieldset>
                         <fieldset class="form-group">
                             <label class="col-md-4" for="laborCostPerSqFt">Labor Cost Per Sq/Ft:</label>
                             <div class="col-md-8">
                                 <input type="text" id="labor-input" class="form-control"/>
+                            </div>
+                            <div id="labor-error" class="col-md-8">
                             </div>
                         </fieldset>
                         <div id="add-product-validation-errors">

@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 public class DvdDaoLambdaImpl implements DvdDao {
 
     List<Dvd> dvdList = new ArrayList();
-    NoteDao noteDao = new NoteDao();
+    NoteDaoImpl noteDao = new NoteDaoImpl();
     private int nextId = 1000;
 
     public DvdDaoLambdaImpl() {
@@ -40,10 +40,9 @@ public class DvdDaoLambdaImpl implements DvdDao {
     }
 
     @Override
-    public Dvd create(Dvd dvd, Date date) {
+    public Dvd create(Dvd dvd) {
 
         dvd.setId(nextId);
-        dvd.setDvdDate(date);
         nextId++;
         dvdList.add(dvd);
 
@@ -64,7 +63,7 @@ public class DvdDaoLambdaImpl implements DvdDao {
     }
 
     @Override
-    public Dvd get(int id) {
+    public Dvd get(Integer id) {
 
         return dvdList
                 .stream()
@@ -108,7 +107,6 @@ public class DvdDaoLambdaImpl implements DvdDao {
 
     }
 
-    @Override
     public void encode() {
 
         final String TOKEN = "::";
@@ -146,8 +144,7 @@ public class DvdDaoLambdaImpl implements DvdDao {
         }
 
     }
-
-    @Override
+    
     public List<Dvd> decode() {
 
         int lastId = 0;
@@ -299,19 +296,18 @@ public class DvdDaoLambdaImpl implements DvdDao {
         return averAge;
     }
 
-    @Override
-    public int findAverageAmountOfNotes() {
-
-        int averAge;
-        Integer sum = dvdList
-                .stream()
-                .map(Dvd::getDvdNoteAmount)
-                .reduce(0, (a, b) -> a + b);
-
-        averAge = sum / dvdList.size();
-        return averAge;
-        
-    }
+//    public int findAverageAmountOfNotes() {
+//
+//        int averAge;
+//        Integer sum = dvdList
+//                .stream()
+//                .map(Dvd::getDvdNoteAmount)
+//                .reduce(0, (a, b) -> a + b);
+//
+//        averAge = sum / dvdList.size();
+//        return averAge;
+//        
+//    }
 
     @Override
     public List<Dvd> list() {

@@ -9,7 +9,7 @@ $(document).ready(function () {
             rating: $("#rating-input").val(),
             director: $("#director-input").val(),
             studio: $("#studio-input").val(),
-            date: $("#date-input").val(),
+            dvdDate: $("#date-input").val(),
             notes: $("#notes-input").val()
 
         });
@@ -63,12 +63,20 @@ $(document).ready(function () {
                 xhr.setRequestHeader("Accept", "application/json");
             },
             success: function (data, status) {
+                $('.note-row').remove();
                 $('#dvd-title').html(data.title);
                 $('#dvd-director').html(data.director);
                 $('#dvd-rating').html(data.rating);
                 $('#dvd-studio').html(data.studio);
-                $('#dvd-date').html(data.date);
-                $('#dvd-notes').html(data.notes);
+                $('#dvd-date').html(data.dvdDate);
+                
+                var notes = data.noteList;
+                
+                for(var i = 0; i < data.noteList.length; i++){
+                    var noteRow = buildNoteRow(notes[i]);
+                    $('#show-dvd-table').append($(noteRow));
+                    
+                }
             },
             error: function (data, status) {
 
@@ -97,7 +105,7 @@ $(document).ready(function () {
                 $('#edit-dvd-director').val(data.director);
                 $('#edit-dvd-rating').val(data.rating);
                 $('#edit-dvd-studio').val(data.studio);
-                $('#edit-dvd-date').val(data.date);
+                $('#edit-dvd-date').val(data.dvdDate);
                 $('#edit-dvd-notes').val(data.notes);
                 $('#edit-id').val(data.id);
             },
@@ -121,7 +129,7 @@ $(document).ready(function () {
             director: $("#edit-dvd-director").val(),
             rating: $("#edit-dvd-rating").val(),
             studio: $("#edit-dvd-studio").val(),
-            date: $("#edit-dvd-date").val(),
+            dvdDate: $("#edit-dvd-date").val(),
             notes: $("#edit-dvd-notes").val()
         });
 
@@ -195,6 +203,14 @@ $(document).ready(function () {
                 </tr>  ";
 
 
+    }
+    
+    function buildNoteRow(notes){
+        
+        return"<tr class='note-row'>\n\
+                <td></td><td>"+ notes.note+ "</td>\n\
+                </td>";
+        
     }
 
 

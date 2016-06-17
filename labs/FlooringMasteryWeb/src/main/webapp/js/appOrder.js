@@ -6,8 +6,8 @@ $(document).ready(function () {
 
         var orderData = JSON.stringify({
             customerName: $('#order-name-input').val(),
-            state: $("#order-tax-input").val(),
-            productType: $("#order-product-input").val(),
+            productId: $("#order-product-input").val(),
+            taxesId: $("#order-tax-input").val(),
             area: $("#order-area-input").val(),
             date: $("#order-date-input").val()
 
@@ -31,7 +31,7 @@ $(document).ready(function () {
                 $("#order-product-input").val('');
                 $("#order-area-input").val('');
                 $("#order-date-input").val('');
-
+                $("#order-number").val(data.orderNumber);
                 $('#show-header').text("Order Added");
 
                 $('#order-date').text(data.date);
@@ -40,11 +40,9 @@ $(document).ready(function () {
                 $('#order-product').text(data.productType);
                 $('#order-area').text(data.area);
 
-
                 $('#order-product-cost').text(data.costPerSqFt);
                 $('#order-labor-cost').text(data.laborCostPerSqFt);
                 $('#order-tax-rate').text(data.taxRate);
-
 
                 $('#order-product-total').text(data.materialCost);
                 $('#order-labor-total').text(data.totalLaborCost);
@@ -55,10 +53,23 @@ $(document).ready(function () {
             },
             error: function (data, status) {
                 var errors = data.responseJSON.errors;
+                $('#name-error').empty();
+                $('#area-error').empty();
 
                 $.each(errors, function (index, error) {
 
-                    $('#add-order-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
+                    switch (error.fieldName) {
+                        case "customerName":
+                            $('#name-error').append(error.message);
+                            //$('#order-name-input').addClass("") (or .css);
+                            break;
+                        case "area":
+                            $('#area-error').append(error.message);
+                            break;
+                        default:
+                            break;
+
+                    }
 
                 });
             }
@@ -73,7 +84,11 @@ $(document).ready(function () {
         var link = $(e.relatedTarget);
 
         var orderId = link.data('order-id');
-
+        if (orderId === undefined) {
+            orderId = $('#order-number').val();
+        }
+        console.log(orderId);
+        console.log($('#order-number').val());
         $.ajax({
             url: contextRoot + "/order/" + orderId,
             type: 'GET',
@@ -83,17 +98,15 @@ $(document).ready(function () {
             },
             success: function (data, status) {
 
-                $('#order-date').html(data.orderDate);
+                $('#order-date').html(data.date);
                 $('#order-name').html(data.customerName);
                 $('#order-state').html(data.state);
                 $('#order-product').html(data.productType);
                 $('#order-area').html(data.area);
 
-
                 $('#order-product-cost').html(data.costPerSqFt);
                 $('#order-labor-cost').html(data.laborCostPerSqFt);
                 $('#order-tax-rate').html(data.taxRate);
-
 
                 $('#order-product-total').html(data.materialCost);
                 $('#order-labor-total').html(data.totalLaborCost);
@@ -112,7 +125,6 @@ $(document).ready(function () {
     $('#editOrderModal').on('show.bs.modal', function (e) {
 
         var link = $(e.relatedTarget);
-
         var orderId = link.data('order-id');
         $.ajax({
             url: contextRoot + "/order/" + orderId,
@@ -123,20 +135,17 @@ $(document).ready(function () {
             },
             success: function (data, status) {
                 $('#edit-order-name').val(data.customerName);
-                $('#edit-order-product').val(data.productType);
-                $('#edit-order-tax').val(data.state);
                 $('#edit-order-area').val(data.area);
-                $('#edit-order-date').val(data.orderDate);
-                $('#edit-id').val(data.orderNumber);
+                $('#edit-order-product').val(data.product.id);
+                $('#edit-order-tax').val(data.taxes.id);
+                $('#edit-order-date').val(data.date);
+                $('#last-date').val(data.date);
+                $('#order-number').val(data.orderNumber);
+                $('#edit-id').val(orderId);
+
             },
             error: function (data, status) {
-                var errors = data.responseJSON.errors;
 
-                $.each(errors, function (index, error) {
-
-                    $('#edit-order-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
-
-                });
             }
 
         });
@@ -148,13 +157,15 @@ $(document).ready(function () {
 
         e.preventDefault();
 
+        console.log($('#last-date').val());
+
         var orderData = JSON.stringify({
             orderNumber: $("#edit-id").val(),
             customerName: $("#edit-order-name").val(),
-            productType: $("#edit-order-product").val(),
-            state: $("#edit-order-tax").val(),
+            productId: $("#edit-order-product").val(),
+            taxesId: $("#edit-order-tax").val(),
             area: $('#edit-order-area').val(),
-            orderDate: $('#edit-order-date').val()
+            date: $('#edit-order-date').val()
         });
 
         $.ajax({
@@ -172,38 +183,58 @@ $(document).ready(function () {
 
                 $('#show-header').text("Order Updated");
 
-                $('#order-date').text(data.orderDate);
-                $('#order-name').text(data.customerName);
-                $('#order-state').text(data.state);
-                $('#order-product').text(data.productType);
-                $('#order-area').text(data.area);
+                $('#order-date').html(data.date);
+                $('#order-name').html(data.customerName);
+                $('#order-state').html(data.state);
+                $('#order-product').html(data.productType);
+                $('#order-area').html(data.area);
+
+                $('#order-product-cost').html(data.costPerSqFt);
+                $('#order-labor-cost').html(data.laborCostPerSqFt);
+                $('#order-tax-rate').html(data.taxRate);
 
 
-                $('#order-product-cost').text(data.costPerSqFt);
-                $('#order-labor-cost').text(data.laborCostPerSqFt);
-                $('#order-tax-rate').text(data.taxRate);
-
-
-                $('#order-product-total').text(data.materialCost);
-                $('#order-labor-total').text(data.totalLaborCost);
-                $('#order-tax-total').text(data.tax);
-                $('#order-grand-total').text(data.orderTotal);
+                $('#order-product-total').html(data.materialCost);
+                $('#order-labor-total').html("<fmt:formatNumber type='currency' maxIntegerDigits='10' value='" + data.totalLaborCost + "'/>");
+                $('#order-tax-total').html(data.tax);
+                $('#order-grand-total').html(data.orderTotal);
 
                 $('#showOrderModal').modal('show');
 
+                console.log(data.date);
+                console.log($('#last-date').val());
+                if (data.date !== $('#last-date').val()) {
 
-                var tableRow = buildOrderRow(data);
+                    $('#order-row-' + data.orderNumber).remove();
 
-                $('#order-row-' + data.orderNumber).replaceWith($(tableRow));
+                } else {
+
+                    var tableRow = buildOrderRow(data);
+
+                    $('#order-row-' + data.orderNumber).replaceWith($(tableRow));
+
+                }
 
             },
             error: function (data, status) {
                 var errors = data.responseJSON.errors;
+                $('#name-edit-error').empty();
+                $('#area-edit-error').empty();
+
 
                 $.each(errors, function (index, error) {
 
-                    $('#edit-order-validation-errors').append(error.fieldName + ": " + error.message + "<br/>");
-
+                    switch (error.fieldName) {
+                        case "customerName":
+                            $('#name-edit-error').append(error.message);
+                            //$('#order-name-input').addClass("") (or .css);
+                            break;
+                        case "area":
+                            $('#area-edit-error').append(error.message);
+                            break;
+                        default:
+                            break;
+                    }
                 });
             }
 
@@ -244,11 +275,13 @@ $(document).ready(function () {
                 <td><a data-order-id='" + data.orderNumber + "' data-toggle='modal' data-target='#showOrderModal'>" + data.orderNumber + "</a></td>  \n\
                 <td> " + data.customerName + "</td>    \n\
                 <td> <a data-order-id='" + data.orderNumber + "' data-toggle='modal' data-target='#editOrderModal'><i class='glyphicon glyphicon-wrench'></i></a>  </td>   \n\
-                <td> <a class='delete-link'><i data-order-type='" + data.orderNumber + "' class='glyphicon glyphicon-trash'></i></a>  </td>   \n\
+                <td> <a class='delete-link'><i data-order-id='" + data.orderNumber + "' class='glyphicon glyphicon-trash'></i></a>  </td>   \n\
                 </tr>  ";
 
 
     }
+
+
 
 
 });

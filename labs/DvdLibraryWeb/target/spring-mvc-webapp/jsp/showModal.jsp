@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <div class="modal fade" id="showDvdModal" role="dialog">
@@ -42,8 +43,7 @@
                             <td id="dvd-date"></td>
                         </tr>
                         <tr>
-                            <th>Notes:</th>
-                            <td id="dvd-notes"></td>
+                            <th>Notes:</th>                        
                         </tr>
 
                     </table>

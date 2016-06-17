@@ -35,6 +35,8 @@ public class OrderCommand {
     private String orderDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy", timezone="EST")
     private Date date;
+    private int productId;
+    private int taxesId;
 
     public int getOrderNumber() {
         return orderNumber;
@@ -146,6 +148,22 @@ public class OrderCommand {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public int getTaxesId() {
+        return taxesId;
+    }
+
+    public void setTaxesId(int taxesId) {
+        this.taxesId = taxesId;
     }
 
     

@@ -16,7 +16,9 @@
             <fieldset class="form-group">
                 <label class="col-md-4" for="customerName">Name on Order:</label>
                 <div class="col-md-8">
-                    <input type="text" id="order-name-input" class="form-control"/>
+                    <input type="text" id="order-name-input" class="form-control ${hasError}"/>
+                </div>
+                <div id="name-error" class="col-md-8">
                 </div>
             </fieldset>
 
@@ -25,7 +27,7 @@
                 <div div class="col-md-8">
                     <select class="form-control" name="productType" id="order-product-input">
                         <c:forEach items="${products}" var="productType">
-                            <option value="${productType.productType}">${productType.productType}</option>
+                            <option value="${productType.id}">${productType.productType}</option>
                         </c:forEach>
                     </select>
                 </div>
@@ -36,7 +38,7 @@
                 <div div class="col-md-8">
                     <select class="form-control" name="state" id="order-tax-input">
                         <c:forEach items="${taxes}" var="state">
-                            <option value="${state.state}">${state.state}</option>
+                            <option value="${state.id}">${state.state}</option>
                         </c:forEach>
                     </select>
                 </div>
@@ -45,7 +47,9 @@
             <fieldset class="form-group">
                 <label class="col-md-4" for="area">Area:</label>
                 <div class="col-md-8">
-                    <input type="text" id="order-area-input" class="form-control"/>
+                    <input type="text" id="order-area-input" class="form-control ${hasError}"/>
+                </div>
+                <div id="area-error" class="col-md-8">
                 </div>
             </fieldset>
 
@@ -60,9 +64,11 @@
 
             <div id="button">
                 <fieldset class="form-group ">
-                    <input  id="create-submit" class="btn bg-primary pull-right button-size" type="submit" value="Submit Order"/>
+                    <input id="create-submit" class="btn bg-primary pull-right button-size" type="submit" value="Submit Order"/>
                 </fieldset>
             </div>
+
+            <input type="hidden" id="order-number"/>
         </form>
 
     </div>

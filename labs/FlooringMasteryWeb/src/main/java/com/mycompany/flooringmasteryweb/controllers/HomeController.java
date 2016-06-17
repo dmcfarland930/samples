@@ -7,15 +7,17 @@ package com.mycompany.flooringmasteryweb.controllers;
 import com.mycompany.flooringmasteryweb.dao.OrderDao;
 import com.mycompany.flooringmasteryweb.dao.ProductDao;
 import com.mycompany.flooringmasteryweb.dao.TaxesDao;
-import com.mycompany.flooringmasteryweb.data.FlooringData;
 import com.mycompany.flooringmasteryweb.dto.Order;
 import com.mycompany.flooringmasteryweb.dto.OrderCommand;
 import com.mycompany.flooringmasteryweb.dto.Product;
 import com.mycompany.flooringmasteryweb.dto.Taxes;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Inject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,19 +31,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class HomeController {
 
-    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyy");
+    SimpleDateFormat sdf = new SimpleDateFormat("MMddyyyy");
     private OrderDao orderDao;
     private TaxesDao taxDao;
     private ProductDao productDao;
-    private FlooringData floorData;
     boolean testMode;
 
     @Inject
-    public HomeController(OrderDao oDao, TaxesDao tDao, ProductDao pDao, FlooringData fData) {
+    public HomeController(OrderDao oDao, TaxesDao tDao, ProductDao pDao) {
         this.orderDao = oDao;
         this.taxDao = tDao;
         this.productDao = pDao;
-        this.floorData = fData;
 
     }
 
@@ -49,18 +49,21 @@ public class HomeController {
     public String home(Map model) {
 
         Date date = new Date();
-        testMode = readTest();
+//        testMode = readTest();
         String dateFormat = sdf.format(date);
-        String dateString = dateFormat.replace("/", "");
-        List<Order> orders = orderDao.getOrdersOnDate(dateString);
+        List<Order> orders = orderDao.getOrdersOnDate(dateFormat);
         List<Product> products = productDao.getProductList();
         List<Taxes> taxes = taxDao.getTaxesList();
-        model.put("test", showTest(testMode));
-        model.put("date", dateFormat);
+//        model.put("test", showTest(testMode));
+        String dateFormat2 = insertDateFormat(dateFormat);
+        model.put("date", dateFormat2);
 
         if (orders.isEmpty()) {
             model.put("noOrders", "No orders placed today!!");
         } else {
+            for(Order order : orders){
+                order.setOrderDate(dateFormat2);
+            }
             model.put("orders", orders);
         }
 
@@ -95,21 +98,27 @@ public class HomeController {
 
     }
 
+    public String insertDateFormat(String date) {
 
-    public boolean readTest() {
+        date = date.substring(0, 2) + "/" + date.substring(2, date.length());
+        date = date.substring(0, 5) + "/" + date.substring(5, date.length());
 
-        floorData.testDecode();
-        return testMode = floorData.isTestMode();
-
+        return date;
     }
 
-    public String showTest(boolean testMode) {
-        String test = "";
-        if (testMode) {
-            test = "(TEST)";
-        }
-
-        return test;
-    }
-
+//    public boolean readTest() {
+//
+//        floorData.testDecode();
+//        return testMode = floorData.isTestMode();
+//
+//    }
+//
+//    public String showTest(boolean testMode) {
+//        String test = "";
+//        if (testMode) {
+//            test = "(TEST)";
+//        }
+//
+//        return test;
+//    }
 }

@@ -18,8 +18,6 @@
         <!-- External Styling -->
         <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
         <link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
-        
-
     </head>
     <body>
         <div class="container">
@@ -38,15 +36,11 @@
                     </form>
                 </ul>    
             </div>
-
             <div class="row">
                 <div class="col-md-6 col-md-offset-3 formDiv">
                     <h1>Admin Login</h1>
-
                     <div id="login" >
                         <form method="POST" action="${pageContext.request.contextPath}/adminlogin">
-
-
                             <fieldset class="form-group ${hasError}">
                                 <input type="password" class="form-control" name="password" placeholder="Password">
                             </fieldset>
@@ -55,7 +49,6 @@
                             </div>
                         </form>
                     </div>
-
                     <div id="errorMessage">
                         <p>${error}</p>
                     </div>
@@ -64,7 +57,6 @@
             <!-- Placed at the end of the document so the pages load faster -->
             <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
             <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-
     </body>
 </html>
 

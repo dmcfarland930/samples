@@ -17,22 +17,41 @@
     <!-- Bean definitions go here -->
     
     
+    <tx:annotation-driven/>
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/flooring_master"/>
+        <property name="username" value="root"/>
+        <property name="password" value="apprentice"/>
+        <property name="initialSize" value="5"/>
+        <property name="maxActive" value="10"/>
+    </bean>
+    
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    
+    
     <bean id="floorData" class="com.mycompany.flooringmasteryweb.data.FlooringData"/>
     <bean id="productXmlDao" class="com.mycompany.flooringmasteryweb.dao.ProductXmlDao"/>
     <bean id="taxesXmlDao" class="com.mycompany.flooringmasteryweb.dao.TaxesXmlDao"/>
     
-    <bean id="productDao" class="com.mycompany.flooringmasteryweb.dao.ProductDaoImpl">    
-        <constructor-arg ref="floorData"/>
-        <constructor-arg ref="productXmlDao"/>
+    <bean id="productDao" class="com.mycompany.flooringmasteryweb.dao.ProductDaoDbImpl">    
+        <constructor-arg ref="jdbcTemplate"/>
     </bean>
 
-    <bean id="taxesDao" class="com.mycompany.flooringmasteryweb.dao.TaxesDaoImpl">    
-        <constructor-arg ref="floorData"/>
-        <constructor-arg ref="taxesXmlDao"/>
+    <bean id="taxesDao" class="com.mycompany.flooringmasteryweb.dao.TaxesDaoDbImpl">    
+        <constructor-arg ref="jdbcTemplate"/>
     </bean>
     
-    <bean id="orderDao" class="com.mycompany.flooringmasteryweb.dao.OrderDaoImpl">
-        <constructor-arg ref="floorData"/>
+    <bean id="orderDao" class="com.mycompany.flooringmasteryweb.dao.OrderDaoDbImpl">
+        <constructor-arg ref="productDao"/>
+        <constructor-arg ref="taxesDao"/>
+        <constructor-arg ref="jdbcTemplate"/>
     </bean>
     
        

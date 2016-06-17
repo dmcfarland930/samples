@@ -12,19 +12,10 @@ import com.mycompany.dvdlibraryweb.dao.DvdDao;
  */
 public class Notes {
 
-    String title;
     String note;
     int dvdId;
     int noteId;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
+    
     public String getNote() {
         return note;
     }

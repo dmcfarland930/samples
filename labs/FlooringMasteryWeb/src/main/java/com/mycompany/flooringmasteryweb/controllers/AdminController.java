@@ -6,7 +6,6 @@ package com.mycompany.flooringmasteryweb.controllers;
 
 import com.mycompany.flooringmasteryweb.dao.ProductDao;
 import com.mycompany.flooringmasteryweb.dao.TaxesDao;
-import com.mycompany.flooringmasteryweb.data.FlooringData;
 import com.mycompany.flooringmasteryweb.dto.Product;
 import com.mycompany.flooringmasteryweb.dto.Taxes;
 import java.text.SimpleDateFormat;
@@ -34,26 +33,24 @@ public class AdminController {
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
     private TaxesDao taxDao;
     private ProductDao productDao;
-    private FlooringData floorData;
     boolean testMode;
 
     @Inject
-    public AdminController(TaxesDao tDao, ProductDao pDao, FlooringData fData) {
+    public AdminController(TaxesDao tDao, ProductDao pDao) {
 
         this.taxDao = tDao;
         this.productDao = pDao;
-        this.floorData = fData;
-        this.testMode = testRead();
+//        this.testMode = testRead();
 
     }
 
     @RequestMapping(value = "/adminhome", method = RequestMethod.GET)
     public String home(Map model) {
 
-        testMode = testRead();
+//        testMode = testRead();
         List<Product> products = productDao.getProductList();
         List<Taxes> taxes = taxDao.getTaxesList();
-        model.put("test", showTest(testMode));
+//        model.put("test", showTest(testMode));
         model.put("products", products);
         model.put("taxes", taxes);
         return "adminhome";
@@ -62,9 +59,9 @@ public class AdminController {
     @RequestMapping(value = "/addproducts", method = RequestMethod.GET)
     public String create(@ModelAttribute Product product, Map model) {
 
-        testMode = testRead();
+//        testMode = testRead();
         List<Product> products = productDao.getProductList();
-        model.put("test", showTest(testMode));
+//        model.put("test", showTest(testMode));
         model.put("products", products);
         model.put("product", new Product());
 
@@ -87,9 +84,9 @@ public class AdminController {
     @RequestMapping(value = "/addtaxrates", method = RequestMethod.GET)
     public String create(@ModelAttribute Taxes tax, Map model) {
 
-        testMode = testRead();
+//        testMode = testRead();
         List<Taxes> taxes = taxDao.getTaxesList();
-        model.put("test", showTest(testMode));
+//        model.put("test", showTest(testMode));
         model.put("taxesList", taxes);
         model.put("taxes", new Taxes());
 
@@ -101,7 +98,7 @@ public class AdminController {
     @ResponseBody
     public Taxes createSubmit(@Valid @RequestBody Taxes tax, Map model) {
 
-        testMode = testRead();
+//        testMode = testRead();
         List<Taxes> taxes = taxDao.getTaxesList();
 
         model.put("stateExists", "That state already exists!");
@@ -115,57 +112,57 @@ public class AdminController {
 
     @RequestMapping(value = "/editProduct/{productType}", method = RequestMethod.GET)
     @ResponseBody
-    public Product editProduct(@PathVariable("productType") String productType) {
+    public Product editProduct(@RequestBody Product product) {
 
-        return productDao.get(productType);
+        return productDao.get(product.getId());
 
     }
 
     @RequestMapping(value = "/editTax/{state}", method = RequestMethod.GET)
     @ResponseBody
-    public Taxes editTax(@PathVariable("state") String taxRate) {
+    public Taxes editTax(@RequestBody Taxes tax) {
 
-        return taxDao.get(taxRate);
+        return taxDao.get(tax.getId());
 
     }
 
     @RequestMapping(value = "/productSave/{productType}", method = RequestMethod.PUT)
     @ResponseBody
-    public Product editProductSubmit(@Valid @RequestBody Product product, @PathVariable("productType") String productType) {
+    public Product editProductSubmit(@Valid @RequestBody Product product) {
 
-        testMode = testRead();
+//        testMode = testRead();
 
         List<Product> products = productDao.getProductList();
-        productDao.update(product, productType);
+        productDao.update(product);
         return product;
 
     }
 
     @RequestMapping(value = "/taxSave{tax}", method = RequestMethod.PUT)
     @ResponseBody
-    public Taxes editTaxSubmit(@Valid @RequestBody Taxes taxRate, @PathVariable("tax") String tax) {
+    public Taxes editTaxSubmit(@Valid @RequestBody Taxes taxRate) {
 
-        testMode = testRead();
+//        testMode = testRead();
 
         List<Taxes> taxes = taxDao.getTaxesList();
-        taxDao.update(taxRate, tax);
+        taxDao.update(taxRate);
         return taxRate;
     }
 
     @RequestMapping(value = "deleteProduct/{productType}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void deleteProducts(@PathVariable("productType") String productType) {
+    public void deleteProducts(@RequestBody Product product) {
 
-        Product product = productDao.get(productType);
-        productDao.delete(product);
+        Product productDel = productDao.get(product.getId());
+        productDao.delete(productDel);
     }
 
     @RequestMapping(value = "deleteTax/{state}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void deleteTaxes(@PathVariable("state") String state) {
+    public void deleteTaxes(@RequestBody Taxes tax) {
 
-        Taxes tax = taxDao.get(state);
-        taxDao.delete(tax);
+        Taxes taxDel = taxDao.get(tax.getId());
+        taxDao.delete(taxDel);
     }
 
 //    @RequestMapping(value = "/showproducts/{productType}", method = RequestMethod.GET)
@@ -201,20 +198,20 @@ public class AdminController {
         return date;
     }
 
-    public boolean testRead() {
-
-        floorData.testDecode();
-        return testMode = floorData.isTestMode();
-
-    }
-
-    public String showTest(boolean testMode) {
-        String test = "";
-        if (testMode) {
-            test = "(TEST)";
-        }
-
-        return test;
-    }
+//    public boolean testRead() {
+//
+//        floorData.testDecode();
+//        return testMode = floorData.isTestMode();
+//
+//    }
+//
+//    public String showTest(boolean testMode) {
+//        String test = "";
+//        if (testMode) {
+//            test = "(TEST)";
+//        }
+//
+//        return test;
+//    }
 
 }

@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html>
     <div class="modal fade" id="showOrderModal" role="dialog">
@@ -16,6 +18,7 @@
                 </div>
                 <div class="modal-body">
                     <table class="table table-striped" id="show-order-table"> 
+
                         <tr>
                             <td>Date of Order:</td> 
                             <td id="order-date"></td>
@@ -23,7 +26,7 @@
                         <tr>
                             <td>Customer Name:</td> 
                             <td id="order-name"></td>
-                            
+
                         </tr>
                         <tr>
                             <td>State:</td> 

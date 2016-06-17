@@ -6,6 +6,7 @@ package com.mycompany.flooringmasteryweb.dao;
 
 
 import com.mycompany.flooringmasteryweb.dto.Order;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,28 +17,29 @@ public interface OrderDao {
 
     double calculateOrderTotal(double laborTotal, double productTotal, double tax);
 
-    boolean checkFileDateExists(String date);
-
-    Order create(Order order, String date);
-
-    void delete(Order order, String date);
-
+    Order create(Order order);
+    
     Order get(Integer orderNumber);
+    
+    void update(Order order);
+
+    void delete(Order order);
 
     List<Order> getList();
 
-    List<String> getListOfDates();
-
+//    List<String> getListOfDates();
+//
     List<Order> getOrdersOnDate(String date);
+//
+//    List makeListWithDate(String date);
+//
+//    void setDatesToOrders();
+//
+//    int setIdForDate(Order order, String date);
+//
+//    void setTestMode(boolean testMode);
+//    
+//    boolean checkFileDateExists(String date);
 
-    List makeListWithDate(String date);
-
-    void setDatesToOrders();
-
-    int setIdForDate(Order order, String date);
-
-    void setTestMode(boolean testMode);
-
-    Order update(Order order, String date, boolean changeDate);
 
 }

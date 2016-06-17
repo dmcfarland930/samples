@@ -132,6 +132,8 @@
                             <div class="col-md-8">
                                 <input type="text" id="rate-input" class="form-control"/>
                             </div>
+                            <div id="rate-error" class="col-md-8">
+                            </div>
                         </fieldset>
                         <div id="add-taxes-validation-errors">
                         </div>
