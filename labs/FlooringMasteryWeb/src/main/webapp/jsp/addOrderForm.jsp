@@ -15,10 +15,10 @@
 
             <fieldset class="form-group">
                 <label class="col-md-4" for="customerName">Name on Order:</label>
-                <div class="col-md-8">
-                    <input type="text" id="order-name-input" class="form-control ${hasError}"/>
+                <div id="name-div" class="col-md-8">
+                    <input type="text" id="order-name-input" class="form-control"/>
                 </div>
-                <div id="name-error" class="col-md-8">
+                <div class="error-message" id="name-error" class="col-md-8">
                 </div>
             </fieldset>
 
@@ -46,17 +46,17 @@
 
             <fieldset class="form-group">
                 <label class="col-md-4" for="area">Area:</label>
-                <div class="col-md-8">
+                <div id="area-div" class="col-md-8">
                     <input type="text" id="order-area-input" class="form-control ${hasError}"/>
                 </div>
-                <div id="area-error" class="col-md-8">
+                <div class="error-message" id="area-error" class="col-md-8">
                 </div>
             </fieldset>
 
             <fieldset class="form-group">
                 <label class="col-md-4" for="date">Date:</label>
                 <div class="col-md-8">
-                    <input id="order-date-input" path="date" class="form-control datepicker" value="${date}"></input>
+                    <input id="order-date-input" path="date" class="form-control datepicker" value="${date}" readonly></input>
                 </div>
             </fieldset>
             <div id="add-order-validation-errors">
@@ -67,7 +67,7 @@
                     <input id="create-submit" class="btn bg-primary pull-right button-size" type="submit" value="Submit Order"/>
                 </fieldset>
             </div>
-
+            <input type="hidden" id="last-date" value="${date}"/>
             <input type="hidden" id="order-number"/>
         </form>
 

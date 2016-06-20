@@ -4,7 +4,7 @@
  */
 package com.mycompany.dvdlibraryweb.dto;
 
-import com.mycompany.dvdlibraryweb.dao.DvdDao;
+import java.util.Date;
 
 /**
  *
@@ -15,6 +15,16 @@ public class Notes {
     String note;
     int dvdId;
     int noteId;
+    Date noteDate;
+
+    public Date getNoteDate() {
+        return noteDate;
+    }
+
+    public void setNoteDate(Date noteDate) {
+        this.noteDate = noteDate;
+    }
+    
     
     public String getNote() {
         return note;

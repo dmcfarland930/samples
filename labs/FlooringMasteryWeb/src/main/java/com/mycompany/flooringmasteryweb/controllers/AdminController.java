@@ -110,25 +110,25 @@ public class AdminController {
 
     }
 
-    @RequestMapping(value = "/editProduct/{productType}", method = RequestMethod.GET)
+    @RequestMapping(value = "/editProduct/{productId}", method = RequestMethod.GET)
     @ResponseBody
-    public Product editProduct(@RequestBody Product product) {
+    public Product editProduct(@PathVariable ("productId") Integer id) {
 
-        return productDao.get(product.getId());
+        return productDao.get(id);
 
     }
 
-    @RequestMapping(value = "/editTax/{state}", method = RequestMethod.GET)
+    @RequestMapping(value = "/editTax/{taxId}", method = RequestMethod.GET)
     @ResponseBody
-    public Taxes editTax(@RequestBody Taxes tax) {
+    public Taxes editTax(@PathVariable ("taxId") Integer id) {
 
-        return taxDao.get(tax.getId());
+        return taxDao.get(id);
 
     }
 
     @RequestMapping(value = "/productSave/{productType}", method = RequestMethod.PUT)
     @ResponseBody
-    public Product editProductSubmit(@Valid @RequestBody Product product) {
+    public Product editProductSubmit(@RequestBody Product product) {
 
 //        testMode = testRead();
 
@@ -138,9 +138,9 @@ public class AdminController {
 
     }
 
-    @RequestMapping(value = "/taxSave{tax}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/taxSave/{tax}", method = RequestMethod.PUT)
     @ResponseBody
-    public Taxes editTaxSubmit(@Valid @RequestBody Taxes taxRate) {
+    public Taxes editTaxSubmit(@RequestBody Taxes taxRate) {
 
 //        testMode = testRead();
 
@@ -149,19 +149,19 @@ public class AdminController {
         return taxRate;
     }
 
-    @RequestMapping(value = "deleteProduct/{productType}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "deleteProduct/{productId}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void deleteProducts(@RequestBody Product product) {
+    public void deleteProducts(@PathVariable ("productId") Integer id) {
 
-        Product productDel = productDao.get(product.getId());
+        Product productDel = productDao.get(id);
         productDao.delete(productDel);
     }
 
-    @RequestMapping(value = "deleteTax/{state}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "deleteTax/{taxId}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void deleteTaxes(@RequestBody Taxes tax) {
+    public void deleteTaxes(@PathVariable ("taxId") Integer id) {
 
-        Taxes taxDel = taxDao.get(tax.getId());
+        Taxes taxDel = taxDao.get(id);
         taxDao.delete(taxDel);
     }
 

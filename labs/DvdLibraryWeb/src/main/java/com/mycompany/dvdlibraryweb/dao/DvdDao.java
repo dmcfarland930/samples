@@ -3,6 +3,7 @@
  * I hope you enjoy it!
  */
 package com.mycompany.dvdlibraryweb.dao;
+
 import com.mycompany.dvdlibraryweb.dto.Dvd;
 import java.util.List;
 
@@ -23,21 +24,19 @@ public interface DvdDao {
     void update(Dvd dvd);
 
     List<Dvd> list();
-    
+
     List<Dvd> getByMPAA(String mpaa);
 
     List<Dvd> getByStudio(String studio);
-    
+
     List<Dvd> getMoviesAfterDate(int years);
 
     List<Dvd> getByDirector(String director);
-    
-    Dvd findNewestMovie();
-    
-    Dvd findOldestMovie();
-    
+
+    List<Dvd> findNewestMovie();
+
+    List<Dvd> findOldestMovie();
+
     int findAverageAgeOfMovies();
-    
-    
 
 }

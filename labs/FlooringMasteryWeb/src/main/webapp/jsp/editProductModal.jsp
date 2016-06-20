@@ -20,27 +20,27 @@
                         <input type="hidden" id="edit-id"/>
                         <tr>
                             <th>Product Type</th>
-                            <td>
-                                <input type="text" id="edit-product-type"/>
-                                <div id="type-edit-error" class="col-md-8">
+                            <td id="product-div">
+                                <input class="form-control" type="text" id="edit-product-type"/>
+                                <div id="type-edit-error" class="col-md-8 error-message">
                                 </div>
                             </td>
                         </tr> 
 
                         <tr>
                             <th>Cost/SqFt</th>
-                            <td>
-                                <input type="text" id="edit-product-cost"/>
-                                <div id="cost-edit-error" class="col-md-8">
+                            <td id="cost-div">
+                                <input class="form-control" type="text" id="edit-product-cost"/>
+                                <div id="cost-edit-error" class="col-md-8 error-message">
                                 </div>
                             </td>
                         </tr>
 
                         <tr>
                             <th>Labor Cost/SqFt</th>
-                            <td>
-                                <input type="text" id="edit-product-labor"/>
-                                <div id="labor-edit-error" class="col-md-8">
+                            <td id="labor-div">
+                                <input class="form-control" type="text" id="edit-product-labor"/>
+                                <div id="labor-edit-error" class="col-md-8 error-message">
                                 </div>
                             </td>
                         </tr>

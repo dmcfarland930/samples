@@ -22,9 +22,9 @@
                         <input type="hidden" id="order-number"/>
                         <tr>
                             <th>Name on Order:</th>
-                            <td>
-                                <input type="text" id="edit-order-name"/>
-                                <div id="name-edit-error" class="col-md-8">
+                            <td id="name-div">
+                                <input type="text" id="edit-order-name" class="form-control"/>
+                                <div id="name-edit-error" class="col-md-8 error-message">
                                 </div>
                             </td>
                         </tr>                   
@@ -50,9 +50,9 @@
                         </tr>
                         <tr>
                             <th>Area:</th>
-                            <td>
-                                <input type="text" id="edit-order-area"/>
-                                <div id="area-edit-error" class="col-md-8">
+                            <td id="area-div">
+                                <input type="text" id="edit-order-area" class="form-control"/>
+                                <div id="area-edit-error" class="col-md-8 error-message">
                                 </div>
                             </td>
                         </tr>    

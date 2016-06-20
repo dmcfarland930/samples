@@ -20,22 +20,21 @@
         <link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
     </head>
     <body>
-        <div class="container">
-            <h1>Flooring Master ${test}</h1>
-            <hr/>
-            <div class="navbar">
-                <ul class="nav nav-tabs">
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/">Home</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/adminlogin/">Admin Login</a></li>
-                    <form class="form-inline pull-right" method="POST" action="${pageContext.request.contextPath}/order/search/">
+        <div class="navbar">
+            <ul class="nav nav-tabs">
+                <li role="presentation"><a href="${pageContext.request.contextPath}/">Flooring Master</a></li>
+                <li role="presentation"><a href="${pageContext.request.contextPath}/adminlogin/">Admin Login</a></li>
+                <form style="margin-top:.25em; margin-right: 2em;"class="form-inline pull-right" method="POST" action="${pageContext.request.contextPath}/order/search/">
 
-                        <fieldset class="form-group">
-                            <input type="text" class="form-control" name="date" placeholder="Enter date to find order.">
-                        </fieldset>
-                        <button class="btn bg-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                    </form>
-                </ul>    
-            </div>
+                    <fieldset class="form-group">
+                        <input type="text" class="form-control search" name="date" placeholder="Enter date to find order.">
+                    </fieldset>
+                    <button class="btn bg-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                </form>
+            </ul>    
+        </div>
+        <div class="container">
+
             <div class="row">
                 <div class="col-md-6 col-md-offset-3 formDiv">
                     <h1>Admin Login</h1>
@@ -44,13 +43,13 @@
                             <fieldset class="form-group ${hasError}">
                                 <input type="password" class="form-control" name="password" placeholder="Password">
                             </fieldset>
+                        <p>${error}</p>
                             <div id="buttonLogin">
                                 <input class="btn bg-primary button-size" type="submit" value="Log In"/>
                             </div>
                         </form>
                     </div>
                     <div id="errorMessage">
-                        <p>${error}</p>
                     </div>
                 </div>
             </div>

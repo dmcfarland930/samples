@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public class NoteDaoDbImpl implements NoteDao {
 
-    private static final String SQL_INSERT_NOTES = "INSERT INTO notes (dvd_id, note_details) VALUES (?, ?)";
-    private static final String SQL_UPDATE_NOTES = "UPDATE notes SET dvd_id = ?, note_details = ? WHERE id = ?";
+    private static final String SQL_INSERT_NOTES = "INSERT INTO notes (dvd_id, note_details, note_date) VALUES (?, ?, ?)";
+    private static final String SQL_UPDATE_NOTES = "UPDATE notes SET dvd_id = ?, note_details = ?, note_date = ? WHERE id = ?";
     private static final String SQL_DELETE_NOTES = "DELETE FROM notes WHERE id = ?";
     private static final String SQL_GET_NOTES = "SELECT * FROM notes WHERE id = ?";
     private static final String SQL_GET_NOTES_LIST = "SELECT * FROM notes";
@@ -40,7 +40,8 @@ public class NoteDaoDbImpl implements NoteDao {
     public Notes create(Notes note) {
      jdbcTemplate.update(SQL_INSERT_NOTES,
                 note.getDvdId(),
-                note.getNote());
+                note.getNote(),
+                note.getNoteDate());
 
         Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
 
@@ -72,6 +73,7 @@ public class NoteDaoDbImpl implements NoteDao {
                 
                 note.getDvdId(),
                 note.getNote(),
+                note.getNoteDate(),
                 note.getNoteId());
      }
 
@@ -108,6 +110,7 @@ public class NoteDaoDbImpl implements NoteDao {
             note.setNoteId(rs.getInt("id"));
             note.setDvdId(rs.getInt("dvd_id"));
             note.setNote(rs.getString("note_details"));
+            note.setNoteDate(rs.getDate("note_date"));
 
             return note;
         }

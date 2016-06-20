@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -20,27 +21,28 @@ public class Dvd {
     int id;
     int dvdAge;
     int dvdNoteAmount;
-    
-    @NotEmpty(message="You must enter a title!")
+
+    @NotEmpty(message = "You must enter a title!")
     String title;
-    
-    @NotEmpty(message="You must enter a rating!")
+
+    @NotEmpty(message = "You must enter a rating!")
     String rating;
-    
-    @NotEmpty(message="You must enter a director!")
+
+    @NotEmpty(message = "You must enter a director!")
     String director;
-    
-    @NotEmpty(message="You must enter a studio!")
+
+    @NotEmpty(message = "You must enter a studio!")
     String studio;
-    
+
     String date;
-    
+
     String notes;
-    
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy", timezone="EST")
+
+    @NotNull(message = "You can't leave this blank!")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone="EST")
     Date dvdDate = new Date();
-    
-    List <Notes> noteList = new ArrayList();
+
+    List<Notes> noteList = new ArrayList();
 
     public int getId() {
         return id;
@@ -117,7 +119,7 @@ public class Dvd {
         return dvdNoteAmount;
     }
 
-    public void setDvdNoteAmount(List <Notes> noteList) {
+    public void setDvdNoteAmount(List<Notes> noteList) {
         this.dvdNoteAmount = noteList.size();
     }
 
@@ -136,7 +138,5 @@ public class Dvd {
     public void setNotes(String notes) {
         this.notes = notes;
     }
-    
 
-    
 }

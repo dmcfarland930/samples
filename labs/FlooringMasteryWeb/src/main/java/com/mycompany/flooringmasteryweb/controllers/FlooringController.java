@@ -128,13 +128,12 @@ public class FlooringController {
     public String searchSubmit(@RequestParam("date") String date, Map model) {
 
         String dateString = date.replace("/", "");
-//        Date orderDate = new Date();
-//        try {
-//            orderDate = sdf.parse(dateString);
-//        } catch (ParseException ex) {
-//            Logger.getLogger(FlooringController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        List<Order> orders = orderDao.getOrdersOnDate(dateString);
+        List<Order> orders = orderDao.getList();
+        if (!dateString.equalsIgnoreCase("all") && !dateString.isEmpty()) {
+            orders = orderDao.getOrdersOnDate(dateString);
+        }else{
+            date = "All";
+        }
 
         List<Product> products = productDao.getProductList();
         List<Taxes> taxes = taxDao.getTaxesList();
@@ -143,7 +142,7 @@ public class FlooringController {
 //        model.put("test", showTest(testMode));
         model.put("date", date);
         if (orders.isEmpty()) {
-            model.put("noOrders", "No orders were found for this date!");
+            model.put("noOrders", "No orders were found for this entry!");
         } else {
             model.put("orders", orders);
         }
@@ -175,7 +174,7 @@ public class FlooringController {
 
         return date;
     }
-//
+
 //    public boolean testRead() {
 //
 //        floorData.testDecode();
@@ -191,7 +190,6 @@ public class FlooringController {
 //
 //        return test;
 //    }
-
     public Order setOrderData(OrderCommand orderCommand) {
 
         Order order = new Order();

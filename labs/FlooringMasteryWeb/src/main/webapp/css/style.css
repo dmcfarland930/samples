@@ -1,5 +1,7 @@
 .navbar{
     font-family: Roboto Slab;
+    background: #337ab7; 
+    border-radius: 0px;
 }
 
 .navbar .navbar-nav {
@@ -12,12 +14,28 @@
     text-align: center;
 }
 
+.nav>li>a {
+    color: white;
+}
+
+.nav > li > a:hover {
+    border-radius: 4px;
+    background: #00427B;
+    color: white;
+}
+
+.nav-tabs{
+    border-bottom: 0px; 
+    margin-top: .5em;
+    margin-left: 5.5em;
+    margin-bottom: .5em;
+    
+}
 
 body{
-
+    background: #E9EBEE;
     max-width: 100%;
     overflow-x: hidden;
-    height: 100%;
 
 }
 
@@ -61,6 +79,11 @@ h3{
     width: 20em;
 }
 
+.button-size:hover{
+    color:white;
+    background: #00427B;
+}
+
 .form-control{
     width: 20em;
     margin: 0 auto;
@@ -73,6 +96,7 @@ h3{
 
 #buttonLogin{
     text-align: center;
+    
 }
 
 #errorMessage, p{
@@ -83,12 +107,12 @@ h3{
 }
 
 .formDiv{
-    font-family: Roboto Slab;
     margin-top: 3em;
     border-color: #DDDDDD;
     border-width: 1.5px;
     border-style: solid;
     border-radius: 5px;
+    text-align: right;
 }
 
 .order-form{
@@ -97,7 +121,7 @@ h3{
 
 
 label{
-    padding-top: 1em;
+    padding-top: .5em;
     text-align: right;
 }
 
@@ -106,7 +130,6 @@ table{
     border-width: 1px;
     border-radius: 5px;
     border-color: #DDDDDD;
-    font-family: Roboto Slab;
 }
 
 .table th{
@@ -118,3 +141,37 @@ table{
     width: 15em;
 }
 
+
+.return-button{
+    background: #00427B;
+    margin-top:.25em; 
+    margin-right: 2em;
+}
+
+.return-button:hover{
+    background: white;
+    margin-top:.25em; 
+    margin-right: 2em;
+}
+
+.alert{
+    border-radius: 0;
+}
+
+.modal-header{
+    font-family: Roboto Slab;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background-color: #337ab7;
+    color: white;
+}
+
+.error-message{
+    font-weight: bold;
+    color: red;
+    margin-right: 3.5em;
+}
+
+.search{
+    border-radius: 20px;
+}

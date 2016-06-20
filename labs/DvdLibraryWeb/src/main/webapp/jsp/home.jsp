@@ -55,10 +55,15 @@
                         </c:forEach>
                     </table>
 
-                    <p>Your Oldest Movie: ${oldest}</p>
-                    <p>Your Newest Movie: ${newest}</p>
+                    <p>Your Oldest Movie(s):</p>
+                    <c:forEach items="${oldest}" var="dvd">
+                        <p>${dvd.title}</p>
+                    </c:forEach>
+                    <p>Your Newest Movie(s):</p>
+                    <c:forEach items="${newest}" var="dvd">
+                        <p>${dvd.title}</p>
+                    </c:forEach>
                     <p>Average Age of Your Movies: ${years} years old</p>
-                    <p>Your movies have an average of ${notenum} notes</p>
 
                 </div>
                 <div class="col-md-6">
@@ -98,7 +103,7 @@
                         <fieldset class="form-group">
                             <label class="col-md-3" for="dvdDate">Date</label>
                             <div class="col-md-9">
-                                <input type="text" id="date-input" class="form-control"/>
+                                <input type="date" id="date-input" class="form-control" placeholder="YYYY/MM/DD"/>
                             </div>
                         </fieldset>
 
@@ -110,6 +115,7 @@
                         </fieldset>
                         <div id="create-dvd-validation-errors">
                         </div>
+                        
                         <input id="create-submit" class="btn btn-default pull-right" type="submit"/>
                     </form>
 
@@ -119,8 +125,10 @@
         </div>
 
         <%@include file="showModal.jsp"%> 
+        <%@include file="showNoteModal.jsp"%> 
         <%@include file="editModal.jsp"%> 
-
+        <%@include file="addNoteModal.jsp"%> 
+        <%@include file="editNoteModal.jsp"%> 
 
         <!-- Placed at the end of the document so the pages load faster -->
         <script>
@@ -130,6 +138,7 @@
         <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/app.js" ></script>
+        <script src="${pageContext.request.contextPath}/js/note.js" ></script>
 
     </body>
 </html>

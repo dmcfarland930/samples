@@ -22,19 +22,18 @@
 
     </head>
     <body>
+        <div class="navbar">
+            <ul class="nav nav-tabs">
+                <li role="presentation"><a href="${pageContext.request.contextPath}/admin/adminhome">Admin Panel</a></li>
+                <li role="presentation"><a href="${pageContext.request.contextPath}/admin/addproducts/">Add Products</a></li>
+                <li role="presentation"><a href="${pageContext.request.contextPath}/admin/addtaxrates/">Add Tax Rate</a></li>
+                <a href="${pageContext.request.contextPath}"> <button class="return-button btn bg-primary col-md-2 pull-right" type="submit"/>Return to Flooring Master</button></a>
+
+
+            </ul>    
+        </div>
         <div class="container">
-            <h1>Flooring Master - Admin Mode ${test}</h1>
-            <hr/>
-            <div class="navbar">
-                <ul class="nav nav-tabs">
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/admin/adminhome">Home</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/admin/addproducts/">Add Products</a></li>
-                    <li class="active"  role="presentation"><a href="${pageContext.request.contextPath}/admin/addtaxrates/">Add Tax Rate</a></li>
-                    <a href="${pageContext.request.contextPath}"> <button class="btn bg-primary col-md-2 pull-right" type="submit"/>Return to Flooring Master</button></a>
 
-
-                </ul>    
-            </div>
 
             <div class="row">
                 <div class="col-md-6">
@@ -51,11 +50,11 @@
                             </tr>
                         </thead>
                         <c:forEach items="${taxesList}" var="tax">
-                            <tr id="taxes-row-${tax.state}">
+                            <tr id="taxes-row-${tax.id}">
                                 <td>${tax.state}</td>
                                 <td fmt:formatNumber type="percent">${tax.taxRate}%</td>
-                                <td><a data-toggle="modal"  data-taxes-type="${tax.state}"  data-target="#editTaxesModal"><i class="glyphicon glyphicon-wrench"></a></td>
-                                <td><a class="delete-tax-link"><i data-taxes-type="${tax.state}" class="glyphicon glyphicon-trash"></i></a></td>
+                                <td><a data-toggle="modal"  data-taxes-type="${tax.id}"  data-target="#editTaxesModal"><i class="glyphicon glyphicon-wrench"></a></td>
+                                <td><a class="delete-tax-link"><i data-taxes-type="${tax.id}" class="glyphicon glyphicon-trash"></i></a></td>
                             </tr>
 
                         </c:forEach>
@@ -129,10 +128,10 @@
                         </fieldset>
                         <fieldset class="form-group">
                             <label class="col-md-4" for="taxRate">Tax Rate:</label>
-                            <div class="col-md-8">
+                            <div id="rate-div" class="col-md-8">
                                 <input type="text" id="rate-input" class="form-control"/>
                             </div>
-                            <div id="rate-error" class="col-md-8">
+                            <div class="error-message" id="rate-error" class="col-md-8">
                             </div>
                         </fieldset>
                         <div id="add-taxes-validation-errors">
@@ -148,10 +147,7 @@
 
                     <%@include file="editTaxesModal.jsp"%> 
                     <%@include file="showTaxesModal.jsp"%> 
-
-
-
-
+                    <%@include file="errorModal.jsp"%> 
 
                 </div>
             </div>

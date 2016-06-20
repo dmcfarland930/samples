@@ -42,16 +42,15 @@
                             <th>Date:</th>
                             <td id="dvd-date"></td>
                         </tr>
-                        <tr>
-                            <th>Notes:</th>                        
-                        </tr>
-
                     </table>
                 </div>
                 <div class="modal-footer">
+
+                    <button id="dvd-id-note" type="button" class="btn btn-default" data-toggle="modal" data-target="#showNoteModal">View Notes</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
+        <script src="${pageContext.request.contextPath}/js/note.js" ></script>
 </html>

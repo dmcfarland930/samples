@@ -22,17 +22,16 @@
 
     </head>
     <body>
+        <div class="navbar">
+            <ul class="nav nav-tabs">
+                <li role="presentation"><a href="${pageContext.request.contextPath}/admin/adminhome">Admin Panel</a></li>
+                <li role="presentation"><a href="${pageContext.request.contextPath}/admin/addproducts/">Add Products</a></li>
+                <li role="presentation"><a href="${pageContext.request.contextPath}/admin/addtaxrates/">Add Tax Rate</a></li>  
+                <a href="${pageContext.request.contextPath}"> <button class="return-button btn bg-primary col-md-2 pull-right" type="submit"/>Return to Flooring Master</button></a>
+            </ul>    
+        </div>
         <div class="container">
-            <h1>Flooring Master - Admin Mode ${test}</h1>
-            <hr/>
-            <div class="navbar">
-                <ul class="nav nav-tabs">
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/admin/adminhome">Home</a></li>
-                    <li class="active" role="presentation"><a href="${pageContext.request.contextPath}/admin/addproducts/">Add Products</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/admin/addtaxrates/">Add Tax Rate</a></li>  
-                    <a href="${pageContext.request.contextPath}"> <button class="btn bg-primary col-md-2 pull-right" type="submit"/>Return to Flooring Master</button></a>
-                </ul>    
-            </div>
+
             <div class="row">
                 <div class="col-md-6">
                     <h1>Products</h1>
@@ -48,12 +47,12 @@
                             </tr>
                         </thead>
                         <c:forEach items="${products}" var="product">
-                            <tr id="product-row-${product.productType}">
+                            <tr id="product-row-${product.id}">
                                 <td>${product.productType}</td>
                                 <td><fmt:formatNumber type="currency" value="${product.costPerSqFt}"/></td>
                                 <td><fmt:formatNumber type="currency" value="${product.laborCostPerSqFt}"/></td>
-                                <td><a data-toggle="modal"  data-product-type="${product.productType}"  data-target="#editProductModal"><i class="glyphicon glyphicon-wrench"></a></td>
-                                <td><a class="delete-link"><i data-product-type="${product.productType}" class="glyphicon glyphicon-trash"></i></a></td>
+                                <td><a data-toggle="modal"  data-product-id="${product.id}"  data-target="#editProductModal"><i class="glyphicon glyphicon-wrench"></a></td>
+                                <td><a class="delete-link"><i data-product-id="${product.id}" class="glyphicon glyphicon-trash"></i></a></td>
                             </tr>
                         </c:forEach>
                     </table>
@@ -65,26 +64,26 @@
 
                         <fieldset class="form-group">
                             <label class="col-md-4" for="productType">Product Type:</label>
-                            <div class="col-md-8">                                
+                            <div id="product-div" class="col-md-8">                                
                                 <input type="text" id="product-type-input" class="form-control"/>
                             </div>
-                            <div id="type-error" class="col-md-8">
+                            <div class="error-message" id="type-error" class="col-md-8">
                             </div>
                         </fieldset>
                         <fieldset class="form-group">
                             <label class="col-md-4" for="costPerSqFt">Cost Per Sq/Ft:</label>
-                            <div class="col-md-8">
+                            <div id="cost-div" class="col-md-8">
                                 <input type="text" id="cost-input" class="form-control"/>
                             </div>
-                            <div id="cost-error" class="col-md-8">
+                            <div class="error-message" id="cost-error" class="col-md-8">
                             </div>
                         </fieldset>
                         <fieldset class="form-group">
                             <label class="col-md-4" for="laborCostPerSqFt">Labor Cost Per Sq/Ft:</label>
-                            <div class="col-md-8">
+                            <div id="labor-div" class="col-md-8">
                                 <input type="text" id="labor-input" class="form-control"/>
                             </div>
-                            <div id="labor-error" class="col-md-8">
+                            <div class="error-message" id="labor-error" class="col-md-8">
                             </div>
                         </fieldset>
                         <div id="add-product-validation-errors">

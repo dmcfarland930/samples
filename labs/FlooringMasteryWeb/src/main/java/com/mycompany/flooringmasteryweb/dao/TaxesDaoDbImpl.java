@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TaxesDaoDbImpl implements TaxesDao {
 
     private static final String SQL_INSERT_TAX = "INSERT INTO taxes (state, rate) VALUES (?, ?)";
-    private static final String SQL_UPDATE_TAX = "UPDATE taxes SET state = ?, rate = ??";
+    private static final String SQL_UPDATE_TAX = "UPDATE taxes SET state = ?, rate = ? WHERE id= ?";
     private static final String SQL_DELETE_TAX = "DELETE FROM taxes WHERE id = ?";
     private static final String SQL_GET_TAX = "SELECT * FROM taxes WHERE id = ?";
     private static final String SQL_GET_TAX_LIST = "SELECT * FROM taxes";

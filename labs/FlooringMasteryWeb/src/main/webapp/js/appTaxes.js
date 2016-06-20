@@ -9,6 +9,8 @@ $(document).ready(function () {
             taxRate: $("#rate-input").val()
         });
 
+        $('#rate-div').removeClass('has-error');
+
         $.ajax({
             url: contextRoot + "/admin/" + "addtaxrates",
             type: "POST",
@@ -23,7 +25,6 @@ $(document).ready(function () {
                 var tableRow = buildTaxesRow(data);
                 $('#taxes-table').append($(tableRow));
                 $("#rate-input").val('');
-                $("#state-input").val('');
 
                 $('#taxes-state').text(data.state);
                 $('#taxes-tax-rate').text(data.taxRate);
@@ -39,6 +40,7 @@ $(document).ready(function () {
                     switch (error.fieldName) {
                         case "taxRate":
                             $('#rate-error').append(error.message);
+                            $('#rate-div').addClass('has-error');
                             break;
                         default:
                             break;
@@ -52,32 +54,6 @@ $(document).ready(function () {
 
     });
 
-//    $('#showTaxesModal').on('show.bs.modal', function (e) {
-//
-//        var link = $(e.relatedTarget);
-//
-//        var taxesType = link.data('taxes-id');
-//
-//        $.ajax({
-//            url: contextRoot + "/admin/" + taxesType,
-//            type: 'GET',
-//            dataType: 'json',
-//            beforeSend: function (xhr) {
-//                xhr.setRequestHeader("Accept", "application/json");
-//            },
-//            success: function (data, status) {
-//                $("#taxes-type-input").html(data.taxesType);
-//                $("#cost-input").html(data.costPerSqFt);
-//                $("#labor-input").html(data.laborCostPerSqFt);
-//            },
-//            error: function (data, status) {
-//
-//            }
-//
-//
-//        });
-//
-//    });
 
     $('#editTaxesModal').on('show.bs.modal', function (e) {
 
@@ -94,7 +70,7 @@ $(document).ready(function () {
             success: function (data, status) {
                 $('#edit-taxes-state').val(data.state);
                 $('#edit-taxes-rate').val(data.taxRate);
-                $('#edit-taxes-id').val(data.state);
+                $('#edit-taxes-id').val(data.id);
                 console.log($('#edit-taxes-id').val());
 
 
@@ -114,14 +90,17 @@ $(document).ready(function () {
         e.preventDefault();
 
         var taxesData = JSON.stringify({
+            id: $('#edit-taxes-id').val(),
             state: $("#edit-taxes-state").val(),
             taxRate: $("#edit-taxes-rate").val()
         });
 
-        console.log($('edit-tax-id').val());
+        $('#rate-div').removeClass('has-error');
+
+        console.log($('#edit-taxes-id').val());
 
         $.ajax({
-            url: contextRoot + "/admin/taxSave" + $('#edit-taxes-id').val(),
+            url: contextRoot + "/admin/taxSave/" + $('#edit-taxes-id').val(),
             type: "PUT",
             data: taxesData,
             dataType: 'json',
@@ -138,20 +117,24 @@ $(document).ready(function () {
 
             },
             error: function (data, status) {
+
                 var errors = data.responseJSON.errors;
-                $('rate-edit-error').empty();
+                $('rate-error').empty();
 
                 $.each(errors, function (index, error) {
 
                     switch (error.fieldName) {
                         case "taxRate":
-                            $('#rate-edit-error').append(error.message);
+                            $('#rate-error').append(error.message);
+                            $('#rate-div').addClass('has-error');
                             break;
                         default:
                             break;
                     }
 
                 });
+
+
             }
 
         });
@@ -177,7 +160,8 @@ $(document).ready(function () {
 
             },
             error: function (data, status) {
-
+                
+                $('#errorModal').modal('show');
             }
         });
 
@@ -188,11 +172,11 @@ $(document).ready(function () {
 
     function buildTaxesRow(data) {
 
-        return "<tr id='taxes-row-" + data.state + "'>  \n\
+        return "<tr id='taxes-row-" + data.id + "'>  \n\
                 <td> " + data.state + "</td> \n\
                 <td> " + data.taxRate + "</td> \n\
-                <td> <a data-taxes-id='" + data.state + "' data-toggle='modal' data-target='#editTaxesModal'><i class='glyphicon glyphicon-wrench'></i></a>  </td>   \n\
-                <td> <a class='delete-tax-link'><i data-taxes-type='" + data.state + "' class='glyphicon glyphicon-trash'></i></a>  </td>   \n\
+                <td> <a data-taxes-id='" + data.id + "' data-toggle='modal' data-target='#editTaxesModal'><i class='glyphicon glyphicon-wrench'></i></a>  </td>   \n\
+                <td> <a class='delete-tax-link'><i data-taxes-type='" + data.id + "' class='glyphicon glyphicon-trash'></i></a>  </td>   \n\
                 </tr>  ";
 
 

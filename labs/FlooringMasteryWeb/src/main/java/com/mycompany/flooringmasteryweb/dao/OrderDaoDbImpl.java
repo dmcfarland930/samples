@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -27,7 +26,6 @@ public class OrderDaoDbImpl implements OrderDao {
     private static final String SQL_DELETE_ORDER = "DELETE FROM orders WHERE id = ?";
     private static final String SQL_GET_ORDER = "SELECT * FROM orders WHERE id = ?";
     private static final String SQL_GET_ORDER_LIST = "SELECT * FROM orders";
-    private static final String SQL_GET_ORDER_ON_DATE_LIST = "SELECT * FROM orders WHERE order_date = ?";
 
     private JdbcTemplate jdbcTemplate;
     private ProductDao productDao;
@@ -112,10 +110,13 @@ public class OrderDaoDbImpl implements OrderDao {
         for (Order order : orders) {
 
             String orderDate = sdf.format(order.getDate());
-            if (date.equals(orderDate)){
+
+            if (date.equals(orderDate)) {
+
                 ordersMatchDate.add(order);
+
             }
-            
+
         }
 
         return ordersMatchDate;

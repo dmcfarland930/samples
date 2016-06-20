@@ -32,26 +32,24 @@ public class HomeController {
 
         List<Dvd> dvds = dvdDao.list();
         
-        try{
             
-        Dvd oldest = dvdDao.findOldestMovie();
-        Dvd newest = dvdDao.findNewestMovie();
+        List<Dvd> oldest = dvdDao.findOldestMovie();
+        List<Dvd> newest = dvdDao.findNewestMovie();
         int years = dvdDao.findAverageAgeOfMovies();
-        model.put("oldest", oldest.getTitle());
-        model.put("newest", newest.getTitle());
+        model.put("oldest", oldest);
+        model.put("newest", newest);
         model.put("years", years);
         
         
-        }catch(Exception ex){
+//            
+//            
+//        model.put("oldest", "You have no movies!");
+//        model.put("newest", "You have no movies!");
+//        model.put("years", "0");
+//        model.put("notenum", "0");
+//        
             
-            
-        model.put("oldest", "You have no movies!");
-        model.put("newest", "You have no movies!");
-        model.put("years", "0");
-        model.put("notenum", "0");
         
-            
-        }
         
         model.put("dvds", dvds);
         model.put("dvd", new Dvd());

@@ -52,12 +52,6 @@
                                 </td>
                             </tr>
 
-                            <tr>
-                                <th>Notes</th>
-                                <td>
-                                    <input type="text" id="edit-dvd-notes"/>
-                                </td>
-                            </tr>
 
                         </table>
                     </div>

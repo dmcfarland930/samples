@@ -6,12 +6,18 @@ $(document).ready(function () {
 
         var orderData = JSON.stringify({
             customerName: $('#order-name-input').val(),
-            productId: $("#order-product-input").val(),
-            taxesId: $("#order-tax-input").val(),
-            area: $("#order-area-input").val(),
-            date: $("#order-date-input").val()
+            productId: $('#order-product-input').val(),
+            taxesId: $('#order-tax-input').val(),
+            area: $('#order-area-input').val(),
+            date: $('#order-date-input').val()
 
         });
+
+        var date = $('#last-date').val();
+        $('#name-div').removeClass('has-error');
+        $('#area-div').removeClass('has-error');
+
+        console.log(date);
 
         $.ajax({
             url: contextRoot + "/order/",
@@ -23,14 +29,16 @@ $(document).ready(function () {
                 xhr.setRequestHeader("Content-type", "application/json");
             },
             success: function (data, status) {
+
+                $('#no-order').remove();
                 console.log(data);
-                var tableRow = buildOrderRow(data);
+
+                if (date === data.date) {
+                    var tableRow = buildOrderRow(data);
+                }
                 $('#order-table').append($(tableRow));
                 $("#order-name-input").val('');
-                $("#order-state-input").val('');
-                $("#order-product-input").val('');
                 $("#order-area-input").val('');
-                $("#order-date-input").val('');
                 $("#order-number").val(data.orderNumber);
                 $('#show-header').text("Order Added");
 
@@ -50,6 +58,7 @@ $(document).ready(function () {
                 $('#order-grand-total').text(data.orderTotal);
 
                 $('#showOrderModal').modal('show');
+
             },
             error: function (data, status) {
                 var errors = data.responseJSON.errors;
@@ -61,10 +70,11 @@ $(document).ready(function () {
                     switch (error.fieldName) {
                         case "customerName":
                             $('#name-error').append(error.message);
-                            //$('#order-name-input').addClass("") (or .css);
+                            $('#name-div').addClass('has-error');
                             break;
                         case "area":
                             $('#area-error').append(error.message);
+                            $('#area-div').addClass('has-error');
                             break;
                         default:
                             break;
@@ -102,16 +112,16 @@ $(document).ready(function () {
                 $('#order-name').html(data.customerName);
                 $('#order-state').html(data.state);
                 $('#order-product').html(data.productType);
-                $('#order-area').html(data.area);
+                $('#order-area').html(data.area + ' sq/ft');
 
-                $('#order-product-cost').html(data.costPerSqFt);
-                $('#order-labor-cost').html(data.laborCostPerSqFt);
-                $('#order-tax-rate').html(data.taxRate);
+                $('#order-product-cost').html('$' + data.costPerSqFt);
+                $('#order-labor-cost').html('$' + data.laborCostPerSqFt);
+                $('#order-tax-rate').html(data.taxRate + '%');
 
-                $('#order-product-total').html(data.materialCost);
-                $('#order-labor-total').html(data.totalLaborCost);
-                $('#order-tax-total').html(data.tax);
-                $('#order-grand-total').html(data.orderTotal);
+                $('#order-product-total').html('$' + data.materialCost);
+                $('#order-labor-total').html('$' + data.totalLaborCost);
+                $('#order-tax-total').html('$' + data.tax);
+                $('#order-grand-total').html('$' + data.orderTotal);
             },
             error: function (data, status) {
 
@@ -167,6 +177,9 @@ $(document).ready(function () {
             area: $('#edit-order-area').val(),
             date: $('#edit-order-date').val()
         });
+
+        $('#name-div').removeClass('has-error');
+        $('#area-div').removeClass('has-error');
 
         $.ajax({
             url: contextRoot + "/order/",
@@ -227,10 +240,11 @@ $(document).ready(function () {
                     switch (error.fieldName) {
                         case "customerName":
                             $('#name-edit-error').append(error.message);
-                            //$('#order-name-input').addClass("") (or .css);
+                            $('#name-div').addClass('has-error');
                             break;
                         case "area":
                             $('#area-edit-error').append(error.message);
+                            $('#area-div').addClass('has-error');
                             break;
                         default:
                             break;

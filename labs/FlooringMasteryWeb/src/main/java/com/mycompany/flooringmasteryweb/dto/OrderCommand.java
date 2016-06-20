@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
 
 /**
  *
@@ -23,8 +25,8 @@ public class OrderCommand {
     private String state;
     private double taxRate;
     private String productType;
-    @DecimalMax("999999999999.0") 
-    @DecimalMin("1.0") 
+    @NotNull(message="This field cannot be blank!")
+    @Range(min=1, message="You must must enter an area greater than or equal to one!")
     private double area;
     private double costPerSqFt;
     private double laborCostPerSqFt;

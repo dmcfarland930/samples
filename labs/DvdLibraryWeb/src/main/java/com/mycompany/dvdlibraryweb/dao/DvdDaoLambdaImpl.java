@@ -82,10 +82,8 @@ public class DvdDaoLambdaImpl implements DvdDao {
 
         dvdList.add(dvd);
 
-        
-
         encode();
-        
+
     }
 
     @Override
@@ -98,8 +96,8 @@ public class DvdDaoLambdaImpl implements DvdDao {
                 .collect(Collectors.toList());
 
         List<Notes> notes = noteDao.getNoteList();
-        for(Notes note : notes){
-            if(note.getDvdId() == dvd.getId()){
+        for (Notes note : notes) {
+            if (note.getDvdId() == dvd.getId()) {
                 noteDao.delete(note);
             }
         }
@@ -144,7 +142,7 @@ public class DvdDaoLambdaImpl implements DvdDao {
         }
 
     }
-    
+
     public List<Dvd> decode() {
 
         int lastId = 0;
@@ -166,7 +164,7 @@ public class DvdDaoLambdaImpl implements DvdDao {
                 if (id > lastId) {
                     lastId = id;
                 }
-                
+
                 myDvd.setId(id);
                 myDvd.setTitle(stringParts[1]);
                 myDvd.setDirector(stringParts[2]);
@@ -254,33 +252,14 @@ public class DvdDaoLambdaImpl implements DvdDao {
     }
 
     @Override
-    public Dvd findNewestMovie() {
-
-        Dvd youngestDvd;
-
-        Comparator<Dvd> compAge = (d1, d2) -> d1.getDvdDate().compareTo(d2.getDvdDate());
-
-        youngestDvd = dvdList
-                .stream()
-                .max(compAge)
-                .get();
-
-        return youngestDvd;
+    public List<Dvd> findNewestMovie() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Dvd findOldestMovie() {
+    public List<Dvd> findOldestMovie() {
 
-        Dvd oldestDvd;
-
-        Comparator<Dvd> compAge = (d1, d2) -> d1.getDvdDate().compareTo(d2.getDvdDate());
-
-        oldestDvd = dvdList
-                .stream()
-                .min(compAge)
-                .get();
-
-        return oldestDvd;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -308,13 +287,10 @@ public class DvdDaoLambdaImpl implements DvdDao {
 //        return averAge;
 //        
 //    }
-
     @Override
     public List<Dvd> list() {
-    
+
         return this.dvdList;
     }
-    
-    
 
 }

@@ -25,27 +25,27 @@
 
     </head>
     <body>
+        <div class="navbar">
+            <ul  class="nav nav-tabs">
+                <li role="presentation"><a href="${pageContext.request.contextPath}">Flooring Master</a></li>
+                <li role="presentation"><a href="${pageContext.request.contextPath}/adminlogin/">Admin Login</a></li>
+                <form style="margin-top:.25em; margin-right: 2em;"class="form-inline pull-right" method="POST" action="${pageContext.request.contextPath}/order/search/">
+                    <fieldset class="form-group">
+                        <input type="text" class="form-control search" name="date" placeholder="Enter date to find order.">
+                    </fieldset>
+                    <button class="btn bg-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                </form>
+            </ul>    
+        </div>
         <div class="container">
-            <h1>Flooring Master ${test}</h1>
-            <hr/>
-            <div class="navbar">
-                <ul class="nav nav-tabs">
-                    <li role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/adminlogin/">Admin Login</a></li>
-                    <form class="form-inline pull-right" method="POST" action="${pageContext.request.contextPath}/order/search/">
-                        <fieldset class="form-group">
-                            <input type="text" class="form-control" name="date" placeholder="Enter date to find order.">
-                        </fieldset>
-                        <button class="btn bg-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                    </form>
-                </ul>    
-            </div>
+
 
             <div class="row">
                 <div class="col-md-6">
 
                     <h1>Your Orders on ${date}</h1>
-                    <table id="order-table" class="table table-striped">    
+                    <table id="order-table" class="table table-striped"> 
+                        <input type="hidden" id="last-date" value="${date}"/>   
                         <thead>
                             <tr>
                                 <th>Order Number</th>
@@ -63,7 +63,9 @@
                             </tr>
                         </c:forEach>
                     </table>
-                    <h2>${noOrders}</h2>
+                    <div id="no-order">
+                        <h2>${noOrders}</h2>
+                    </div>
                 </div>
 
                 <%@include file="addOrderForm.jsp"%> 

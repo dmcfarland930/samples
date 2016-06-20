@@ -11,6 +11,11 @@ $(document).ready(function () {
 
         });
 
+
+        $('#product-div').removeClass('has-error');
+        $('#cost-div').removeClass('has-error');
+        $('#labor-div').removeClass('has-error');
+
         $.ajax({
             url: contextRoot + "/admin/" + "addproducts",
             type: "POST",
@@ -45,13 +50,16 @@ $(document).ready(function () {
                     switch (error.fieldName) {
                         case "productType":
                             $('#type-error').append(error.message);
+                            $('#product-div').addClass('has-error');
 
                             break;
                         case "costPerSqFt":
                             $('#cost-error').append(error.message);
+                            $('#cost-div').addClass('has-error');
                             break;
                         case "laborCostPerSqFt":
                             $('#labor-error').append(error.message);
+                            $('#labor-div').addClass('has-error');
                             break;
                         default:
                             break;
@@ -65,38 +73,11 @@ $(document).ready(function () {
 
     });
 
-//    $('#showProductModal').on('show.bs.modal', function (e) {
-//
-//        var link = $(e.relatedTarget);
-//
-//        var productType = link.data('product-id');
-//
-//        $.ajax({
-//            url: contextRoot + "/admin/" + productType,
-//            type: 'GET',
-//            dataType: 'json',
-//            beforeSend: function (xhr) {
-//                xhr.setRequestHeader("Accept", "application/json");
-//            },
-//            success: function (data, status) {
-//                $("#product-type-input").html(data.productType);
-//                $("#cost-input").html(data.costPerSqFt);
-//                $("#labor-input").html(data.laborCostPerSqFt);
-//            },
-//            error: function (data, status) {
-//
-//            }
-//
-//
-//        });
-//
-//    });
-
     $('#editProductModal').on('show.bs.modal', function (e) {
 
         var link = $(e.relatedTarget);
 
-        var productId = link.data('product-type');
+        var productId = link.data('product-id');
 
         $.ajax({
             url: contextRoot + "/admin/editProduct/" + productId,
@@ -106,7 +87,7 @@ $(document).ready(function () {
                 xhr.setRequestHeader("Accept", "application/json");
             },
             success: function (data, status) {
-                $('#edit-id').val(data.productType);
+                $('#edit-id').val(data.id);
                 $('#edit-product-type').val(data.productType);
                 $('#edit-product-cost').val(data.costPerSqFt);
                 $('#edit-product-labor').val(data.laborCostPerSqFt);
@@ -125,10 +106,15 @@ $(document).ready(function () {
         e.preventDefault();
 
         var productData = JSON.stringify({
+            id: $('#edit-id').val(),
             productType: $("#edit-product-type").val(),
             costPerSqFt: $("#edit-product-cost").val(),
             laborCostPerSqFt: $("#edit-product-labor").val()
         });
+
+        $('#product-div').removeClass('has-error');
+        $('#cost-div').removeClass('has-error');
+        $('#labor-div').removeClass('has-error');
 
         $.ajax({
             url: contextRoot + "/admin/productSave/" + $("#edit-id").val(),
@@ -159,13 +145,15 @@ $(document).ready(function () {
                     switch (error.fieldName) {
                         case "productType":
                             $('#type-edit-error').append(error.message);
-
+                            $('#product-div').addClass('has-error');
                             break;
                         case "costPerSqFt":
                             $('#cost-edit-error').append(error.message);
+                            $('#cost-div').addClass('has-error');
                             break;
                         case "laborCostPerSqFt":
                             $('#labor-edit-error').append(error.message);
+                            $('#labor-div').addClass('has-error');
                             break;
                         default:
                             break;
@@ -185,7 +173,7 @@ $(document).ready(function () {
 
         e.preventDefault();
 
-        var productId = $(e.target).data('product-type');
+        var productId = $(e.target).data('product-id');
         console.log(productId);
         $.ajax({
             type: "DELETE",
@@ -208,12 +196,12 @@ $(document).ready(function () {
 
     function buildProductRow(data) {
 
-        return "<tr id='product-row-" + data.productType + "'>  \n\
+        return "<tr id='product-row-" + data.id + "'>  \n\
                 <td> " + data.productType + "</a></td>  \n\
                 <td> " + "$" + data.costPerSqFt + "</td> \n\
                 <td> " + "$" + data.laborCostPerSqFt + "</td> \n\
                 <td> <a data-product-id='" + data.productType + "' data-toggle='modal' data-target='#editProductModal'><i class='glyphicon glyphicon-wrench'></i></a>  </td>   \n\
-                <td> <a class='delete-tax-link'><i data-product-type='" + data.productType + "' class='glyphicon glyphicon-trash'></i></a>  </td>   \n\
+                <td> <a class='delete-link'><i data-product-id='" + data.id + "' class='glyphicon glyphicon-trash'></i></a>  </td>   \n\
                 </tr>  ";
 
 

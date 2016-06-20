@@ -21,14 +21,14 @@
                         <tr>
                             <th>State Type</th>
                             <td>
-                                <input type="text" id="edit-taxes-state"/>
+                                <input class="form-control" type="text" id="edit-taxes-state" readonly/>
                             </td>
                         </tr> 
                         <tr>
                             <th>Tax Rate</th>
-                            <td>
-                                <input type="text" id="edit-taxes-rate"/>
-                                <div id="rate-edit-error" class="col-md-8">
+                            <td id="rate-div">
+                                <input class="form-control" type="text" id="edit-taxes-rate"/>
+                                <div id="rate-edit-error" class="col-md-8 error-message">
                                 </div>
                             </td>
                         </tr>

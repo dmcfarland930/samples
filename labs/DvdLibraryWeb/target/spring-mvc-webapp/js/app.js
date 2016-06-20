@@ -63,20 +63,13 @@ $(document).ready(function () {
                 xhr.setRequestHeader("Accept", "application/json");
             },
             success: function (data, status) {
-                $('.note-row').remove();
                 $('#dvd-title').html(data.title);
                 $('#dvd-director').html(data.director);
                 $('#dvd-rating').html(data.rating);
                 $('#dvd-studio').html(data.studio);
                 $('#dvd-date').html(data.dvdDate);
+                $('#dvd-id-note').val(dvdId);
                 
-                var notes = data.noteList;
-                
-                for(var i = 0; i < data.noteList.length; i++){
-                    var noteRow = buildNoteRow(notes[i]);
-                    $('#show-dvd-table').append($(noteRow));
-                    
-                }
             },
             error: function (data, status) {
 
@@ -106,7 +99,6 @@ $(document).ready(function () {
                 $('#edit-dvd-rating').val(data.rating);
                 $('#edit-dvd-studio').val(data.studio);
                 $('#edit-dvd-date').val(data.dvdDate);
-                $('#edit-dvd-notes').val(data.notes);
                 $('#edit-id').val(data.id);
             },
             error: function (data, status) {
@@ -129,8 +121,7 @@ $(document).ready(function () {
             director: $("#edit-dvd-director").val(),
             rating: $("#edit-dvd-rating").val(),
             studio: $("#edit-dvd-studio").val(),
-            dvdDate: $("#edit-dvd-date").val(),
-            notes: $("#edit-dvd-notes").val()
+            dvdDate: $("#edit-dvd-date").val()
         });
 
 
@@ -204,14 +195,14 @@ $(document).ready(function () {
 
 
     }
-    
-    function buildNoteRow(notes){
-        
-        return"<tr class='note-row'>\n\
-                <td></td><td>"+ notes.note+ "</td>\n\
-                </td>";
-        
-    }
+//    
+//    function buildNoteRow(notes){
+//        
+//        return"<tr class='note-row'>\n\
+//                <td></td><td>"+ notes.note+ "</td>\n\
+//                </td>";
+//        
+//    }
 
 
 });
