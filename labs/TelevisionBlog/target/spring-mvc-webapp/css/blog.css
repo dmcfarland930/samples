@@ -12,15 +12,24 @@ and open the template in the editor.
 }
 
 .navbar{
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Cabin', sans-serif;
     margin-bottom:  -.5em;
+    position: fixed;
+    width: 100%;
+    top: 0px;
 }
 
 h1{
-    font-family: 'Roboto', sans-serif;
-
+    font-family: 'Cabin', sans-serif;
 }
 
+a{
+    font-family: 'Cabin', sans-serif;
+}
+
+p{
+    font-family: 'Cabin', sans-serif;
+}
 .navbar-item {
     color: white;
 }
@@ -33,6 +42,7 @@ h1{
 #add-category-form {
     margin:auto;
 }
+
 #add-category-validation-errors {
     font-weight: bold;
     min-height: 20px;
@@ -42,6 +52,7 @@ h1{
     max-height: 40px;
     width: auto;
 }
+
 .selected-image {
     border: 2px #206ea1 solid;
 }
@@ -50,56 +61,108 @@ h1{
     margin-left: 10px;
     margin-right: 10px;
 }
+
 body{
     background-color: #D6E2EA;
 }
 
-#category-div{
-    margin-left: 2em;
-    width:30%;
-    margin-top: 2em;
+#404-div{
+    margin-top: 3em;
     background: white;
-    border-radius: 5px;
     border: #D9EBF4 thin solid;
+    border-radius: 5px;
+    margin-bottom: -1.5em;
+    
 }
 
-#latest-posts-div{
-    margin-left: 2em;
-    width:30%;
-    margin-top: 2em;
+
+#category-div{
+    padding-left: 1em;
+    padding-right: 1em;
+    margin-top: 1em;
     background: white;
     border-radius: 5px;
     border: #D9EBF4 thin solid;
+    max-height: 15em;
+    overflow-y: auto;
+}
+
+#latest-posts-div{ 
+    padding-left: 1em;
+    padding-right: 1em;
+    margin-top: 3.5em;
+    background: white;
+    border-radius: 5px;
+    border: #D9EBF4 thin solid;
+    max-height: 15em;
+    overflow-y: auto;
+}
+
+.script-upload{
+    margin-top: 5em;
+    background: white; 
+    border-radius: 5px;
+    border: #D9EBF4 thin solid;
+    padding-bottom: 10px;
 }
 
 #latest-head{
-    
-    font-family: 'Roboto', sans-serif;
+
+    font-family: 'Cabin', sans-serif;
     font-size: 20px;
     margin-bottom: -1em;
-    
+
 }
 
 #cat-head{
-    
-    font-family: 'Roboto', sans-serif;
+
+    font-family: 'Cabin', sans-serif;
     font-size: 20px;
     margin-bottom: -1em;
-    
+
 }
 
 #tag-head{
-    
-    font-family: 'Roboto', sans-serif;
+
+    font-family: 'Cabin', sans-serif;
     font-size: 20px;
     margin-bottom: -1em;
-    
+
 }
 
 #tag-div{
-    margin-left: 2em;
-    width:30%;
-    margin-top: 2em;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 1em;
+    margin-top: 1em;
+    background: white;
+    border-radius: 5px;
+    border: #D9EBF4 thin solid;
+}
+
+.login{
+    margin-top: 10em;
+    background: white; 
+    border-radius: 5px;
+    border: #D9EBF4 thin solid;
+    padding-bottom: 10px;
+}
+
+.login-btn{
+    background: #007fff;
+    color:white;
+}
+
+#error-login{
+    padding-top: 5px;
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    
+}
+
+#twitter {
+    margin-top: 1em;
     background: white;
     border-radius: 5px;
     border: #D9EBF4 thin solid;
@@ -109,12 +172,31 @@ body{
     width: 75%;
 }
 
+#copy{
+    padding-top: 5px;
+    color:white;
+}
+
+#viewing-by{
+    border-radius: 5px;
+    border: #D9EBF4 thin solid;
+    margin-top: 3em;
+    margin-bottom: -2em;
+    padding-bottom: 10px;
+    text-align: center;
+    text-decoration: underline;
+    background: white;
+}
+
 #blog-post-div{
 
-    margin-bottom: 1em;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 3em;
     background: white;
     border: #D9EBF4 thin solid;
     border-radius: 5px;
+    margin-bottom: -1.5em;
 }
 
 a{
@@ -122,32 +204,95 @@ a{
 }
 
 #last-page{
+    margin-top: 2em;
     border: #D9EBF4 thin solid;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Cabin', sans-serif;
     border-radius: 50px 10px 50px 10px;
+    margin-bottom: -1.5em;
 }
 
 #next-page{
+    margin-top: 2em;
     border: #D9EBF4 thin solid;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Cabin', sans-serif;
     border-radius: 50px 10px 50px 10px;
 }
 
-#side-bar{
-    margin-top: 2em;
-    border-width: 2px;
+#sidebar{
+    margin-right: -1em;
 }
 
-#category-div{
-    
-    max-height: 15em;
-    overflow-y: auto;
-    
+#blog-content {
+    padding-top : 20px;
+    padding-bottom: 20px;
 }
+
+.tag-link {
+    background-color: #D6E2EA;
+    border: solid 1px #f1f1f1;
+}
+
+.blog-footer div {
+    background-color: darkslategray ;
+}
+
 
 #tag-div{
-    
+
     max-height: 15em;
     overflow-y: auto;
+
+}
+
+#film-head{
+    background-image:url('film.jpg');
+    height: 20px;
+    background-repeat: repeat-x;
+    width: 100%;
+    position: absolute;
+}
+
+.rrssb-buttons{
+
+    max-width: 35em;
+
+}
+
+.upload-button{
+    margin-top: 1em;
+}
+
+.script-upload{
+    margin-top: 10em;
+}
+
+#script-head{
+
+    padding-top: 1em;
+    font-size: 18px;
+
+}
+
+#archive-head {
+
+    font-family: 'Cabin', sans-serif;
+    font-size: 20px;
+    padding-top: 0.5em;
+    margin-bottom: 0.5em;
+    border-bottom: solid 1px #EEEEEE;
+}
+
+#archive-div {
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 1em;
+    margin-top: 1em;
+    background: white;
+    border-radius: 5px;
+    border: #D9EBF4 thin solid;
+}
+.error-message{
+    font-weight: bold;
+    color: red;
     
 }

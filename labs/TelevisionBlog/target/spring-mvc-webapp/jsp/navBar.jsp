@@ -8,7 +8,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <div class="navbar navbar-inverse navbar-static-top" role="navigation">
-
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
             <span class="sr-only">Toggle navigation</span>
@@ -22,11 +21,11 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
 
         <ul class="nav navbar-nav">
-            <li><a class="navbar-item" href="${pageContext.request.contextPath}/contact/send-script"><span class="navbar-item">Send Script</span></a></li>
+            <li><a class="navbar-item" href="${pageContext.request.contextPath}/contact/send-script"><span class="navbar-item">Send Us Your Ideas</span></a></li>
             <li><a class="navbar-item" href="${pageContext.request.contextPath}/admin/"><span class="navbar-item">Admin</span></a></li>
-            <c:forEach items="${pages}" var="p">
-                <c:choose>
-                    <c:when test="${p.active}">
+                <c:forEach items="${pages}" var="p">
+                    <c:choose>
+                        <c:when test="${p.active}">
                         <li><a class="navbar-item" href="${pageContext.request.contextPath}/${p.url}"><span class="navbar-item">${p.name}</span></a></li>
                             </c:when>
                         </c:choose>
@@ -39,8 +38,8 @@
                     <div class="input-group-btn" style="width: 15%; overflow-x: auto">
                         <select class="form-control" name="search-type">
                             <option value="All">All</option>
-                            <option value="Posts">Post Titles</option>
-                            <option value="Titles">Post Content</option>
+                            <option value="Titles">Post Titles</option>
+                            <option value="Posts">Post Content</option>
                         </select>
                     </div>
                     <div class="input-group-btn">
@@ -50,5 +49,7 @@
             </form>
         </div>
 
+    </div>
+    <div id="film-head">
     </div>
 </div>

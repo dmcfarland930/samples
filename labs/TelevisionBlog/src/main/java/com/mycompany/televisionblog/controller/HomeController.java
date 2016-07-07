@@ -52,9 +52,11 @@ public class HomeController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Map<String, Object> model) {
 
-        List<BlogPost> posts = postDao.listOfThree(0, 3);
-        List<BlogPost> latestPosts = postDao.listOfThree(0, 5);
+        //ListOfN retrieves a number of posts by the second parameter. first parameter sets min by SQL record
+        List<BlogPost> posts = postDao.listOfN(0, 3);
+        List<BlogPost> latestPosts = postDao.listOfN(0, 5);
         List<CategoryPost> categories = categoryDao.getPostCount();
+        Map<String, Integer> months = postDao.listOfPostMonths();
         List<Tag> tags = tagDao.list();
 
         for (BlogPost blogView : posts) {
@@ -71,6 +73,7 @@ public class HomeController {
         model.put("tags", tags);
         model.put("latestPosts", latestPosts);
         model.put("categories", categories);
+        model.put("months", months);
         model.put("pages", pages);
         model.put("pageNext", 2);
         model.put("nextPage", nextPage);
@@ -87,13 +90,19 @@ public class HomeController {
         } catch (EmptyResultDataAccessException e) {
             return "404";
         }
-        User user = userDao.get(page.getUser().getId());
 
-        page.setUser(user);
+        List<BlogPost> latestPosts = postDao.listOfN(0, 5);
+        List<CategoryPost> categories = categoryDao.getPostCount();
+        Map<String, Integer> months = postDao.listOfPostMonths();
         List<Page> pages = pageDao.list();
+        List<Tag> tags = tagDao.list();
 
         model.put("pages", pages);
         model.put("page", page);
+        model.put("tags", tags);
+        model.put("latestPosts", latestPosts);
+        model.put("categories", categories);
+        model.put("months", months);
 
         return "showPage";
     }

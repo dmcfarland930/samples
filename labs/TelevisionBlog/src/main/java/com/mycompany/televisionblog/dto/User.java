@@ -1,5 +1,10 @@
 package com.mycompany.televisionblog.dto;
 
+import com.mycompany.televisionblog.validation.UsernameExists;
+import java.util.List;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  *
  * @author apprentice
@@ -8,10 +13,20 @@ public class User {
 
     private int id;
     private int groupId;
+    @NotNull
+    @NotEmpty(message="You must enter a first name!")
     private String firstName;
+    @NotNull
+    @NotEmpty(message="You must enter a last name!")
     private String lastName;
+    @UsernameExists
+    @NotNull
+    @NotEmpty(message="You must enter a username!")
     private String username;
+    @NotNull
+    @NotEmpty(message="You must enter a password!")
     private String password;
+    private List<Integer> roles;
 
     public int getId() {
         return id;
@@ -61,5 +76,15 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public List<Integer> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Integer> roles) {
+        this.roles = roles;
+    }
+    
+    
 
 }

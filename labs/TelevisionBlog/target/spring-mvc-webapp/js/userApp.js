@@ -33,7 +33,11 @@ $(document).ready(function() {
                
            },
            error: function(data, status) {
-               alert("Could not create user.");
+               var errors = data.responseJSON.errors;
+                console.log(errors);
+                $.each(errors, function (index, validationError) {
+                    $('#' + validationError.fieldName + '-validation-errors').html(validationError.message);
+                });
            }
         });
         
@@ -135,4 +139,7 @@ $(document).ready(function() {
                 </tr>";
     }
     
+    $("#error-delete-modal").on("hidden.bs.modal", function() {
+//       location.reload();
+    });
 });

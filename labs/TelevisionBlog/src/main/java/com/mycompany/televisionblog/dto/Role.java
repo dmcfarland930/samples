@@ -1,6 +1,7 @@
 package com.mycompany.televisionblog.dto;
 
 import java.util.List;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -9,9 +10,13 @@ import java.util.List;
 public class Role {
 
     private int id;
+    
+    @NotEmpty(message="You must supply a name")
     private String name;
-    private String displayName;
+    
+    private Integer userId;
     private List<Integer> userRights;
+    private List<UserRight> allUserRights;
 
     public int getId() {
         return id;
@@ -29,14 +34,6 @@ public class Role {
         this.name = name;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
     public List<Integer> getUserRights() {
         return userRights;
     }
@@ -45,10 +42,22 @@ public class Role {
         this.userRights = userRights;
     }
 
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public List<UserRight> getAllUserRights() {
+        return allUserRights;
+    }
+
+    public void setAllUserRights(List<UserRight> allUserRights) {
+        this.allUserRights = allUserRights;
+    }
 
     
     
-    
-    
-
 }

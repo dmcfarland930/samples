@@ -1,4 +1,22 @@
 $(document).ready(function () {
+
+    jQuery('#post-date-input').datetimepicker({
+        format: 'Y-m-d H:i'
+
+    });
+
+    jQuery('#expiration-date-input').datetimepicker({
+        format: 'Y-m-d'
+
+    });
+    jQuery('#edit-post-expiration-date').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+
+    });
+
+
+
     $('#blog-post-button').on('click', function (e) {
 
         e.preventDefault();
@@ -19,7 +37,7 @@ $(document).ready(function () {
             userId: $('#author-input').val(),
             categoryId: $('#category-input').val(),
             tagNameList: tags,
-            postDate: $('#post-date-input').val(),     
+            postDate: $('#post-date-input').val(),
             isDraft: false,
             approved: false,
             expirationDate: $('#expiration-date-input').val()
@@ -50,7 +68,30 @@ $(document).ready(function () {
                 window.location = contextRoot + "/admin/";
             },
             error: function (data, status) {
+                $('#submitBlogModal').modal('hide');
+
                 console.log("error creating blog post");
+                var errors = data.responseJSON.errors;
+                $('#title-error').empty();
+                $('#url-error').empty();
+
+                $.each(errors, function (index, error) {
+
+                    switch (error.fieldName) {
+                        case "title":
+                            $('#title-error').append(error.message);
+                            $('#title-div').addClass('has-error');
+                            break;
+                        case "url":
+                            $('#url-error').append(error.message);
+                            $('#slug-div').addClass('has-error');
+                            break;
+                        default:
+                            break;
+
+                    }
+
+                });
             }
         });
     });
@@ -145,28 +186,28 @@ $(document).ready(function () {
 
 
     });
-    
-    $(document).on('click', '#delete-images', function(e) {
+
+    $(document).on('click', '#delete-images', function (e) {
         e.preventDefault();
-        $('.selected-image-link').each(function() {
+        $('.selected-image-link').each(function () {
             var img = $(this);
             var imgId = $(this).attr('id');
             imgId = imgId.replace('image-upload-', '');
             console.log(imgId);
             $.ajax({
-                url : contextRoot + '/upload/'+imgId,
-                type : 'DELETE',
-                success : function(data) {
+                url: contextRoot + '/upload/' + imgId,
+                type: 'DELETE',
+                success: function (data) {
                     img.parent().remove();
                     img.remove();
                 },
-                error : function(data) {
+                error: function (data) {
                 }
             });
         });
     });
-    
-    $('#file-upload-button').on('click', function(e) {
+
+    $('#file-upload-button').on('click', function (e) {
         e.preventDefault();
         var formData = new FormData();
         console.log('file', $('input[type=file]')[0].files[0]);
@@ -188,8 +229,7 @@ $(document).ready(function () {
             }
         });
     });
-    
-    $('.chosen-select').chosen();
+
 
     $("#title-input").on("input", function (e) {
 
