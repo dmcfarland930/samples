@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd
+ http://www.springframework.org/schema/mvc
+ http://www.springframework.org/schema/mvc/spring-mvc.xsd
+ http://www.springframework.org/schema/tx
+ http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+ http://www.springframework.org/schema/context
+ http://www.springframework.org/schema/context/spring-context.xsd
+ http://www.springframework.org/schema/aop
+ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+    
+    
+    <!-- Bean definitions go here -->
+
+    <bean id="floorData" class="com.mycompany.data.FlooringData"/>
+    <bean id="productXmlDao" class="com.mycompany.dao.ProductXmlDao"/>
+    <bean id="taxesXmlDao" class="com.mycompany.dao.TaxesXmlDao"/>
+  
+    <bean id="orderDao" class="com.mycompany.dao.OrderDao">
+        <constructor-arg ref="floorData"/>
+    </bean>
+
+    <bean id="productDao" class="com.mycompany.dao.ProductDao">    
+        <constructor-arg ref="floorData"/>
+        <constructor-arg ref="productXmlDao"/>
+    </bean>
+
+    <bean id="taxesDao" class="com.mycompany.dao.TaxesDao">    
+        <constructor-arg ref="floorData"/>
+        <constructor-arg ref="taxesXmlDao"/>
+    </bean>
+
+    
+    <bean id="flooringAdminControl" class="com.mycompany.controller.FlooringAdminControl">
+        <constructor-arg ref="productDao"/>       
+        <constructor-arg ref="taxesDao"/> 
+    </bean>
+        
+    <bean id="flooringControl" class="com.mycompany.controller.FlooringController">
+        <constructor-arg ref="orderDao"/>
+        <constructor-arg ref="productDao"/>       
+        <constructor-arg ref="taxesDao"/> 
+        <constructor-arg ref="taxesXmlDao"/> 
+        <constructor-arg ref="productXmlDao"/> 
+        <constructor-arg ref="flooringAdminControl"/> 
+    </bean>
+    
+    <bean id="audit" class="com.mycompany.aop.Audit"/>
+   
+    <aop:config>
+        <aop:aspect ref="audit">
+            <aop:after method="logSave"
+                       pointcut="execution(* com.mycompany.dao.OrderDaoInterface.create(..))"
+            />
+            <aop:after method="logSave"
+                       pointcut="execution(* com.mycompany.dao.OrderDaoInterface.update(..))"
+            />
+            
+            <aop:after-returning method="logUpdate"
+                                 pointcut="execution(* com.mycompany.dao.OrderDaoInterface.update(..))" returning="retVal"
+            />
+            
+            <aop:after method="logSave"
+                       pointcut="execution(* com.mycompany.dao.OrderDaoInterface.delete(..))"
+            />
+        </aop:aspect>
+    </aop:config>
+    
+    <bean id="timing" class="com.mycompany.aop.Timing"/>
+    
+    <aop:config>
+        <aop:aspect ref="timing">
+            <aop:before method="getTimeAtStart"
+                        pointcut="execution(* com.mycompany.data.FlooringData.orderDecode(..))"/>
+            <aop:after method="getTimeAtEnd"
+                       pointcut="execution(* com.mycompany.data.FlooringData.orderDecode(..))"/>
+            <aop:before method="getTimeAtStart"
+                        pointcut="execution(* com.mycompany.data.FlooringData.orderEncode(..))"/>
+            <aop:after method="getTimeAtEnd"
+                       pointcut="execution(* com.mycompany.data.FlooringData.orderEncode(..))"/>
+            <aop:before method="getTimeAtStart"
+                        pointcut="execution(* com.mycompany.data.FlooringData.productDecode(..))"/>
+            <aop:after method="getTimeAtEnd"
+                       pointcut="execution(* com.mycompany.data.FlooringData.productDecode(..))"/>
+            <aop:before method="getTimeAtStart"
+                        pointcut="execution(* com.mycompany.data.FlooringData.taxDecode(..))"/>
+            <aop:after method="getTimeAtEnd"
+                       pointcut="execution(* com.mycompany.data.FlooringData.taxDecode(..))"/>
+            <aop:before method="getTimeAtStart"
+                        pointcut="execution(* com.mycompany.dao.TaxesXmlDao.readTaxes(..))"/>
+            <aop:after method="getTimeAtEnd"
+                       pointcut="execution(* com.mycompany.dao.TaxesXmlDao.readTaxes(..))"/>
+            <aop:before method="getTimeAtStart"
+                        pointcut="execution(* com.mycompany.dao.ProductXmlDao.readProducts(..))"/>
+            <aop:after method="getTimeAtEnd"
+                       pointcut="execution(* com.mycompany.dao.ProductXmlDao.readProducts(..))"/>
+            
+        </aop:aspect>
+    </aop:config>
+</beans>

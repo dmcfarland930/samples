@@ -1,0 +1,7 @@
+ProductType::ProductID::ProductName::Price::Size::Stock
+Shirt::1000::Polo::100.0::M::10
+Coat::1001::Windbreaker::30.0::L::20
+Shoe::1002::Yeezy Red Octobers::300.0::9.5::10
+Shirt::1003::Henley::20.0::M::10
+Coat::1004::Trench Coat::100.0::XS::10
+Pants::1005::Jeans::30.0::32x32::20

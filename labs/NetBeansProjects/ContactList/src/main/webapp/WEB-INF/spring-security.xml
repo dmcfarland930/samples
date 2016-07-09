@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This program was written by Daniel McFarland.
+I hope you enjoy it!
+-->
+
+<b:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:b="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+
+    <http auto-config="true" use-expressions="false">
+            
+        <form-login login-processing-url="j_spring_security_check"
+                        login-page="/login"
+                        authentication-failure-url="/login?login_error=1"
+                    
+        />
+            
+        <logout logout-success-url="/" />
+            
+    </http>
+
+    <authentication-manager>
+            
+        <authentication-provider>
+                
+            <jdbc-user-service id="userService" data-source-ref="dataSource"
+                               users-by-username-query="SELECT username, password, enabled FROM user WHERE username = ?"
+                               authorities-by-username-query="SELECT u.userName, a.authority 
+                                                              FROM authorities a INNER JOIN user u on a.user_id = u.id
+                                                              WHERE u.username = ?"
+                               
+            />
+
+                
+        </authentication-provider>          
+            
+    </authentication-manager>
+        
+</b:beans>
+    

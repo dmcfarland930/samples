@@ -1,0 +1,6 @@
+State,TaxRate
+PA,6.75
+MI,5.75
+IN,6.0
+WV,6.0
+OH,5.9

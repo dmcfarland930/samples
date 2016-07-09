@@ -1,0 +1,2 @@
+1001::Egg Sandwich::2.0::0
+1002::Miller Lite::1.0::0

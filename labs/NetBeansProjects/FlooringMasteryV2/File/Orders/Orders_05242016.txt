@@ -1,0 +1,8 @@
+OrderNumber, CustomerName, State, TaxRate, ProductType, Area, CostPerSquareFoot, LaborCostPerSquareFoot, MaterialCost, LaborCost, Tax, Total
+1002,Dan,PA,6.75,Marble,100.00,100.00,29.00,10000.00,2900.00,870.75,13770.75
+1003,Mc,OH,5.90,Carpet,40.00,2.25,2.10,90.00,84.00,10.27,184.27
+1004,Dan,WV,6.00,Marble,100.00,100.00,29.00,10000.00,2900.00,774.00,13674.00
+1006,Dan,WV,6.00,Glass,10.00,1.00,3.00,10.00,30.00,2.40,42.40
+1005,Dan,WV,6.00,foam,10.00,0.75,3.00,7.50,30.00,2.25,39.75
+1006,Dan,Wv,6.00,foam,10.00,0.75,3.00,7.50,30.00,2.25,39.75
+1007,Dan,WV,6.00,Foam,10.00,0.75,3.00,7.50,30.00,2.25,39.75

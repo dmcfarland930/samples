@@ -1,0 +1,153 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jun 22, 2016, 9:57:13 AM
+    Author     : apprentice
+*/
+.navbar-inverse {
+    background-color: #B22222;
+}
+
+.navbar{
+    font-family: 'Roboto', sans-serif;
+    margin-bottom:  -.5em;
+}
+
+h1{
+    font-family: 'Roboto', sans-serif;
+
+}
+
+.navbar-item {
+    color: white;
+}
+
+.bg-white{
+    border: gray thin solid;
+    background: white;
+}
+
+#add-category-form {
+    margin:auto;
+}
+#add-category-validation-errors {
+    font-weight: bold;
+    min-height: 20px;
+    text-align: center;
+}
+.uploaded-image {
+    max-height: 40px;
+    width: auto;
+}
+.selected-image {
+    border: 2px #206ea1 solid;
+}
+
+#insert-tags {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+body{
+    background-color: #D6E2EA;
+}
+
+#category-div{
+    margin-left: 2em;
+    width:30%;
+    margin-top: 2em;
+    background: white;
+    border-radius: 5px;
+    border: #D9EBF4 thin solid;
+}
+
+#latest-posts-div{
+    margin-left: 2em;
+    width:30%;
+    margin-top: 2em;
+    background: white;
+    border-radius: 5px;
+    border: #D9EBF4 thin solid;
+}
+
+#latest-head{
+    
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    margin-bottom: -1em;
+    
+}
+
+#cat-head{
+    
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    margin-bottom: -1em;
+    
+}
+
+#tag-head{
+    
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    margin-bottom: -1em;
+    
+}
+
+#tag-div{
+    margin-left: 2em;
+    width:30%;
+    margin-top: 2em;
+    background: white;
+    border-radius: 5px;
+    border: #D9EBF4 thin solid;
+}
+
+#blog-content{
+    width: 75%;
+}
+
+#blog-post-div{
+
+    margin-bottom: 1em;
+    background: white;
+    border: #D9EBF4 thin solid;
+    border-radius: 5px;
+}
+
+a{
+    color: gray;
+}
+
+#last-page{
+    border: #D9EBF4 thin solid;
+    font-family: 'Roboto', sans-serif;
+    border-radius: 50px 10px 50px 10px;
+}
+
+#next-page{
+    border: #D9EBF4 thin solid;
+    font-family: 'Roboto', sans-serif;
+    border-radius: 50px 10px 50px 10px;
+}
+
+#side-bar{
+    margin-top: 2em;
+    border-width: 2px;
+}
+
+#category-div{
+    
+    max-height: 15em;
+    overflow-y: auto;
+    
+}
+
+#tag-div{
+    
+    max-height: 15em;
+    overflow-y: auto;
+    
+}

@@ -1,0 +1,3 @@
+OrderNumber, CustomerName, State, TaxRate, ProductType, Area, CostPerSquareFoot, LaborCostPerSquareFoot, MaterialCost, LaborCost, Tax, Total
+1000,Dan,wv,6.00,foam,10.00,0.75,3.00,7.50,30.00,2.25,39.75
+1008,John,PA,6.75,Wood,20.00,5.15,4.75,103.00,95.00,13.37,211.37
