@@ -86,7 +86,7 @@ public class FlooringData {
                 out.println();
 
                 for (Order myOrder : orderList) {
-                    if (dateEntry.equals(myOrder.getOrderDate().replace("/", ""))) {
+                    if (dateEntry.equals(myOrder.getOrderDateString().replace("/", ""))) {
                         out.print(myOrder.getOrderNumber());
                         out.print(TOKEN);
                         customerName = escapeComma(myOrder);
@@ -147,7 +147,7 @@ public class FlooringData {
 
                 Order myOrder = new Order();
                 String currentLine = sc.nextLine();
-                myOrder.setOrderDate(dateEntry);
+                myOrder.setOrderDateString(dateEntry);
                 String[] stringParts = currentLine.split(",");
                 int id = Integer.parseInt(stringParts[0]);
 

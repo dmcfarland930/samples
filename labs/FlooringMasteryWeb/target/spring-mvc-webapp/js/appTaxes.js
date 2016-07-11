@@ -10,6 +10,7 @@ $(document).ready(function () {
         });
 
         $('#rate-div').removeClass('has-error');
+        $('rate-error').empty();
 
         $.ajax({
             url: contextRoot + "/admin/" + "addtaxrates",
@@ -96,6 +97,7 @@ $(document).ready(function () {
         });
 
         $('#rate-div').removeClass('has-error');
+        $('rate-error').empty();
 
         console.log($('#edit-taxes-id').val());
 
@@ -160,7 +162,7 @@ $(document).ready(function () {
 
             },
             error: function (data, status) {
-                
+
                 $('#errorModal').modal('show');
             }
         });

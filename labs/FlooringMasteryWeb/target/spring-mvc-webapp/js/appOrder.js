@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    
     $('#create-submit').on('click', function (e) {
 
         e.preventDefault();
@@ -13,9 +13,11 @@ $(document).ready(function () {
 
         });
 
-        var date = $('#last-date').val();
         $('#name-div').removeClass('has-error');
         $('#area-div').removeClass('has-error');
+        $('#name-error').empty();
+        $('#area-error').empty();
+        var date = $('#last-date').val();
 
         console.log(date);
 
@@ -108,7 +110,7 @@ $(document).ready(function () {
             },
             success: function (data, status) {
 
-                $('#order-date').html(data.date);
+                $('#order-date').html(data.orderDateString);
                 $('#order-name').html(data.customerName);
                 $('#order-state').html(data.state);
                 $('#order-product').html(data.productType);
@@ -180,6 +182,8 @@ $(document).ready(function () {
 
         $('#name-div').removeClass('has-error');
         $('#area-div').removeClass('has-error');
+        $('#name-error').empty();
+        $('#area-error').empty();
 
         $.ajax({
             url: contextRoot + "/order/",

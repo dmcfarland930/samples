@@ -11,13 +11,10 @@ import com.mycompany.flooringmasteryweb.dto.Order;
 import com.mycompany.flooringmasteryweb.dto.OrderCommand;
 import com.mycompany.flooringmasteryweb.dto.Product;
 import com.mycompany.flooringmasteryweb.dto.Taxes;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.inject.Inject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +28,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class HomeController {
 
-    SimpleDateFormat sdf = new SimpleDateFormat("MMddyyyy");
+    SimpleDateFormat sdfSQL = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat sdfDisplay = new SimpleDateFormat("MM/dd/yyyy");
     private OrderDao orderDao;
     private TaxesDao taxDao;
     private ProductDao productDao;
@@ -49,20 +47,18 @@ public class HomeController {
     public String home(Map model) {
 
         Date date = new Date();
-//        testMode = readTest();
-        String dateFormat = sdf.format(date);
+        String dateFormat = sdfSQL.format(date);
         List<Order> orders = orderDao.getOrdersOnDate(dateFormat);
         List<Product> products = productDao.getProductList();
         List<Taxes> taxes = taxDao.getTaxesList();
-//        model.put("test", showTest(testMode));
-        String dateFormat2 = insertDateFormat(dateFormat);
+        String dateFormat2 = sdfDisplay.format(date);
         model.put("date", dateFormat2);
 
         if (orders.isEmpty()) {
             model.put("noOrders", "No orders placed today!!");
         } else {
             for(Order order : orders){
-                order.setOrderDate(dateFormat2);
+                order.setOrderDateString(dateFormat2);
             }
             model.put("orders", orders);
         }

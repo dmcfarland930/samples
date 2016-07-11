@@ -32,6 +32,27 @@
     
 }
 
+.dataTable table{
+    border-radius: 4px;
+}
+
+.dataTables_filter input{
+border-radius: 10px; 
+}
+
+.dataTable th{
+    background-color: #337ab7;
+    color: white;
+}
+
+.paginate_button{   
+    font-family: Roboto Slab;
+}
+
+.dataTables_info{
+    font-family: Roboto Slab;
+}
+
 body{
     background: #E9EBEE;
     max-width: 100%;
@@ -171,7 +192,6 @@ table{
     color: red;
     margin-right: 3.5em;
 }
-
-.search{
-    border-radius: 20px;
+input:focus{
+    outline: none;
 }

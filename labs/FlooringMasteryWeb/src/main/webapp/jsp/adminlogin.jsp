@@ -9,9 +9,6 @@
         <!-- Bootstrap core CSS -->
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
 
-        <!-- Custom styles for this template -->
-        <link href="${pageContext.request.contextPath}/css/starter-template.css" rel="stylesheet">
-
         <!-- SWC Icon -->
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icon.png">
 
@@ -22,15 +19,9 @@
     <body>
         <div class="navbar">
             <ul class="nav nav-tabs">
-                <li role="presentation"><a href="${pageContext.request.contextPath}/">Flooring Master</a></li>
+                <li role="presentation"><a href="${pageContext.request.contextPath}">Flooring Master</a></li>
                 <li role="presentation"><a href="${pageContext.request.contextPath}/adminlogin/">Admin Login</a></li>
-                <form style="margin-top:.25em; margin-right: 2em;"class="form-inline pull-right" method="POST" action="${pageContext.request.contextPath}/order/search/">
-
-                    <fieldset class="form-group">
-                        <input type="text" class="form-control search" name="date" placeholder="Enter date to find order.">
-                    </fieldset>
-                    <button class="btn bg-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                </form>
+                <li role="presentation"><a href="${pageContext.request.contextPath}/order/vieworders/">View Orders</a></li>        
             </ul>    
         </div>
         <div class="container">
@@ -43,7 +34,7 @@
                             <fieldset class="form-group ${hasError}">
                                 <input type="password" class="form-control" name="password" placeholder="Password">
                             </fieldset>
-                        <p>${error}</p>
+                            <p>${error}</p>
                             <div id="buttonLogin">
                                 <input class="btn bg-primary button-size" type="submit" value="Log In"/>
                             </div>

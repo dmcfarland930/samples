@@ -45,7 +45,7 @@
             </fieldset>
 
             <fieldset class="form-group">
-                <label class="col-md-4" for="area">Area:</label>
+                <label class="col-md-4" for="area">Area (sq ft):</label>
                 <div id="area-div" class="col-md-8">
                     <input type="text" id="order-area-input" class="form-control ${hasError}"/>
                 </div>

@@ -59,7 +59,7 @@
                         <tr>
                             <th>Date:</th>
                             <td>
-                                <input id="edit-order-date" path="date" class="form-control datepicker" value="${date}"></input>
+                                <input id="edit-order-date" path="date" class="form-control datepicker" value="${order.orderDate}" readonly></input>
                             </td>
                         </tr>       
                     </table>

@@ -1,14 +1,8 @@
-/*
- * This program was written by Daniel McFarland.
- * I hope you enjoy it!
- */
 package com.mycompany.flooringmasteryweb.dao;
 
 import com.mycompany.flooringmasteryweb.dto.Order;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,15 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
- * @author apprentice
+ * @author apprentice - Daniel McFarland
  */
 public class OrderDaoDbImpl implements OrderDao {
 
-    private static final String SQL_INSERT_ORDER = "INSERT INTO orders (customer_name, product_id, tax_id, area, order_date) VALUES (?, ?, ?, ?, ?)";
-    private static final String SQL_UPDATE_ORDER = "UPDATE orders SET customer_name = ?, product_id = ?, tax_id = ?, area = ?, order_date = ? WHERE id = ?";
+    private static final String SQL_INSERT_ORDER = "INSERT INTO orders (customer_name, product_id, tax_id, area, order_date, order_total, material_total, labor_total, tax_total) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_UPDATE_ORDER = "UPDATE orders SET customer_name = ?, product_id = ?, tax_id = ?, area = ?, order_date = ?, order_total = ?, material_total = ?, labor_total = ?, tax_total = ? WHERE id = ?";
     private static final String SQL_DELETE_ORDER = "DELETE FROM orders WHERE id = ?";
     private static final String SQL_GET_ORDER = "SELECT * FROM orders WHERE id = ?";
     private static final String SQL_GET_ORDER_LIST = "SELECT * FROM orders";
+    private static final String SQL_GET_ORDER_LIST_DATE = "SELECT * FROM orders WHERE order_date = ?";
 
     private JdbcTemplate jdbcTemplate;
     private ProductDao productDao;
@@ -47,7 +42,11 @@ public class OrderDaoDbImpl implements OrderDao {
                 orders.getProduct().getId(),
                 orders.getTaxes().getId(),
                 orders.getArea(),
-                orders.getDate());
+                orders.getDate(),
+                orders.getOrderTotal(),
+                orders.getMaterialCost(),
+                orders.getTotalLaborCost(),
+                orders.getTax());
 
         Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
 
@@ -65,6 +64,10 @@ public class OrderDaoDbImpl implements OrderDao {
                 order.getTaxes().getId(),
                 order.getArea(),
                 order.getDate(),
+                order.getOrderTotal(),
+                order.getMaterialCost(),
+                order.getTotalLaborCost(),
+                order.getTax(),
                 order.getOrderNumber());
 
     }
@@ -104,22 +107,11 @@ public class OrderDaoDbImpl implements OrderDao {
     @Override
     public List<Order> getOrdersOnDate(String date) {
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MMddyyyy");
-        List<Order> orders = getList();
-        List<Order> ordersMatchDate = new ArrayList();
-        for (Order order : orders) {
 
-            String orderDate = sdf.format(order.getDate());
+        List<Order> orders = jdbcTemplate.query(SQL_GET_ORDER_LIST_DATE, new OrderMapper(), date);
 
-            if (date.equals(orderDate)) {
 
-                ordersMatchDate.add(order);
-
-            }
-
-        }
-
-        return ordersMatchDate;
+        return orders;
 
     }
 
@@ -136,6 +128,10 @@ public class OrderDaoDbImpl implements OrderDao {
             orders.setTaxes(taxDao.get(rs.getInt("tax_id")));
             orders.setArea(rs.getDouble("area"));
             orders.setDate(rs.getDate("order_date"));
+            orders.setOrderTotal(rs.getDouble("order_total"));
+            orders.setMaterialCost(rs.getDouble("material_total"));
+            orders.setTax(rs.getDouble("tax_total"));
+            orders.setTotalLaborCost(rs.getDouble("labor_total"));
 
             return orders;
 

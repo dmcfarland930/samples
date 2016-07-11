@@ -31,7 +31,7 @@ public class Order {
     private double totalLaborCost;
     private double tax;
     private double orderTotal;
-    private String orderDate;
+    private String orderDateString;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy", timezone = "UTC")
     private Date date;
     private Product product;
@@ -133,12 +133,12 @@ public class Order {
         this.orderTotal = orderTotal;
     }
 
-    public String getOrderDate() {
-        return orderDate;
+    public String getOrderDateString() {
+        return orderDateString;
     }
 
-    public void setOrderDate(String orderDate) {
-        this.orderDate = orderDate;
+    public void setOrderDateString(String orderDateString) {
+        this.orderDateString = orderDateString;
     }
 
     public Date getDate() {

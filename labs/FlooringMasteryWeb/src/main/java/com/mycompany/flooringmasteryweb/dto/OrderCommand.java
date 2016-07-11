@@ -6,8 +6,6 @@ package com.mycompany.flooringmasteryweb.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
@@ -34,7 +32,7 @@ public class OrderCommand {
     private double totalLaborCost;
     private double tax;
     private double orderTotal;
-    private String orderDate;
+    private String orderDateString;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy", timezone="EST")
     private Date date;
     private int productId;
@@ -136,12 +134,12 @@ public class OrderCommand {
         this.orderTotal = orderTotal;
     }
 
-    public String getOrderDate() {
-        return orderDate;
+    public String getOrderDateString() {
+        return orderDateString;
     }
 
-    public void setOrderDate(String orderDate) {
-        this.orderDate = orderDate;
+    public void setOrderDateString(String orderDateString) {
+        this.orderDateString = orderDateString;
     }
 
     public Date getDate() {

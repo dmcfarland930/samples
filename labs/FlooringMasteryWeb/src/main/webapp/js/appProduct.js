@@ -15,6 +15,9 @@ $(document).ready(function () {
         $('#product-div').removeClass('has-error');
         $('#cost-div').removeClass('has-error');
         $('#labor-div').removeClass('has-error');
+        $('type-error').empty();
+        $('cost-error').empty();
+        $('labor-error').empty();
 
         $.ajax({
             url: contextRoot + "/admin/" + "addproducts",
@@ -115,6 +118,9 @@ $(document).ready(function () {
         $('#product-div').removeClass('has-error');
         $('#cost-div').removeClass('has-error');
         $('#labor-div').removeClass('has-error');
+        $('type-error').empty();
+        $('cost-error').empty();
+        $('labor-error').empty();
 
         $.ajax({
             url: contextRoot + "/admin/productSave/" + $("#edit-id").val(),
