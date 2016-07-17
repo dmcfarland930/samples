@@ -1,3 +1,0 @@
-Action, OrderNumber, CustomerName, State, TaxRate, ProductType, Area, CostPerSquareFoot, LaborCostPerSquareFoot, MaterialCost, LaborCost, Tax, Total, Date of Action
-Create,1019,Jeff,OH,5.9,foam,400.0,0.75,3.0,300.0,1200.0,88.50000000000001,1588.5,Thu May 26 11:00:28 EDT 2016
-Create,1020,Dan,WV,6.0,foam,200.0,0.75,3.0,150.0,600.0,45.0,795.0,Thu May 26 11:17:02 EDT 2016

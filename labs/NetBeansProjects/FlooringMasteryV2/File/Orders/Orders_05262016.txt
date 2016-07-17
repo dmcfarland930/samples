@@ -1,6 +1,0 @@
-OrderNumber, CustomerName, State, TaxRate, ProductType, Area, CostPerSquareFoot, LaborCostPerSquareFoot, MaterialCost, LaborCost, Tax, Total
-1001,Mac,PA,6.75,foam,399.00,0.75,3.00,299.25,1197.00,101.00,1597.25
-1017,Dan,WV,6.00,carpet,200.00,2.25,2.10,450.00,420.00,52.20,922.20
-1018,Mac,PA,6.75,wood,200.00,5.15,4.75,1030.00,950.00,133.65,2113.65
-1019,Jeff,OH,5.90,foam,400.00,0.75,3.00,300.00,1200.00,88.50,1588.50
-1020,Dan,WV,6.00,foam,200.00,0.75,3.00,150.00,600.00,45.00,795.00

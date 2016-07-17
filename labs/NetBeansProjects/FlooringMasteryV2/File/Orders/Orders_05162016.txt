@@ -1,3 +1,0 @@
-OrderNumber, CustomerName, State, TaxRate, ProductType, Area, CostPerSquareFoot, LaborCostPerSquareFoot, MaterialCost, LaborCost, Tax, Total
-1001,VoIP Innovations,PA,6.75,tile,25.00,3.50,4.15,87.50,103.75,12.91,204.16
-1000,Dan,MI,5.75,Wood,20.00,5.15,4.75,103.00,95.00,11.39,209.38

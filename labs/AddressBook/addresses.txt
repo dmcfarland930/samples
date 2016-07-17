@@ -1,5 +1,0 @@
-1::Bill::McFarland::104 Chestnut St::Belmont::WV::United States::26134::none
-2::Dan::Jones::104 Mom St.::Akron::OH::United States::23321::none
-3::Mac::McDonald::54 Main Street::Belmont::WV::United States::26134::none
-5::Chris::Estrada::316 Washinton Ave.::Wheeling::WV::United States::26006::Apt 373
-4::John::Cena::45 Carolina St::San Francisco::CA::23333::United States::none
