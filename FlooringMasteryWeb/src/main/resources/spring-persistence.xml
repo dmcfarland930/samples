@@ -36,9 +36,6 @@
     </bean>
     
     
-    <bean id="floorData" class="com.mycompany.flooringmasteryweb.data.FlooringData"/>
-    <bean id="productXmlDao" class="com.mycompany.flooringmasteryweb.dao.ProductXmlDao"/>
-    <bean id="taxesXmlDao" class="com.mycompany.flooringmasteryweb.dao.TaxesXmlDao"/>
     
     <bean id="productDao" class="com.mycompany.flooringmasteryweb.dao.ProductDaoDbImpl">    
         <constructor-arg ref="jdbcTemplate"/>

@@ -54,7 +54,7 @@
 
                         </c:forEach>
                     </table>
-
+<!--
                     <p>Your Oldest Movie(s):</p>
                     <c:forEach items="${oldest}" var="dvd">
                         <p>${dvd.title}</p>
@@ -63,7 +63,7 @@
                     <c:forEach items="${newest}" var="dvd">
                         <p>${dvd.title}</p>
                     </c:forEach>
-                    <p>Average Age of Your Movies: ${years} years old</p>
+                    <p>Average Age of Your Movies: ${years} years old</p>-->
 
                 </div>
                 <div class="col-md-6">

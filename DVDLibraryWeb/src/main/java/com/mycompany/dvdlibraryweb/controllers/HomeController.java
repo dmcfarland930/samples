@@ -31,16 +31,16 @@ public class HomeController {
     public String home(Map model) {
 
         List<Dvd> dvds = dvdDao.list();
-        
-            
-        List<Dvd> oldest = dvdDao.findOldestMovie();
-        List<Dvd> newest = dvdDao.findNewestMovie();
-        int years = dvdDao.findAverageAgeOfMovies();
-        model.put("oldest", oldest);
-        model.put("newest", newest);
-        model.put("years", years);
-        
-        
+
+        if (!dvds.isEmpty()) {
+            List<Dvd> oldest = dvdDao.findOldestMovie();
+            List<Dvd> newest = dvdDao.findNewestMovie();
+            int years = dvdDao.findAverageAgeOfMovies();
+            model.put("oldest", oldest);
+            model.put("newest", newest);
+            model.put("years", years);
+        }
+
 //            
 //            
 //        model.put("oldest", "You have no movies!");
@@ -48,9 +48,6 @@ public class HomeController {
 //        model.put("years", "0");
 //        model.put("notenum", "0");
 //        
-            
-        
-        
         model.put("dvds", dvds);
         model.put("dvd", new Dvd());
         return "home";

@@ -151,6 +151,12 @@
                                 <th>Zip Code:</th>
                                 <td id="address-zip"></td>
                             </tr>
+                            <tr>
+                                <th>Location:</th>
+                                <td>
+                            <iframe id="map" src="">
+                            </iframe></td>
+                            </tr>
 
                         </table>
                     </div>

@@ -69,6 +69,8 @@ $(document).ready(function () {
                 $('#address-city').html(data.city);
                 $('#address-state').html(data.state);
                 $('#address-zip').html(data.zip);
+                document.getElementById('map').src = "//www.google.com/maps/embed/v1/place?q="+data.streetNumber+"+"+data.streetName+"+"+data.city+"+"+data.state+"+"+data.zip+"&zoom=17&key=AIzaSyBtKEaTaZeu1AxsAYLXNzfwssoql2Z-BT4";
+
             },
             error: function (data, status) {
 

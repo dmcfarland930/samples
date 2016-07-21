@@ -69,8 +69,7 @@ $(document).ready(function () {
                 $('#dvd-studio').html(data.studio);
                 $('#dvd-date').html(data.dvdDate);
                 $('#dvd-id-note').val(dvdId);
-                
-            },
+                },
             error: function (data, status) {
 
             }
